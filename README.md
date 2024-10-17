@@ -4,14 +4,12 @@
 1. [Introduction](#introduction)  
 2. [Features](#features)  
 3. [Tech Stack](#tech-stack)  
-4. [Installation](#installation)  
-5. [Running the App](#running-the-app)  
-6. [Project Structure](#project-structure)  
-7. [Pages Overview](#pages-overview)  
-8. [How to Use](#how-to-use)  
-9. [Future Improvements](#future-improvements)  
-10. [Contributing](#contributing)  
-11. [License](#license)
+4. [Pages Overview](#pages-overview)  
+5. [How to Use](#how-to-use)  
+6. [Future Improvements](#future-improvements) 
+7. [Contributing](#contributing)   
+8. [License](#license)
+9. [Contact](#contact)
 
 ---
 
@@ -40,20 +38,6 @@ This project is a **Point of Sale (POS) system frontend** built using React, Typ
 - **React Router**: Handles navigation and routing.
 
 
-## **Project Structure**
-
-pos-system-frontend/
-├── src/
-│   ├── components/          # Reusable components (e.g., Navbar)
-│   ├── data/                # Mock data for products and employees
-│   ├── pages/               # App pages (Orders, Reservations, Employees)
-│   ├── utils/               # Utility functions (e.g., generateId)
-│   ├── App.tsx              # Main app component with routes
-│   ├── index.tsx            # Entry point of the React app
-│   └── styles/              # Custom CSS or Tailwind overrides
-├── public/                  # Public files (e.g., index.html)
-├── package.json             # Project dependencies and scripts
-└── README.md                # Project documentation
 
 ## **Pages Overview**
 
@@ -110,3 +94,4 @@ This project is proprietary software and may not be used, distributed, or modifi
 ## **Contact**
 
 For inquiries or suggestions, feel free to reach out to **Elie Saade - Elie309**.
+Email: elie.saade432@gmail.com
