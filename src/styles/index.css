@@ -1,3 +1,108 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+
+Color platte
+#F4F6FF
+#F3C623
+#EB8317
+#10375C
+*/
+
+/* Make tailwind css styles here for input */
+@layer components {
+  .primary-title {
+    @apply text-3xl xl:text-4xl w-full font-bold text-[#10375C] text-center my-4;
+  }
+
+  .secondary-title {
+    @apply text-2xl xl:text-3xl w-full font-bold text-gray-600 my-4 text-center;
+  }
+
+  .label-input-container {
+    @apply flex flex-col w-full px-2 my-2;
+  }
+
+  .label-input-container label {
+    @apply text-sm font-semibold text-gray-600;
+  }
+
+  .label-input-container input,
+  .label-input-container select,
+  .label-input-container textarea {
+    @apply border border-gray-300 rounded-md px-2 py-1 outline-none focus:border-[#EB8317] text-gray-600;
+  }
+
+  .label-input-container input::placeholder,
+  .label-input-container select::placeholder,
+  .label-input-container textarea::placeholder {
+    @apply text-gray-400;
+  }
+
+  .submit-button {
+    @apply bg-[#F3C623] text-white rounded-md px-4 py-2 mt-4 transition-colors 
+        ease-linear duration-200 outline-none focus:outline-none 
+        focus:ring-2 focus:ring-[#F3C623] focus:ring-opacity-50 
+        hover:bg-[#EB8317];
+  }
+
+  /* HTML: <div class="loader"></div> */
+  .loader {
+    width: 60px;
+    aspect-ratio: 1;
+    --_g: no-repeat radial-gradient(farthest-side, #374151 90%, #00000000);
+    background: var(--_g), var(--_g), var(--_g);
+    background-size: 25% 25%;
+    animation: l17 1s infinite;
+  }
+
+  @keyframes l17 {
+    0% {
+      background-position: 0% -100%, 50% -100%, 100% -100%;
+    }
+
+    16.67% {
+      background-position: 0% 50%, 50% -100%, 100% -100%;
+    }
+
+    33.33% {
+      background-position: 0% 50%, 50% 50%, 100% -100%;
+    }
+
+    45%,
+    55% {
+      background-position: 0% 50%, 50% 50%, 100% 50%;
+    }
+
+    66.67% {
+      background-position: 0% 200%, 50% 50%, 100% 50%;
+    }
+
+    83.33% {
+      background-position: 0% 200%, 50% 200%, 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 200%, 50% 200%, 100% 200%;
+    }
+  }
+}
+
+@media print {
+  .print-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .break-page {
+    page-break-before: always;
+  }
+
+  .no-print {
+    display: none;
+  }
+}
