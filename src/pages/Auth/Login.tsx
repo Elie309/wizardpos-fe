@@ -1,8 +1,30 @@
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useState } from "react";
 import api from "../../utils/Axios";
 import BlurredBackground from "../../components/BlurredBackground";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../utils/userSlice";
+import { RootState } from "../../utils/store";
+
+interface IUser {
+    name: string,
+    email: string,
+    role: string
+}
 
 export default function Login() {
+
+    const dispatch = useDispatch()
+    const user = useSelector((state: RootState) => state.user)
+
+  
+    const handleLogin = (data: IUser) => {
+      dispatch(setUser(data))
+    }
+  
+    // const handleLogout = () => {
+    //   dispatch(clearUser())
+    // }
+  
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -26,7 +48,13 @@ export default function Login() {
 
             if (response.status === 200) {
                 window.location.href = '/orders';
+                //unset message
+                var data = response.data;
+                //remove message from data
+                delete data.message;
 
+                handleLogin(data);
+                setLoading(false);
                 
             } else {
                 setLoading(false);
