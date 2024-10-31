@@ -1,11 +1,11 @@
 import { FormEvent, useState } from "react";
 import api from "../../utils/Axios";
 import BlurredBackground from "../../components/BlurredBackground";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../../utils/userSlice";
-import { RootState } from "../../utils/store";
 
 interface IUser {
+    id: string,
     name: string,
     email: string,
     role: string
@@ -13,19 +13,13 @@ interface IUser {
 
 export default function Login() {
 
-    const dispatch = useDispatch()
-    const user = useSelector((state: RootState) => state.user)
-
+    const dispatch = useDispatch();
   
     const handleLogin = (data: IUser) => {
       dispatch(setUser(data))
     }
-  
-    // const handleLogout = () => {
-    //   dispatch(clearUser())
-    // }
-  
 
+    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -47,14 +41,18 @@ export default function Login() {
             const response = await api.post('auth/login', formData);
 
             if (response.status === 200) {
-                window.location.href = '/orders';
-                //unset message
-                var data = response.data;
-                //remove message from data
-                delete data.message;
 
-                handleLogin(data);
+                let user: IUser = {
+                    name: response.data.name,
+                    email: response.data.email,
+                    role: response.data.role,
+                    id: response.data.id,
+                }
+
+                handleLogin(user);
                 setLoading(false);
+
+                window.location.href = '/orders';
                 
             } else {
                 setLoading(false);

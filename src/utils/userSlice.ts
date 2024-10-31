@@ -4,6 +4,7 @@ interface UserState {
     name: string;
     email: string;
     role: string;
+    id: string;
     isAuthenticated: boolean;
 }
 
@@ -11,6 +12,7 @@ const initialState: UserState = {
     name: '',
     email: '',
     role: '',
+    id: '',
     isAuthenticated: false,
 };
 
@@ -28,6 +30,7 @@ const userSlice = createSlice({
             state.name = '';
             state.email = '';
             state.role = '';
+            state.id = '';
             state.isAuthenticated = false;
         },
     },

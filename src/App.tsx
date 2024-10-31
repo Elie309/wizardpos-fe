@@ -10,26 +10,54 @@ import EmployeeProfilePage from "./pages/EmployeeProfilePage";
 import Login from "./pages/Auth/Login";
 
 function App() {
-  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+  const user = useSelector((state: RootState) => state.user);
 
-  if (!isAuthenticated) {
-    window.history.pushState({}, '', '/login');
-    return <Login />;
+
+  if (!user) {
+
+    return (
+      <div className="w-full h-full flex justify-center items-center ">
+        <div className="loader scale-150"></div>
+      </div>
+    )
+
   }
 
-  return (
-    <Router>
-      <Routes>
-          <Route path="/orders" element={<OrdersPage />} />
-          <Route path="/reservations" element={<ReservationPage />} />
-          <Route path="/employees" element={<EmployeePage />} />
-          <Route path="/employees/:id" element={<EmployeeProfilePage />} />
+
+  if (user.isAuthenticated) {
+    return (
+      <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/reservations" element={<ReservationPage />} />
+
+            <Route path="/employees/:id" element={<EmployeeProfilePage />} />
+
+            <Route path="/employees" element={<EmployeePage />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+      </Router>
+    );
+
+  } else {
+
+    if(window.location.pathname !== '/login'){
+      window.location.href = '/login';
+    }
+
+    return (
+      <Router>
+        <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<ErrorPage />} />
-      </Routes>
+        </Routes>
+      </Router>
+    );
 
-    </Router>
-  );
+  }
+
 }
+
 
 export default App;

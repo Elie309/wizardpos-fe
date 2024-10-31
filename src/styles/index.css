@@ -48,46 +48,35 @@ Color platte
         hover:bg-[#EB8317];
   }
 
-  /* HTML: <div class="loader"></div> */
-  .loader {
-    width: 60px;
-    aspect-ratio: 1;
-    --_g: no-repeat radial-gradient(farthest-side, #374151 90%, #00000000);
-    background: var(--_g), var(--_g), var(--_g);
-    background-size: 25% 25%;
-    animation: l17 1s infinite;
-  }
+}
 
-  @keyframes l17 {
-    0% {
-      background-position: 0% -100%, 50% -100%, 100% -100%;
-    }
+html, body, #root {
+  font-family: 'Poppins', sans-serif;
+  background-color: #F4F6FF;
+  width: 100vw;
+  height: 100vh;
+}
 
-    16.67% {
-      background-position: 0% 50%, 50% -100%, 100% -100%;
-    }
+/* HTML: <div class="loader"></div> */
+.loader {
+  --c:no-repeat linear-gradient(#F3C623 0 0);
+  background: 
+    var(--c),var(--c),var(--c),
+    var(--c),var(--c),var(--c),
+    var(--c),var(--c),var(--c);
+  background-size: 16px 16px;
+  animation: 
+    l32-1 1s infinite,
+    l32-2 1s infinite;
 
-    33.33% {
-      background-position: 0% 50%, 50% 50%, 100% -100%;
-    }
-
-    45%,
-    55% {
-      background-position: 0% 50%, 50% 50%, 100% 50%;
-    }
-
-    66.67% {
-      background-position: 0% 200%, 50% 50%, 100% 50%;
-    }
-
-    83.33% {
-      background-position: 0% 200%, 50% 200%, 100% 50%;
-    }
-
-    100% {
-      background-position: 0% 200%, 50% 200%, 100% 200%;
-    }
-  }
+}
+@keyframes l32-1 {
+  0%,100% {width:45px;height: 45px}
+  35%,65% {width:65px;height: 65px}
+}
+@keyframes l32-2 {
+  0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
+  60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
 }
 
 @media print {
