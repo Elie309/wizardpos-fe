@@ -18,7 +18,7 @@ function App() {
     try {
       setLoading(true);
 
-      let response = await api.get('/auth/getAuthenticatedUser');
+      let response = await api.get('auth/getAuthenticatedUser');
 
       if (response.status === 200) {
         let user = {
@@ -39,8 +39,7 @@ function App() {
 
   useEffect(() => {
 
-      authenticatedUser();
-
+    authenticatedUser();
 
   }, []);
 
@@ -53,11 +52,23 @@ function App() {
     );
   }
 
-  return (
-    <div>
-      {user.isAuthenticated ? <AppRouter /> : <Login />}
-    </div>
-  );
+  if (user.isAuthenticated) {
+
+    return (
+      <div className=' flex flex-col w-full h-full'>
+        <AppRouter />
+      </div>
+
+    );
+  } else {
+
+    window.history.pushState({}, '', '/login');
+    return (
+      <Login />
+    );
+
+  }
+
 }
 
 

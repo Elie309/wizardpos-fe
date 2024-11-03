@@ -49,8 +49,6 @@ export default function LoginPage() {
                 handleLogin(user);
                 setLoading(false);
 
-
-
                 window.history.pushState({}, '', '/orders');
                 
             } else {
