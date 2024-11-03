@@ -1,6 +1,6 @@
 // src/pages/OrdersPage.tsx
 import { useState } from "react";
-import { Product, Category } from "../types/Product";
+import { Product, Category } from "../../types/Product";
 
 export const categories: Category[] = [
   { id:"cat0", name: "All" },

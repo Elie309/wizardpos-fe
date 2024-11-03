@@ -2,21 +2,17 @@ import { FormEvent, useState } from "react";
 import api from "../../utils/Axios";
 import BlurredBackground from "../../components/BlurredBackground";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../utils/userSlice";
+import { setUser, UserState } from "../../utils/userSlice";
 
-interface IUser {
-    id: string,
-    name: string,
-    email: string,
-    role: string
-}
 
-export default function Login() {
+export default function LoginPage() {
 
     const dispatch = useDispatch();
   
-    const handleLogin = (data: IUser) => {
-      dispatch(setUser(data))
+    const handleLogin = (data: UserState) => {
+        dispatch(setUser(data));
+        data.token && sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('user', JSON.stringify(data));
     }
 
     
@@ -42,17 +38,20 @@ export default function Login() {
 
             if (response.status === 200) {
 
-                let user: IUser = {
-                    name: response.data.name,
-                    email: response.data.email,
-                    role: response.data.role,
-                    id: response.data.id,
+                let user: UserState = {
+                    name: response.data.user.name,
+                    email: response.data.user.email,
+                    role: response.data.user.role,
+                    token: response.data.token,
+                    isAuthenticated: true
                 }
 
                 handleLogin(user);
                 setLoading(false);
 
-                window.location.href = '/orders';
+
+
+                window.history.pushState({}, '', '/orders');
                 
             } else {
                 setLoading(false);
@@ -106,7 +105,7 @@ export default function Login() {
                     </div>
                     <div className="w-full text-center">
                         
-                        <button className="submit-button w-1/2" 
+                        <button className={`submit-button w-1/2 ${loading ? "cursor-wait": ""} `}
                         disabled={loading}  
                         onClick={handleSubmit}>{loading ? "Loading..." : "Login"}</button>
 

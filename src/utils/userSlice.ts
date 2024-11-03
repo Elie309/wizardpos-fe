@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface UserState {
+export interface UserState {
     name: string;
     email: string;
     role: string;
-    id: string;
+    token: string;
     isAuthenticated: boolean;
 }
 
@@ -12,7 +12,7 @@ const initialState: UserState = {
     name: '',
     email: '',
     role: '',
-    id: '',
+    token: '',
     isAuthenticated: false,
 };
 
@@ -24,13 +24,14 @@ const userSlice = createSlice({
             state.name = action.payload.name;
             state.email = action.payload.email;
             state.role = action.payload.role;
+            state.token = action.payload.token;
             state.isAuthenticated = true;
         },
         clearUser(state) {
             state.name = '';
             state.email = '';
             state.role = '';
-            state.id = '';
+            state.token = '';
             state.isAuthenticated = false;
         },
     },

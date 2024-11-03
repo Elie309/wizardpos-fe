@@ -1,7 +1,7 @@
 // src/pages/ReservationPage.tsx
 import { useState } from "react";
-import { Table } from "../types/Table";
-import { generateId } from "../utils/generateId";
+import { Table } from "../../types/Table";
+import { generateId } from "../../utils/generateId";
 
 // Sample table data
 const sampleTables: Table[] = [

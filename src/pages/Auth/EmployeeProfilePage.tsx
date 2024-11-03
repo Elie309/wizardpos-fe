@@ -1,9 +1,9 @@
 // src/pages/EmployeeProfilePage.tsx
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearUser } from "../utils/userSlice";
-import { RootState } from "../utils/store";
-import api from "../utils/Axios";
+import { clearUser } from "../../utils/userSlice";
+import { RootState } from "../../utils/store";
+import api from "../../utils/Axios";
 import { useState } from "react";
 
 export default function EmployeeProfilePage() {
@@ -21,9 +21,15 @@ export default function EmployeeProfilePage() {
       const response = await api.post('auth/logout');
 
       if (response.status === 200) {
+
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+
         setLoading(false);
         dispatch(clearUser())
-        window.location.href = '/login';
+
+        window.history.pushState({}, '', '/login');
+
       } else {
         setError(response.data.message);
         setLoading(false);

@@ -1,62 +1,63 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './utils/store.ts';
-import OrdersPage from "./pages/OrdersPage";
-import ReservationPage from "./pages/ReservationPage";
-import Navbar from "./components/Navbar";
-import ErrorPage from "./pages/ErrorPage";
-import EmployeePage from "./pages/admin/EmployeePage";
-import EmployeeProfilePage from "./pages/EmployeeProfilePage";
-import Login from "./pages/Auth/Login";
+import Login from "./pages/Auth/LoginPage.tsx";
+import AppRouter from './pages/AppRouter.tsx';
+import api from './utils/Axios.ts';
+import { useEffect, useState } from 'react';
+import { setUser } from './utils/userSlice.ts';
 
 function App() {
   const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
 
 
-  if (!user) {
+
+  const authenticatedUser = async () => {
+
+    try {
+      setLoading(true);
+
+      let response = await api.get('/auth/getAuthenticatedUser');
+
+      if (response.status === 200) {
+        let user = {
+          name: response.data.user.name,
+          email: response.data.user.email,
+          role: response.data.user.role,
+          isAuthenticated: true
+        }
+        dispatch(setUser(user));
+        setLoading(false);
+      }
+
+    } catch (error: any) {
+      setLoading(false);
+    }
+
+  }
+
+  useEffect(() => {
+
+      authenticatedUser();
+
+
+  }, []);
+
+  if (loading) {
 
     return (
       <div className="w-full h-full flex justify-center items-center ">
         <div className="loader scale-150"></div>
       </div>
-    )
-
+    );
   }
 
-
-  if (user.isAuthenticated) {
-    return (
-      <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/orders" element={<OrdersPage />} />
-            <Route path="/reservations" element={<ReservationPage />} />
-
-            <Route path="/employees/:id" element={<EmployeeProfilePage />} />
-
-            <Route path="/employees" element={<EmployeePage />} />
-            <Route path="*" element={<ErrorPage />} />
-          </Routes>
-      </Router>
-    );
-
-  } else {
-
-    if(window.location.pathname !== '/login'){
-      window.location.href = '/login';
-    }
-
-    return (
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
-      </Router>
-    );
-
-  }
-
+  return (
+    <div>
+      {user.isAuthenticated ? <AppRouter /> : <Login />}
+    </div>
+  );
 }
 
 
