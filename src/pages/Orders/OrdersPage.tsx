@@ -11,15 +11,8 @@ export default function OrdersPage() {
 
   return (
     <div className="flex flex-row p-8 w-full h-full">
-      {/* Product List */}
-      <div className="col-span-2">
-        <ProductMenu />
-      </div>
-
-      {/* Order Summary */}
-     
       <OrderSummary />
-
+      <ProductMenu />
     </div>
   );
 }
