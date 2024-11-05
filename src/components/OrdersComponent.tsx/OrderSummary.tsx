@@ -13,7 +13,7 @@ export default function OrderSummary() {
   }
 
   return (
-    <div className="flex flex-col justify-between rounded shadow-lg max-h-full max-w-sm bg-white p-4">
+    <div className="flex flex-col justify-between rounded-lg shadow-lg h-5/6 min-w-96 bg-white p-4">
       <div>
         <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
 
