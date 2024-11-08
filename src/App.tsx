@@ -4,7 +4,8 @@ import Login from "./pages/Auth/LoginPage.tsx";
 import AppRouter from './pages/AppRouter.tsx';
 import api from './utils/Axios.ts';
 import { useEffect, useState } from 'react';
-import { setUser } from './utils/userSlice.ts';
+import { setUser } from './utils/Slices/userSlice.ts';
+import Loading from './components/Loading/Loading.tsx';
 
 function App() {
   const user = useSelector((state: RootState) => state.user);
@@ -46,9 +47,7 @@ function App() {
   if (loading) {
 
     return (
-      <div className="w-full h-full flex justify-center items-center ">
-        <div className="loader scale-150"></div>
-      </div>
+      <Loading />
     );
   }
 

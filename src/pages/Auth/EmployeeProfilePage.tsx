@@ -1,7 +1,7 @@
 // src/pages/EmployeeProfilePage.tsx
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearUser } from "../../utils/userSlice";
+import { clearUser } from "../../utils/Slices/userSlice";
 import { RootState } from "../../utils/store";
 import api from "../../utils/Axios";
 import { useState } from "react";
