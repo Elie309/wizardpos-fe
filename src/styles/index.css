@@ -14,11 +14,15 @@ Color platte
 /* Make tailwind css styles here for input */
 @layer components {
   .primary-title {
-    @apply text-3xl xl:text-4xl w-full font-bold text-[#10375C] text-center my-4;
+    @apply text-3xl xl:text-4xl w-full font-bold text-dark text-center my-4;
   }
 
   .secondary-title {
     @apply text-2xl xl:text-3xl w-full font-bold text-gray-600 my-4 text-center;
+  }
+
+  .inverse-primary-title {
+    @apply text-2xl xl:text-3xl w-full font-bold text-white my-4 text-center;
   }
 
   .label-input-container {
@@ -32,7 +36,7 @@ Color platte
   .label-input-container input,
   .label-input-container select,
   .label-input-container textarea {
-    @apply border border-gray-300 rounded-md px-2 py-1 outline-none focus:border-[#EB8317] text-gray-600;
+    @apply border border-gray-300 rounded-md px-2 py-1 outline-none focus:border-secondary text-gray-600;
   }
 
   .label-input-container input::placeholder,
@@ -42,11 +46,23 @@ Color platte
   }
 
   .submit-button {
-    @apply bg-[#F3C623] text-white rounded-md px-4 py-2 mt-4 transition-colors 
+    @apply bg-primary text-white rounded-md px-4 py-2 mt-4 transition-colors 
         ease-linear duration-200 outline-none focus:outline-none 
-        focus:ring-2 focus:ring-[#F3C623] focus:ring-opacity-50 
-        hover:bg-[#EB8317];
+        focus:ring-2 focus:ring-primary focus:ring-opacity-50 
+        hover:bg-secondary;
   }
+
+  .submit-button:disabled {
+    @apply bg-gray-300 cursor-not-allowed;
+  }
+
+  .button-menu {
+    @apply py-3 px-6 bg-secondary text-white rounded-md transition-colors 
+        ease-linear duration-200 outline-none focus:outline-none text-center
+        focus:ring-2 focus:ring-primary focus:ring-opacity-50 
+        hover:bg-secondary;
+  }
+  
 
 }
 
