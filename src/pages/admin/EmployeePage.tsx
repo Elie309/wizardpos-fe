@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Employee, employees as initialEmployees } from "../../types/Employee";
-import { generateId } from "../../utils/generateId";
 import { Link } from "react-router-dom";
 
 export default function EmployeePage() {
@@ -19,7 +18,7 @@ export default function EmployeePage() {
     }
 
     const newEmp: Employee = {
-      id: generateId(),
+      id: '12312123',
       username: newEmployee.username,
       password: newEmployee.password,
     };

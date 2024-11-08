@@ -1,7 +1,6 @@
 // src/pages/ReservationPage.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table } from "../../types/Table";
-import { generateId } from "../../utils/generateId";
 
 // Sample table data
 const sampleTables: Table[] = [
@@ -18,53 +17,28 @@ const sampleTables: Table[] = [
 ];
 
 export default function ReservationPage() {
+
     const [tables, setTables] = useState<Table[]>(sampleTables);
     const [selectedTable, setSelectedTable] = useState<number | null>(null);
-    const [clientDetails, setClientDetails] = useState({
-        clientName: "",
-        phoneNumber: "",
-        timeOfStay: "",
-        additionalNotes: "",
-    });
 
-    const handleSelectTable = (id: number) => {
-        if (tables.find((table) => table.id === id)?.reserved) return; // Prevent selecting reserved tables
-        setSelectedTable(id);
+    const handleSelectedTable = (id: number) => {
+        console.log(`Table ${id} selected`);
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setClientDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
-    };
+    useEffect(() => {
 
-    const handleReserveTable = () => {
-        const reservationId = generateId(); // Generate unique reservation ID
-
-        setTables((prevTables) =>
-            prevTables.map((table) =>
-                table.id === selectedTable
-                    ? {
-                        ...table,
-                        reserved: true,
-                        reservationId,
-                        ...clientDetails,
-                    }
-                    : table
-            )
-        );
-        alert(`Reservation ID: ${reservationId}. Reservation successful!`);
-        setSelectedTable(null);
-        setClientDetails({ clientName: "", phoneNumber: "", timeOfStay: "", additionalNotes: "" });
-    };
+        setTables(sampleTables);
+    }, []);
 
     return (
         <div className="p-8">
             <h1 className="text-2xl font-bold mb-6">Table Reservation</h1>
+
             <div className="grid grid-cols-2 gap-6">
                 {tables.map((table) => (
                     <div
                         key={table.id}
-                        onClick={() => handleSelectTable(table.id)}
+                        onClick={() => handleSelectedTable(table.id)}
                         className={`p-6 border rounded cursor-pointer text-center text-5xl ${table.reserved
                                 ? "bg-red-300 cursor-not-allowed"
                                 : selectedTable === table.id
@@ -83,44 +57,6 @@ export default function ReservationPage() {
                     </div>
                 ))}
             </div>
-            {selectedTable && (
-                <div className="mt-6">
-                    <h2 className="text-xl">Enter Reservation Details</h2>
-                    <input
-                        type="text"
-                        name="clientName"
-                        placeholder="Client Name"
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border rounded mt-2"
-                    />
-                    <input
-                        type="tel"
-                        name="phoneNumber"
-                        placeholder="Phone Number"
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border rounded mt-2"
-                    />
-                    <input
-                        type="text"
-                        name="timeOfStay"
-                        placeholder="Time of Stay"
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border rounded mt-2"
-                    />
-                    <textarea
-                        name="additionalNotes"
-                        placeholder="Additional Notes"
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border rounded mt-2"
-                    ></textarea>
-                    <button
-                        onClick={handleReserveTable}
-                        className="w-full bg-blue-500 text-white py-2 rounded mt-4"
-                    >
-                        Reserve Table
-                    </button>
-                </div>
-            )}
         </div>
     );
 }
