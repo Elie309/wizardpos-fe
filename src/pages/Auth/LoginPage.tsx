@@ -2,7 +2,8 @@ import { FormEvent, useState } from "react";
 import api from "../../utils/Axios";
 import BlurredBackground from "../../components/BlurredBackground";
 import { useDispatch } from "react-redux";
-import { setUser, UserState } from "../../utils/userSlice";
+import { setUser, UserState } from "../../utils/Slices/userSlice";
+import LogoFilled from "../../components/Icons/LogoFilled";
 
 
 export default function LoginPage() {
@@ -49,7 +50,7 @@ export default function LoginPage() {
                 handleLogin(user);
                 setLoading(false);
 
-                window.history.pushState({}, '', '/orders');
+                window.history.pushState({}, '', '/');
                 
             } else {
                 setLoading(false);
@@ -77,7 +78,7 @@ export default function LoginPage() {
             bg-white p-4">
 
                 <div className="flex flex-col xl:flex-row justify-center">
-                    <img src="logo-filled.svg" alt="LOGO" className=" w-2/4 mx-auto xl:w-1/4" />
+                    <LogoFilled className="fill-dark w-3/4 mx-auto" />
 
                     <div className="flex flex-col justify-center w-full xl:w-3/4 ">
                         <h1 className="primary-title ">Wizard POS</h1>

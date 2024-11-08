@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import ProductService from "../../services/ProductService";
 import Product from "../../types/Product";
 import ProductItem from "./ProductItem";
+import Loading from "../Loading/Loading";
 
 export default function ProductMenu() {
 
@@ -47,9 +48,7 @@ export default function ProductMenu() {
 
     if (loading) {
         return (
-            <div className="w-full h-full flex justify-center items-center ">
-                <div className="loader scale-150"></div>
-            </div>
+           <Loading />
         );
     }
 
@@ -68,7 +67,7 @@ export default function ProductMenu() {
                 })}
 
             </div>
-            <div className="w-full h-full flex flex-row flex-wrap gap-4">
+            <div className="w-full h-fit flex flex-row flex-wrap gap-4">
             {products.map((product: Product) => {
 
                 if (!category.includes(product.categoryName)) {

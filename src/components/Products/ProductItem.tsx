@@ -7,9 +7,16 @@ interface ProductItemProps {
 //export default with props above
 
 export default function ProductItem({ product }: ProductItemProps) {
+
+    const handleOnClick = () => {
+        console.log(`Product ${product.name} clicked`);
+    }
+
     return (
 
-        <div className="bg-white shadow-lg w-36 h-36 rounded-lg">
+        <div 
+            onClick={handleOnClick}
+            className="bg-white shadow-lg w-36 h-36 rounded-lg hover:scale-105 transition-transform cursor-pointer ease-linear">
             <img src={product.image} alt={product.name} className="object-cover rounded-t-lg" />
 
             <div className="px-2">
