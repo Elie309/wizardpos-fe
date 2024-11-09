@@ -28,12 +28,18 @@ function App() {
           role: response.data.user.role,
           isAuthenticated: true
         }
+        if(user.email === '' || user.name === '' || user.role === ""){
+          window.history.replaceState({}, '', "/")
+
+        }
+
         dispatch(setUser(user));
         setLoading(false);
       }
 
     } catch (error: any) {
       setLoading(false);
+      window.history.replaceState({}, '', "/")
     }
 
   }
