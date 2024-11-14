@@ -4,8 +4,9 @@ import ErrorPage from "./Others/ErrorPage.tsx";
 import EmployeeProfilePage from "./Auth/EmployeeProfilePage.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Main from "./Main.tsx";
-import EmployeePage from "./admin/EmployeePage.tsx";
-import ProductList from "./Products/ProductList.tsx";
+import EmployeePage from "./Admin/EmployeePage.tsx";
+import ProductListPage from "./Products/ProductListPage.tsx";
+import SaveProductPage from "./Products/SaveProductPage.tsx";
 
 
 
@@ -15,8 +16,9 @@ export default function AppRouter() {
             <Routes>
                 <Route path="/" element={<Main />} />
                 
-                <Route path="/products" element={<ProductList />} />
-
+                <Route path="/products" element={<ProductListPage />} />
+                <Route path="/products/:id" element={<SaveProductPage edit={true} />} />
+                <Route path="/products/add" element={<SaveProductPage edit={false} />} />
                 
                 <Route path="/orders" element={<OrdersPage />} />
 
