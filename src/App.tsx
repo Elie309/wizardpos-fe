@@ -35,6 +35,9 @@ function App() {
 
         dispatch(setUser(user));
         setLoading(false);
+      }else{
+        window.history.replaceState({}, '', "/login")
+        setLoading(false);
       }
 
     } catch (error: any) {
