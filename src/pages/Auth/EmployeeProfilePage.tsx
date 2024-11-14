@@ -28,7 +28,7 @@ export default function EmployeeProfilePage() {
         setLoading(false);
         dispatch(clearUser())
 
-        window.history.pushState({}, '', '/login');
+        window.history.replaceState({}, '', '/login');
 
       } else {
         setError(response.data.message);
