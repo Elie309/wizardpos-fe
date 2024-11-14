@@ -50,7 +50,7 @@ export default function LoginPage() {
                 handleLogin(user);
                 setLoading(false);
 
-                window.history.pushState({}, '', '/');
+                window.history.replaceState({}, '', '/');
                 
             } else {
                 setLoading(false);
@@ -104,7 +104,7 @@ export default function LoginPage() {
                     </div>
                     <div className="w-full text-center">
                         
-                        <button className={`submit-button w-1/2 ${loading ? "cursor-wait": ""} `}
+                        <button className={`submit-button w-1/2 mt-4 ${loading ? "cursor-wait": ""} `}
                         disabled={loading}  
                         onClick={handleSubmit}>{loading ? "Loading..." : "Login"}</button>
 
