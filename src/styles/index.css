@@ -29,7 +29,8 @@ Color platte
     @apply flex flex-col w-full px-2 my-2;
   }
 
-  .label-input-container label {
+  .label-input-container label,
+  .main-label {
     @apply text-sm font-semibold text-gray-600;
   }
 
