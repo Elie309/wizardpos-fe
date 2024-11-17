@@ -17,8 +17,8 @@ export default function AppRouter() {
                 <Route path="/" element={<Main />} />
                 
                 <Route path="/products" element={<ProductListPage />} />
-                <Route path="/products/:id" element={<SaveProductPage edit={true} />} />
-                <Route path="/products/add" element={<SaveProductPage edit={false} />} />
+                <Route path="/products/:id" element={<SaveProductPage isEdit={true} />} />
+                <Route path="/products/add" element={<SaveProductPage isEdit={false} />} />
                 
                 <Route path="/orders" element={<OrdersPage />} />
 

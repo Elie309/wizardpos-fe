@@ -55,6 +55,11 @@ export default class Product {
     this.categoryName = categoryName;
   }
 
+  //Simple product from changeable values
+  static simpleProduct(sku: string, slug: string, name: string, description: string, price: number, categoryId: number, showInMenu: boolean, productionDate: string, expiryDate: string, image: string, isActive: boolean): Product {
+    return new Product(0, sku, slug, name, description, price, categoryId, showInMenu, productionDate, expiryDate, image, isActive, '', '', '', '');
+  }
+
   //FromJson
   static fromJson(json: any): Product {
     return new Product(json.product_id, json.product_sku, json.product_slug, json.product_name, json.product_description, json.product_price, json.product_category_id, json.product_show_in_menu, json.product_production_date, json.product_expiry_date, json.product_image, json.product_is_active, json.product_created_at, json.product_updated_at, json.product_deleted_at, json.category_name);
@@ -79,6 +84,18 @@ export default class Product {
       product_deleted_at: this.deletedAt,
       category_name: this.categoryName
     }
+  }
+
+
+  //generate barcode for product
+  static generateSKU(): string {
+    return Math.floor(100000000000 + Math.random() * 900000000000).toString();
+  }
+
+  //Generate slug from name
+  static generateSlug(name: string): string {
+    //Replace spaces with hyphens & convert to lowercase & special characters
+    return name.replace(/\s+/g, '-').toLowerCase().replace(/[^\w-]+/g, '');
   }
 
 }

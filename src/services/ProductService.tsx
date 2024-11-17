@@ -1,6 +1,8 @@
 
+import { AxiosError } from 'axios';
 import Product, {IProduct} from '../types/Product';
 import api from '../utils/Axios';
+import { CastBooleanToNumber } from '../utils/Helpers/CastBoolean';
 
 
 type IProductResponse = {
@@ -62,11 +64,8 @@ export default class ProductService {
         }
     }
 
-    static async saveProduct(edit: boolean, product: Product): Promise<IProductResponse> {
+    static async saveProduct(edit: boolean, product: Product,  id?:string): Promise<IProductResponse> {
         try{
-
-            console.log('Product');
-            console.log(product);
 
             let formData = new FormData();
             formData.append('product_sku', product.sku);
@@ -75,20 +74,25 @@ export default class ProductService {
             formData.append('product_description', product.description);
             formData.append('product_price', product.price.toString());
             formData.append('product_category_id', product.categoryId.toString());
-            formData.append('product_show_in_menu', product.showInMenu.toString());
+            formData.append('product_show_in_menu', CastBooleanToNumber(product.showInMenu).toString());
             formData.append('product_production_date', product.productionDate);
             formData.append('product_expiry_date', product.expiryDate);
             formData.append('product_image', product.image);
-            formData.append('product_is_active', product.isActive.toString());
+            formData.append('product_is_active', CastBooleanToNumber(product.isActive).toString());
 
 
             let response = null;
             if(edit){
-                console.log('Edit');
-                response = await api.post('products/' + product.sku, formData);
+                if(!id){
+                    return {
+                        success: false,
+                        message: 'Invalid product id',
+                        data: null
+                    };
+                }
+                response = await api.post('products/' + id, formData);
             }else{
-                console.log('Save');
-                response = await api.post('products/save', formData);
+                response = await api.post('products', formData);
             }
 
 
@@ -116,18 +120,30 @@ export default class ProductService {
 
         }catch(error: any){
 
-            let errors = error.response.data.errors;
-            // Convert json object to string
-            let message = JSON.stringify(errors);
-            //get values and join
-            message = Object.values(errors).join(', ').toLowerCase();
+            if(error instanceof AxiosError){
 
+                let errors = error.response?.data.errors;
+                // Convert json object to string
+                let message = JSON.stringify(errors);
+                //get values and join
+                message = Object.values(errors).join(', ').toLowerCase();
+    
+    
+                return {
+                    success: false,
+                    message: error.response?.data.message.toString().concat(", ", message),
+                    data: null
+                };
 
-            return {
-                success: false,
-                message: error.response.data.message.toString().concat(", ", message),
-                data: null
-            };
+            }else {
+                return {
+                    success: false,
+                    message: error.message || 'An error occurred',
+                    data: null
+                };
+            }
+
+          
         }
     }
 

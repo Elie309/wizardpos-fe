@@ -5,16 +5,33 @@ import Loading from "../../components/Loading/Loading";
 import ErrorDisplay from "../../components/Error/ErrorComponent";
 import CategoryService from "../../services/CategoryService";
 import Category from "../../types/Category";
+import SwitchInput from "../../components/Utils/SwitchInput";
 
-export default function SaveProductPage({ edit }: { edit: boolean }) {
 
-    const [product, setProduct] = useState<Product | null>(null);
+type IFormData = {
+    sku: string;
+    slug: string;
+    name: string;
+    description: string;
+    price: number;
+    categoryId: number;
+    showInMenu: boolean;
+    productionDate: string;
+    expiryDate: string;
+    image: string;
+    isActive: boolean;
+}
+
+export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
+
+    const [sku, setSku] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [success, setSuccess] = useState<boolean>(false);
     const [categories, setCategories] = useState<Category[]>([]);
-    const [formData, setFormData] = useState({
+    const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
+    const [formData, setFormData] = useState<IFormData>({
         sku: "",
         slug: "",
         name: "",
@@ -26,7 +43,6 @@ export default function SaveProductPage({ edit }: { edit: boolean }) {
         expiryDate: "",
         image: "",
         isActive: false,
-        categoryName: ""
     });
 
 
@@ -37,6 +53,7 @@ export default function SaveProductPage({ edit }: { edit: boolean }) {
     }
 
 
+
     const loadProduct = async () => {
         try {
 
@@ -44,14 +61,13 @@ export default function SaveProductPage({ edit }: { edit: boolean }) {
 
             const product = await ProductService.getWithSKU(sku);
 
-            const category = await CategoryService.getCategories();
-
-            if (product === null || category === null) {
+            if (product === null) {
+                window.location.href = "/products"
                 throw new Error("Product or Category not found")
             }
-            setCategories(category);
 
-            setProduct(product);
+            setSku(product.sku);
+
             setFormData(
                 {
                     sku: product.sku,
@@ -65,7 +81,6 @@ export default function SaveProductPage({ edit }: { edit: boolean }) {
                     expiryDate: product.expiryDate,
                     image: product.image,
                     isActive: product.isActive,
-                    categoryName: product.categoryName
                 }
             )
 
@@ -73,34 +88,75 @@ export default function SaveProductPage({ edit }: { edit: boolean }) {
         } catch (error: any) {
             setError(true);
             setErrorMessage(error.message);
+        }finally{
+            setLoading(false);
+        }
+    }
+
+    const loadCategories = async () => {
+        try {
+            const categories = await CategoryService.getCategories();
+            setCategories(categories);
+        } catch (error: any) {
+            setError(true);
+            setErrorMessage(error.message);
         } finally {
-            setLoading(false)
+            if (!isEdit) {
+                setLoading(false);
+            }
         }
     }
 
     useEffect(() => {
-        if (edit) {
+        setLoading(true);
+        if (isEdit) {
+            loadCategories()
             loadProduct()
+        } else {
+            loadCategories()
         }
+
     }, [])
 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoadingSubmit(true);
+        setError(false);
+        setSuccess(false);
         try {
 
-            if (product === null) {
+            if (formData.sku === "" || formData.slug === "" || formData.name === "" ||
+                formData.description === "" || formData.price === 0 ||
+                formData.categoryId === 0 || formData.productionDate === "" ||
+                formData.expiryDate === "" || formData.image === "") {
+
+
                 setError(true);
-                setErrorMessage("Product is null. Please try again");
+                setErrorMessage("Please fill all fields");
                 return;
             }
-
             let response = null;
 
-            if (edit) {
-                response = await ProductService.saveProduct(edit, product);
+            let product = Product.simpleProduct(
+                formData.sku.trim(),
+                formData.slug.trim(),
+                formData.name.trim(),
+                formData.description.trim(),
+                formData.price,
+                formData.categoryId,
+                formData.showInMenu,
+                formData.productionDate,
+                formData.expiryDate,
+                formData.image.trim(),
+                formData.isActive,
+            )
+
+
+            if (isEdit) {
+                response = await ProductService.saveProduct(isEdit, product, sku);
             } else {
-                response = await ProductService.saveProduct(!edit, product);
+                response = await ProductService.saveProduct(isEdit, product);
             }
 
             if (response.success) {
@@ -110,9 +166,11 @@ export default function SaveProductPage({ edit }: { edit: boolean }) {
                 setErrorMessage(response.message);
             }
 
+            setLoadingSubmit(false);
         } catch (error: any) {
             setError(true);
             setErrorMessage(error.message);
+            setLoadingSubmit(false);
         }
     };
 
@@ -123,18 +181,38 @@ export default function SaveProductPage({ edit }: { edit: boolean }) {
 
     return (
         <div className='w-full h-full p-8 mx-auto shadow-lg max-w-5xl bg-white rounded overflow-x-hidden overflow-y-auto'>
-            <h1 className="primary-title">{edit ? "Edit" : "Add"} Product</h1>
+            <h1 className="primary-title">{isEdit ? "Edit" : "Add"} Product</h1>
             {error && <ErrorDisplay message={errorMessage} />}
-            {success && <div className=" border border-green-800 bg-green-100 py-4 rounded-xl text-center w-3/4 mx-8 text-green-600">Product saved successfully</div>}
+            {success && <div className=" border border-green-800 bg-green-100 py-4 rounded-xl text-center w-full mx-8 text-green-600">Product saved successfully</div>}
             <form onSubmit={handleSubmit}>
-                <div className="label-input-container my-4 ">
-                    <label htmlFor="sku">SKU</label>
-                    <input type="text" name="sku" value={formData.sku} onChange={handleChange} placeholder="SKU" />
+                <div className="label-input-container my-4 flex flex-row">
+                    <div className="w-full">
+                        <label htmlFor="sku" className="mr-4 w-1/4">SKU</label>
+                        <input type="text" name="sku" className=" w-3/4 h-full" value={formData.sku} onChange={handleChange} placeholder="SKU" />
+                    </div>
+
+                    {/* Generate barcode */}
+                    <button className="neutral-button mx-2 text-sm p-2" onClick={() => {
+                        let sku = Product.generateSKU();
+                        setFormData({ ...formData, sku });
+                    }} type="button">Generate</button>
+
+
                 </div>
 
-                <div className="label-input-container my-4 ">
-                    <label htmlFor="slug">Slug</label>
-                    <input type="text" name="slug" value={formData.slug} onChange={handleChange} placeholder="Slug" />
+                <div className="label-input-container my-4 flex flex-row">
+                    <div className="w-full">
+
+                        <label htmlFor="slug" className="mr-4 w-1/4">Slug</label>
+                        <input type="text" name="slug" className="w-3/4 h-full" value={formData.slug} onChange={handleChange} placeholder="Slug" />
+                    </div>
+
+                    {/* Generate slug */}
+                    <button className="neutral-button mx-2 text-sm p-2" onClick={() => {
+                        let slug = Product.generateSlug(formData.name);
+                        setFormData({ ...formData, slug });
+                    }} type="button">Generate</button>
+
                 </div>
 
                 <div className="label-input-container my-4 ">
@@ -152,7 +230,8 @@ export default function SaveProductPage({ edit }: { edit: boolean }) {
 
                 <div className="label-input-container my-4 ">
                     <label htmlFor="categoryId">Category</label>
-                    <select name="category_id" value={formData.categoryId} onChange={handleChange}>
+                    <select name="categoryId" value={formData.categoryId} onChange={handleChange}>
+                        <option value={0}>Select Category</option>
                         {categories.map((category) => {
                             return <option key={category.id}
                                 value={category.id}>{category.name}</option>
@@ -184,20 +263,32 @@ export default function SaveProductPage({ edit }: { edit: boolean }) {
 
                     <div className="flex flex-row justify-around w-1/2">
                         <label className="main-label" htmlFor="showInMenu">Show in Menu</label>
-                        <input className="" type="checkbox" name="showInMenu" checked={formData.showInMenu} onChange={handleChange} />
+                        <SwitchInput name="showInMenu" value={formData.showInMenu} onChange={() => {
+                            setFormData({ ...formData, showInMenu: !formData.showInMenu })
+                        }} />
 
                     </div>
+
+
+
                     <div className="flex flex-row justify-around w-1/2">
                         <label className="main-label" htmlFor="isActive">Active</label>
-                        <input className="" type="checkbox" name="isActive" checked={formData.isActive} onChange={handleChange} />
-
+                        <SwitchInput name="isActive" value={formData.isActive} onChange={() => {
+                            setFormData({ ...formData, isActive: !formData.isActive })
+                        }} />
                     </div>
                 </div >
 
                 <div className="label-input-container my-4 ">
-                    <button className="submit-button mx-auto w-1/4" type="submit">{edit ? "Update" : "Save"} Product</button>
+                    <button className={`submit-button mx-auto w-1/4 ${loadingSubmit ? "cursor-wait" : ""} `}
+                        disabled={loadingSubmit}
+                        type="submit"
+                        onClick={handleSubmit}>
+                        {loadingSubmit ? "Loading..." : isEdit ? "Update Product" : "Save Product"}
+                    </button>
                 </div >
             </form >
         </div >
     )
+
 }
