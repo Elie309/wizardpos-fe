@@ -127,13 +127,11 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
         try {
 
             if (formData.sku === "" || formData.slug === "" || formData.name === "" ||
-                formData.description === "" || formData.price === 0 ||
-                formData.categoryId === 0 || formData.productionDate === "" ||
-                formData.expiryDate === "" || formData.image === "") {
-
-
+                formData.price === 0 ||
+                formData.categoryId === 0) {
+                setLoadingSubmit(false)
                 setError(true);
-                setErrorMessage("Please fill all fields");
+                setErrorMessage("Please fill all required fields");
                 return;
             }
             let response = null;
@@ -181,13 +179,17 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
 
     return (
         <div className='w-full h-full p-8 mx-auto shadow-lg max-w-5xl bg-white rounded overflow-x-hidden overflow-y-auto'>
-            <h1 className="primary-title">{isEdit ? "Edit" : "Add"} Product</h1>
+            
+            <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/products"> Product List</a> / {isEdit ? formData.sku : "New Product"}</p>
+            <h1 className="primary-title my-4">{isEdit ? "Edit" : "Add"} Product</h1>
+
+
             {error && <ErrorDisplay message={errorMessage} />}
-            {success && <div className=" border border-green-800 bg-green-100 py-4 rounded-xl text-center w-full mx-8 text-green-600">Product saved successfully</div>}
+            {success && <div className=" border border-green-800 bg-green-100 py-4 rounded-xl text-center w-full text-green-600">Product saved successfully</div>}
             <form onSubmit={handleSubmit}>
                 <div className="label-input-container my-4 flex flex-row">
                     <div className="w-full">
-                        <label htmlFor="sku" className="mr-4 w-1/4">SKU</label>
+                        <label htmlFor="sku" className="mr-4 w-1/4">SKU<span className="required-field"></span></label>
                         <input type="text" name="sku" className=" w-3/4 h-full" value={formData.sku} onChange={handleChange} placeholder="SKU" />
                     </div>
 
@@ -203,7 +205,7 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
                 <div className="label-input-container my-4 flex flex-row">
                     <div className="w-full">
 
-                        <label htmlFor="slug" className="mr-4 w-1/4">Slug</label>
+                        <label htmlFor="slug" className="mr-4 w-1/4">Slug<span className="required-field"></span></label>
                         <input type="text" name="slug" className="w-3/4 h-full" value={formData.slug} onChange={handleChange} placeholder="Slug" />
                     </div>
 
@@ -216,7 +218,7 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
                 </div>
 
                 <div className="label-input-container my-4 ">
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">Name<span className="required-field"></span></label>
                     <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" />
                 </div>
 
@@ -224,12 +226,12 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
 
 
                 <div className="label-input-container my-4 ">
-                    <label htmlFor="price">Price</label>
+                    <label htmlFor="price">Price<span className="required-field"></span></label>
                     <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Price" />
                 </div>
 
                 <div className="label-input-container my-4 ">
-                    <label htmlFor="categoryId">Category</label>
+                    <label htmlFor="categoryId">Category<span className="required-field"></span></label>
                     <select name="categoryId" value={formData.categoryId} onChange={handleChange}>
                         <option value={0}>Select Category</option>
                         {categories.map((category) => {
@@ -280,7 +282,7 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
                 </div >
 
                 <div className="label-input-container my-4 ">
-                    <button className={`submit-button mx-auto w-1/4 ${loadingSubmit ? "cursor-wait" : ""} `}
+                    <button className={`submit-button mx-auto w-3/4 md:w-1/4 ${loadingSubmit ? "cursor-wait" : ""} `}
                         disabled={loadingSubmit}
                         type="submit"
                         onClick={handleSubmit}>

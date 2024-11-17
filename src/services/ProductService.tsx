@@ -8,10 +8,79 @@ import { CastBooleanToNumber } from '../utils/Helpers/CastBoolean';
 type IProductResponse = {
     success: boolean;
     message: string;
-    data: Product | null;
+    products: Product | Product[] | null;
+    details?: any;
 }
 
 export default class ProductService {
+
+    static async getAll(rowPerPage: number, page: number, search?: string): Promise<IProductResponse> {
+        try{
+            if(isNaN(rowPerPage) || isNaN(page)){
+                return {
+                    success: false,
+                    message: 'Invalid row per page or page number',
+                    products: null
+                };
+            }
+
+            if(rowPerPage < 1 || page < 1){
+                return {
+                    success: false,
+                    message: 'Invalid row per page or page number',
+                    products: null
+                };
+            }
+
+            if(!(search && search.trim().length > 0)){
+                search = '';
+            }
+            //escape search
+            search = encodeURIComponent(search);
+
+            const response = await api.get('/products?perPage=' + rowPerPage + '&page=' + page+ '&search=' + search);
+
+            let products: Product[] = [];
+
+          
+            if(response.status === 200){
+                products = response.data.products.map((product: IProduct) => Product.fromJson(product));
+
+                delete response.data.products;
+                return {
+                    success: true,
+                    message: 'Products fetched successfully',
+                    products: products,
+                    details: response.data
+                };
+            }else {
+                return {
+                    success: false,
+                    message: 'Failed to fetch products',
+                    products: null
+                };
+            }
+
+
+           
+        }catch(error: any){
+
+            if(error instanceof AxiosError){
+                return {
+                    success: false,
+                    message: error.response?.data.message || 'An error occurred',
+                    products: null
+                };
+            }else {
+                return {
+                    success: false,
+                    message: error.message || 'An error occurred',
+                    products: null
+                };
+            }
+            
+        }
+    }
 
     //Static getWithSKU
     static async getWithSKU(sku: string): Promise<Product | null>  {
@@ -87,7 +156,7 @@ export default class ProductService {
                     return {
                         success: false,
                         message: 'Invalid product id',
-                        data: null
+                        products: null
                     };
                 }
                 response = await api.post('products/' + id, formData);
@@ -100,7 +169,7 @@ export default class ProductService {
                 return {
                     success: true,
                     message: response.data.message,
-                    data: Product.fromJson(response.data)
+                    products: Product.fromJson(response.data)
                 };
             }
 
@@ -108,14 +177,14 @@ export default class ProductService {
                 return {
                     success: true,
                     message: response.data.message,
-                    data: Product.fromJson(response.data)
+                    products: Product.fromJson(response.data)
                 };
             }
 
             return {
                 success: false,
                 message: response.data.message,
-                data: null
+                products: null
             };
 
         }catch(error: any){
@@ -132,14 +201,14 @@ export default class ProductService {
                 return {
                     success: false,
                     message: error.response?.data.message.toString().concat(", ", message),
-                    data: null
+                    products: null
                 };
 
             }else {
                 return {
                     success: false,
                     message: error.message || 'An error occurred',
-                    data: null
+                    products: null
                 };
             }
 
