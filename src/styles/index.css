@@ -59,6 +59,20 @@ Color platte
     @apply bg-gray-300 cursor-not-allowed;
   }
 
+  .reverse-button {
+    @apply bg-white text-primary border border-primary rounded-md px-4 py-2 transition-colors 
+        ease-linear duration-200 outline-none focus:outline-none 
+        focus:ring-2 focus:ring-primary focus:ring-opacity-50 
+        hover:bg-primary hover:text-white;
+  }
+
+  .neutral-button {
+    @apply bg-transparent text-dark border border-dark rounded-md px-4 py-2 transition-colors 
+        ease-linear duration-200 outline-none focus:outline-none 
+        focus:ring-2 focus:ring-dark focus:ring-opacity-50 
+        hover:bg-dark hover:text-white;
+  }
+
   .button-menu {
     @apply py-3 px-6 bg-secondary text-white rounded-md transition-colors 
         ease-linear duration-200 outline-none focus:outline-none text-center
@@ -163,4 +177,49 @@ html, body, #root {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+
+/* Styles for the switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #EB8317;
+}
+
+input:checked + .slider:before {
+  transform: translateX(14px);
 }
