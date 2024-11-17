@@ -4,6 +4,7 @@ import BlurredBackground from "../../components/BlurredBackground";
 import { useDispatch } from "react-redux";
 import { setUser, UserState } from "../../utils/Slices/userSlice";
 import LogoFilled from "../../components/Icons/LogoFilled";
+import { AxiosError } from "axios";
 
 
 export default function LoginPage() {
@@ -27,6 +28,12 @@ export default function LoginPage() {
         e.preventDefault();
         setError('');
         setLoading(true);
+
+        if(email === '' || password === ''){
+            setError('Please fill all fields');
+            setLoading(false);
+            return;
+        }
 
         try {
             let formData = new FormData();
@@ -54,13 +61,24 @@ export default function LoginPage() {
                 
             } else {
                 setLoading(false);
-                setError(response.data.message);
+                setError(response.data.message || 'An error occurred');
             }
 
 
         } catch (error: any) {
+
+            if(error instanceof AxiosError){
+                if(error.response?.status === 401){
+                    setError(error.response.data.message);
+                }else{
+                    setError('An error occurred');
+                }
+            }else{
+                setError(error.message || 'An error occurred');
+            }
+
             setLoading(false);
-            setError(error.response.data.message);
+
         }
     }
 
