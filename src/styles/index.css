@@ -106,8 +106,25 @@ Color platte
     @apply bg-gray-200 cursor-pointer;
   }
 
-  
+  .pager {
+    @apply flex items-center justify-center space-x-2 my-4;
+  }
 
+  .pager button {
+    @apply bg-white border border-gray-300 text-gray-700 rounded-md px-3 py-1 transition-colors duration-200 ease-linear outline-none focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 hover:bg-gray-100;
+  }
+
+  .pager button:disabled {
+    @apply bg-gray-200 text-gray-400 cursor-not-allowed;
+  }
+
+  .pager button[disabled] {
+    @apply bg-gray-200 text-gray-400 cursor-not-allowed;
+  }
+
+  .link-internal a{
+    @apply text-primary underline;
+  } 
 }
 
 html, body, #root {
@@ -138,7 +155,7 @@ html, body, #root {
 }
 @keyframes l32-2 {
   0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
-  60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
+  60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,0 0,  50% 50% }
 }
 
 @media print {
@@ -222,4 +239,9 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(14px);
+}
+
+.required-field::before {
+  content: "*";
+  color: red;
 }
