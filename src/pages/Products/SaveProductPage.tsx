@@ -127,8 +127,7 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
         try {
 
             if (formData.sku === "" || formData.slug === "" || formData.name === "" ||
-                formData.price === 0 ||
-                formData.categoryId === 0) {
+                formData.price === 0 || formData.categoryId === 0) {
                 setLoadingSubmit(false)
                 setError(true);
                 setErrorMessage("Please fill all required fields");
@@ -159,6 +158,19 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
 
             if (response.success) {
                 setSuccess(true);
+                setFormData({
+                    sku: "",
+                    slug: "",
+                    name: "",
+                    description: "",
+                    price: 0,
+                    categoryId: 0,
+                    showInMenu: false,
+                    productionDate: "",
+                    expiryDate: "",
+                    image: "",
+                    isActive: false,
+                });
             } else {
                 setError(true);
                 setErrorMessage(response.message);
