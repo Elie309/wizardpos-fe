@@ -52,7 +52,7 @@ export default function ProductListPage() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <a href='/add' className='submit-button text-center col-span-2'>Add Product</a>
+                <a href='products/add' className='submit-button text-center col-span-2'>Add Product</a>
 
             </div>
 
