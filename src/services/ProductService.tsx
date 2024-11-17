@@ -195,7 +195,13 @@ export default class ProductService {
                 // Convert json object to string
                 let message = JSON.stringify(errors);
                 //get values and join
-                message = Object.values(errors).join(', ').toLowerCase();
+
+                //If errors is an array
+                if(Array.isArray(errors)){
+                    message = errors.join(', ').toLowerCase();
+                }else if(typeof errors === 'object') {
+                    message = Object.values(errors).join(', ').toLowerCase();
+                }
     
     
                 return {
