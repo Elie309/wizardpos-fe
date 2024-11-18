@@ -1,5 +1,7 @@
+import { AxiosError } from "axios";
 import Category, { ICategory } from "../types/Category";
 import api from "../utils/Axios";
+import { CastBooleanToNumber } from "../utils/Helpers/CastBoolean";
 
 type ICategoryResponse = {
     success: boolean;
@@ -12,7 +14,7 @@ type ICategoryResponse = {
 export default class CategoryService {
 
 
-    static async getCategories(): Promise<Category[]> {
+    static async getAll(): Promise<Category[]> {
         try {
             const response = await api.get('/categories');
 
@@ -26,9 +28,9 @@ export default class CategoryService {
         }
     }
 
-    static async getCategoryWithId(id: number): Promise<ICategoryResponse> {
+    static async getCategoryByName(categoryName: string): Promise<ICategoryResponse> {
         try {
-            const response = await api.get(`/categories/${id}`);
+            const response = await api.get(`/categories/${categoryName}`);
 
             if (response.status === 200) {
 
@@ -70,12 +72,12 @@ export default class CategoryService {
 
             formData.append('category_name', category.name);
             formData.append('category_image', category.image);
-            formData.append('category_is_active', category.isActive.toString());
+            formData.append('category_is_active', CastBooleanToNumber(category.isActive).toString());
             formData.append('category_description', category.description);
-            formData.append('category_show_in_menu', category.showInMenu.toString());
+            formData.append('category_show_in_menu', CastBooleanToNumber(category.showInMenu).toString());
 
 
-            const response = await api.post('/categories',formData);
+            const response = await api.post('/categories', formData);
 
             if (response.status === 201) {
                 return {
@@ -92,34 +94,49 @@ export default class CategoryService {
             };
 
         } catch (error: any) {
-            let errors = error.response.data.errors;
-            errors = JSON.stringify(errors);
-            errors = Object.values(errors).join(', ').toLowerCase();
+            if(error instanceof AxiosError){
+                let errors = error.response?.data.errors;
+                // Convert json object to string
+                let message = JSON.stringify(errors);
+                //get values and join
 
-            let message = error.response?.data?.message || error.message;
-            message = `${message}, ${errors}`;
+                //If errors is an array
+                if(Array.isArray(errors)){
+                    message = errors.join(', ').toLowerCase();
+                }else if(typeof errors === 'object') {
+                    message = Object.values(errors).join(', ').toLowerCase();
+                }
+    
+    
+                return {
+                    success: false,
+                    message: error.response?.data.message.toString().concat(", ", message),
+                    data: null
+                };
 
-            return {
-                success: false,
-                message,
-                data: null
+            }else {
+                return {
+                    success: false,
+                    message: error.message || 'An error occurred',
+                    data: null
+                };
             }
         }
     }
 
-    static async updateCategory(category: Category): Promise<ICategoryResponse> {
+    static async updateCategory(category_name: string, category: Category): Promise<ICategoryResponse> {
         try {
 
             const formData = new FormData();
 
             formData.append('category_name', category.name);
             formData.append('category_image', category.image);
-            formData.append('category_is_active', category.isActive.toString());
+            formData.append('category_is_active', CastBooleanToNumber(category.isActive).toString());
             formData.append('category_description', category.description);
-            formData.append('category_show_in_menu', category.showInMenu.toString());
+            formData.append('category_show_in_menu', CastBooleanToNumber(category.showInMenu).toString());
 
 
-            const response = await api.put(`/categories/${category.id}`, formData);
+            const response = await api.post(`/categories/${category_name}`, formData);
 
             if (response.status === 200) {
                 return {
@@ -136,17 +153,33 @@ export default class CategoryService {
             };
 
         } catch (error: any) {
-            let errors = error.response.data.errors;
-            errors = JSON.stringify(errors);
-            errors = Object.values(errors).join(', ').toLowerCase();
+            if(error instanceof AxiosError){
 
-            let message = error.response?.data?.message || error.message;
-            message = `${message}, ${errors}`;
+                let errors = error.response?.data.errors;
+                // Convert json object to string
+                let message = JSON.stringify(errors);
+                //get values and join
 
-            return {
-                success: false,
-                message,
-                data: null
+                //If errors is an array
+                if(Array.isArray(errors)){
+                    message = errors.join(', ').toLowerCase();
+                }else if(typeof errors === 'object') {
+                    message = Object.values(errors).join(', ').toLowerCase();
+                }
+    
+    
+                return {
+                    success: false,
+                    message: error.response?.data.message.toString().concat(", ", message),
+                    data: null
+                };
+
+            }else {
+                return {
+                    success: false,
+                    message: error.message || 'An error occurred',
+                    data: null
+                };
             }
         }
     }
