@@ -9,6 +9,7 @@ import ProductListPage from "./Products/ProductListPage.tsx";
 import SaveProductPage from "./Products/SaveProductPage.tsx";
 import CategoryListPage from "./Categories/CategoryListPage.tsx";
 import SaveCategoryPage from "./Categories/SaveCategoryPage.tsx";
+import UploadPage from "./Others/UploadPage.tsx";
 
 
 
@@ -28,7 +29,8 @@ export default function AppRouter() {
                 <Route path="/categories/:id" element={<SaveCategoryPage isEdit={true} />} />
                 <Route path="/categories/add" element={<SaveCategoryPage isEdit={false} />} />
 
-                
+                {/* Uploads */}
+                <Route path="/uploads" element={<UploadPage />} />
                 
                 <Route path="/orders" element={<OrdersPage />} />
 

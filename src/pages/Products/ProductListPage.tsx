@@ -58,34 +58,39 @@ export default function ProductListPage() {
                 <p className='link-internal'><a href='/' className=''>Home</a> / Products</p>
 
                 <div className='grid grid-cols-2 gap-2 my-2'>
+                    {/* Upload images */}
+                    <a href='uploads' className='reverse-button flex items-center justify-center text-center'>Upload Images</a>
+
+                    {/* Categories */}
                     <a href='categories' className='reverse-button flex items-center justify-center text-center '>Categories</a>
 
                     {/* row Per Page */}
-                    <select
-                        className='main-input py-3 h-fit'
-                        value={perPage}
-                        onChange={(e) => {
-                            setPerPage(parseInt(e.target.value));
-                        }}
-                    >
-                        <option value='10'>10 per page</option>
-                        <option value='20'>20 per page</option>
-                        <option value='50'>50 per page</option>
-                        <option value='100'>100 per page</option>
-                    </select>
+
                 </div>
             </div>
             <h2 className='primary-title'>Products</h2>
 
             <div className='w-full grid grid-cols-10 gap-2 items-center mb-8'>
                 <input
-                    className="main-input py-2 h-fit col-span-8"
+                    className="main-input py-1 col-span-10 md:col-span-6"
                     type="text"
                     placeholder="Search products..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <a href='products/add' className='submit-button p-1 py-2 sm:p-2 text-sm text-center col-span-2'>Add Product</a>
+                <select
+                    className='main-input text-sm py-2 col-span-5 md:col-span-2'
+                    value={perPage}
+                    onChange={(e) => {
+                        setPerPage(parseInt(e.target.value));
+                    }}
+                >
+                    <option value='10'>10 per page</option>
+                    <option value='20'>20 per page</option>
+                    <option value='50'>50 per page</option>
+                    <option value='100'>100 per page</option>
+                </select>
+                <a href='products/add' className='submit-button p-1 py-2 sm:p-2 text-sm text-center col-span-5 md:col-span-2'>Add Product</a>
 
             </div>
 
