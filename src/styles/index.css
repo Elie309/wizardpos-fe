@@ -14,7 +14,7 @@ Color platte
 /* Make tailwind css styles here for input */
 @layer components {
   .primary-title {
-    @apply text-3xl xl:text-4xl w-full font-bold text-dark text-center my-4;
+    @apply text-3xl xl:text-4xl w-full font-bold text-dark text-center my-4 ;
   }
 
   .secondary-title {
@@ -120,6 +120,10 @@ Color platte
 
   .pager button[disabled] {
     @apply bg-gray-200 text-gray-400 cursor-not-allowed;
+  }
+
+  .link-internal {
+    @apply text-dark font-bold text-base;
   }
 
   .link-internal a{
