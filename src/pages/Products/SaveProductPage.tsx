@@ -174,6 +174,9 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
                         image: "",
                         isActive: false,
                     });
+                }else {
+                    setSku(formData.sku);
+                    window.history.replaceState({}, "", `/products/${formData.sku}`);
                 }
 
             } else {
@@ -197,7 +200,7 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
     return (
         <div className='w-full h-full p-8 mx-auto shadow-lg max-w-5xl bg-white rounded overflow-x-hidden overflow-y-auto'>
 
-            <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/products"> Products</a> / {isEdit ? formData.sku : "New Product"}</p>
+            <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/products"> Products</a> / {isEdit ? sku : "New Product"}</p>
             <h1 className="primary-title my-4">{isEdit ? "Edit" : "Add"} Product</h1>
 
 
