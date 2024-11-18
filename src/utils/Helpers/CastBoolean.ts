@@ -4,6 +4,13 @@ export function CastBoolean(value: any): boolean {
     }
 
     if (typeof value === 'string') {
+
+        if (parseInt(value) === 1) {
+            return true;
+        }else if (parseInt(value) === 0) {
+            return false;
+        }
+
         return value === 'true';
     }
 
