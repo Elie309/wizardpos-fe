@@ -6,6 +6,7 @@ import ErrorDisplay from "../../components/Error/ErrorComponent";
 import CategoryService from "../../services/CategoryService";
 import Category from "../../types/Category";
 import SwitchInput from "../../components/Utils/SwitchInput";
+import SuccessDisplay from "../../components/Success/SuccessComponent";
 
 
 type IFormData = {
@@ -88,14 +89,14 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
         } catch (error: any) {
             setError(true);
             setErrorMessage(error.message);
-        }finally{
+        } finally {
             setLoading(false);
         }
     }
 
     const loadCategories = async () => {
         try {
-            const categories = await CategoryService.getCategories();
+            const categories = await CategoryService.getAll();
             setCategories(categories);
         } catch (error: any) {
             setError(true);
@@ -158,19 +159,23 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
 
             if (response.success) {
                 setSuccess(true);
-                setFormData({
-                    sku: "",
-                    slug: "",
-                    name: "",
-                    description: "",
-                    price: 0,
-                    categoryId: 0,
-                    showInMenu: false,
-                    productionDate: "",
-                    expiryDate: "",
-                    image: "",
-                    isActive: false,
-                });
+
+                if (!isEdit) {
+                    setFormData({
+                        sku: "",
+                        slug: "",
+                        name: "",
+                        description: "",
+                        price: 0,
+                        categoryId: 0,
+                        showInMenu: false,
+                        productionDate: "",
+                        expiryDate: "",
+                        image: "",
+                        isActive: false,
+                    });
+                }
+
             } else {
                 setError(true);
                 setErrorMessage(response.message);
@@ -191,13 +196,14 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
 
     return (
         <div className='w-full h-full p-8 mx-auto shadow-lg max-w-5xl bg-white rounded overflow-x-hidden overflow-y-auto'>
-            
-            <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/products"> Product List</a> / {isEdit ? formData.sku : "New Product"}</p>
+
+            <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/products"> Products</a> / {isEdit ? formData.sku : "New Product"}</p>
             <h1 className="primary-title my-4">{isEdit ? "Edit" : "Add"} Product</h1>
 
 
             {error && <ErrorDisplay message={errorMessage} />}
-            {success && <div className=" border border-green-800 bg-green-100 py-4 rounded-xl text-center w-full text-green-600">Product saved successfully</div>}
+            {success && <SuccessDisplay message="Product saved successfully" />}
+
             <form onSubmit={handleSubmit}>
                 <div className="label-input-container my-4 flex flex-row">
                     <div className="w-full">
@@ -270,7 +276,7 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
 
                 <div className="label-input-container my-4 ">
                     <label htmlFor="description">Description</label>
-                    <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description" />
+                    <textarea name="description" className="min-h-20" value={formData.description} onChange={handleChange} placeholder="Description" />
                 </div>
 
                 <div className="grid grid-cols-2 justify-items-center my-4 px-2">

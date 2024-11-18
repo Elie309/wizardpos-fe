@@ -55,12 +55,14 @@ export default function ProductListPage() {
         <div className='w-full h-full p-8 mx-auto mt-8 shadow-lg max-w-5xl bg-white rounded overflow-auto'>
 
             <div className='flex flex-row justify-between items-center'>
-                <p className='link-internal'><a href='/' className=''>Home</a> / Product List</p>
+                <p className='link-internal'><a href='/' className=''>Home</a> / Products</p>
 
-                <div className='text-center my-4'>
+                <div className='grid grid-cols-2 gap-2 my-2'>
+                    <a href='categories' className='reverse-button flex items-center justify-center text-center '>Categories</a>
+
                     {/* row Per Page */}
                     <select
-                        className='main-input py-2 h-fit'
+                        className='main-input py-3 h-fit'
                         value={perPage}
                         onChange={(e) => {
                             setPerPage(parseInt(e.target.value));
@@ -73,7 +75,7 @@ export default function ProductListPage() {
                     </select>
                 </div>
             </div>
-            <h2 className='primary-title'>Product List</h2>
+            <h2 className='primary-title'>Products</h2>
 
             <div className='w-full grid grid-cols-10 gap-2 items-center mb-8'>
                 <input
@@ -103,6 +105,8 @@ export default function ProductListPage() {
                                 <th>Name</th>
                                 <th>Category</th>
                                 <th>Price</th>
+                                <th>Active</th>
+                                <th>In Menu</th>
                             </tr>
                         </thead>
                         <tbody >
@@ -112,6 +116,8 @@ export default function ProductListPage() {
                                     <td >{product.name}</td>
                                     <td >{product.categoryName}</td>
                                     <td >{product.price}</td>
+                                    <td >{product.isActive ? 'Yes' : 'No'}</td>
+                                    <td >{product.showInMenu ? 'Yes' : 'No'}</td>
                                 </tr>
                             ))}
                         </tbody>
