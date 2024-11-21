@@ -92,7 +92,7 @@ export default function UploadImagesPage() {
         <div className='w-full h-full p-8 mx-auto mt-8 shadow-lg max-w-5xl bg-white rounded overflow-auto'>
 
             <div className='flex flex-row justify-between items-center'>
-                <p className='link-internal'><a href='/' className=''>Home</a> / <a href="">Products</a> / Uploads</p>
+                <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/products">Products</a> / Uploads</p>
             </div>
 
             <h1 className='primary-title'>Upload Images</h1>
