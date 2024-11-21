@@ -129,6 +129,15 @@ Color platte
   .link-internal a{
     @apply text-primary underline;
   } 
+
+  .drag-drop-area {
+    @apply border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center text-gray-600 cursor-pointer;
+  }
+  
+  .drag-drop-area.dragging {
+    @apply border-secondary bg-gray-100;
+  }
+  
 }
 
 html, body, #root {
@@ -249,3 +258,4 @@ input:checked + .slider:before {
   content: "*";
   color: red;
 }
+
