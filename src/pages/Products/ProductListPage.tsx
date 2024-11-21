@@ -64,8 +64,6 @@ export default function ProductListPage() {
                     {/* Categories */}
                     <a href='categories' className='reverse-button flex items-center justify-center text-center '>Categories</a>
 
-                    {/* row Per Page */}
-
                 </div>
             </div>
             <h2 className='primary-title'>Products</h2>
