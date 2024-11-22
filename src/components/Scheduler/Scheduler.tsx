@@ -1,5 +1,5 @@
-import React, { forwardRef } from 'react';
-import DatePicker, { CalendarContainer } from 'react-datepicker'
+import React from 'react';
+import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import SchedularItem from './SchedularItem';
 import Drawer from '../Drawer/Drawer';
@@ -57,7 +57,7 @@ export default function Scheduler() {
     };
 
 
-    const handleOnAssetClick = (assetId: string) => {
+    const handleOnAssetClick = () => {
         if (drawerRef.current) {
             drawerRef.current.openDrawer();
         }
@@ -117,7 +117,7 @@ export default function Scheduler() {
                                     .filter((event) => event.asset === asset.id)
                                     .map((event, index) => (
                                         <SchedularItem
-                                            onClick={() => handleOnAssetClick(asset.id)}
+                                            onClick={() => handleOnAssetClick()}
                                             key={index}
                                             title={event.title}
                                             startDate={event.startDate}

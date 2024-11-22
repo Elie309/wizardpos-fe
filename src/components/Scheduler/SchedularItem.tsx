@@ -26,18 +26,19 @@ function formatTime(dateString: string) {
 export default function SchedularItem(props: IProps) {
 
 
-    const [reseravtionState, setReservationState] = useState(ReservationState.AVAILABLE);
+    const [reservationStatus, setReservationStatus] = useState(ReservationState.RESERVED);
     
 
     const handleOnClick = () => {
         
         props.onClick();
+        setReservationStatus(ReservationState.AVAILABLE);
     }
 
     return (
         <div
             onClick={handleOnClick}
-            className="absolute cursor-pointer bg-blue-500 text-white p-1 rounded"
+            className={`absolute cursor-pointer ${reservationStatus === ReservationState.AVAILABLE ? "bg-blue-500" : "bg-gray-400"} text-white p-1 rounded-lg`}
             style={props.style}
         >
             <h3 className="text-sm font-medium">{props.title}</h3>
