@@ -258,25 +258,3 @@ input:checked + .slider:before {
   content: "*";
   color: red;
 }
-
-.drawer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  width: 250px;
-  height: 100%;
-  background-color: #fff;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.5);
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-}
-
-.drawer.open {
-  transform: translateX(0);
-}
-
-.drawer-content {
-  padding: 20px;
-}
-
