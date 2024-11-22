@@ -136,7 +136,7 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
             }
             let response = null;
 
-            let product = Product.simpleProduct(
+            let product = Product.create(
                 formData.sku.trim(),
                 formData.slug.trim(),
                 formData.name.trim(),

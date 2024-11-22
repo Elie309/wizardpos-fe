@@ -56,7 +56,7 @@ export default class Product {
   }
 
   //Simple product from changeable values
-  static simpleProduct(sku: string, slug: string, name: string, description: string, price: number, categoryId: number, showInMenu: boolean, productionDate: string, expiryDate: string, image: string, isActive: boolean): Product {
+  static create(sku: string, slug: string, name: string, description: string, price: number, categoryId: number, showInMenu: boolean, productionDate: string, expiryDate: string, image: string, isActive: boolean): Product {
     return new Product(0, sku, slug, name, description, price, categoryId, showInMenu, productionDate, expiryDate, image, isActive, '', '', '', '');
   }
 

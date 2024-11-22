@@ -38,7 +38,7 @@ export default class Category {
     }
 
     //Simple category
-    static simpleCategory(name: string, description: string, image: string, isActive: boolean, showInMenu: boolean): Category {
+    static create(name: string, description: string, image: string, isActive: boolean, showInMenu: boolean): Category {
         return new Category(0, name, description, image, isActive, showInMenu, "", "", null);
     }
     // FromJson

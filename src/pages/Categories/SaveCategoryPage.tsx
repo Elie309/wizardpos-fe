@@ -98,7 +98,7 @@ export default function SaveCategoryPage({ isEdit }: { isEdit: boolean }) {
 
         try {
 
-            let category = Category.simpleCategory(
+            let category = Category.create(
                 formData.name,
                 formData.description,
                 formData.image,
