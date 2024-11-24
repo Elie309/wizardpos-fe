@@ -5,6 +5,8 @@ const Elements = [
     ['Products', '/products'],
     ['Orders', '/orders'],
     ['Reservations', '/reservations'],
+    ['Clients', '/clients'],
+    ['Employees', '/employees'],
     ['Profile', '/employees/:id']
 ]
 
