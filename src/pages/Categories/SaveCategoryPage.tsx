@@ -166,13 +166,13 @@ export default function SaveCategoryPage({ isEdit }: { isEdit: boolean }) {
         <div className='w-full h-full p-8 mx-auto mt-8 shadow-lg max-w-3xl bg-white rounded overflow-auto'>
 
             <div className='flex flex-row justify-between items-center'>
-                <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/products">Products</a> / <a href="/categories">Categories</a> / {isEdit ? initialCategoryName : "Add Product"}</p>
+                <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/products">Products</a> / <a href="/categories">Categories</a> / {isEdit ? initialCategoryName : "Add Category"}</p>
             </div>
 
             <h1 className="primary-title ">{isEdit ? "Edit" : "Add"} Category</h1>
 
             {error && <ErrorDisplay message={errorMessage || "An error occurred"} />}
-            {success && <SuccessDisplay message="Product saved successfully" />}
+            {success && <SuccessDisplay message="Category saved successfully" />}
 
             <form>
                 <div className="label-input-container">
