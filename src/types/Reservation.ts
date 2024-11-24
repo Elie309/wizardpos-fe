@@ -6,7 +6,7 @@ export enum ReservationStatus {
     COMPLETED = 'completed'
 }
 
-type IReservation = {
+export type IReservation = {
     reservation_id: number;
     reservation_client_id: string;
     reservation_table_id: string;
