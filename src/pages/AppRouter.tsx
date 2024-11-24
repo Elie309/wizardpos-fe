@@ -10,6 +10,8 @@ import SaveProductPage from "./Products/SaveProductPage.tsx";
 import CategoryListPage from "./Categories/CategoryListPage.tsx";
 import SaveCategoryPage from "./Categories/SaveCategoryPage.tsx";
 import UploadImagesPage from "./Others/UploadImagesPage.tsx";
+import ClientListPage from "./Clients/ClientListPage.tsx";
+import SaveClientPage from "./Clients/SaveClientPage.tsx";
 
 
 
@@ -32,9 +34,20 @@ export default function AppRouter() {
                 {/* Uploads */}
                 <Route path="/uploads" element={<UploadImagesPage />} />
                 
+
+                {/* Clients */}
+                <Route path="clients" element={<ClientListPage />} />
+                <Route path="/clients" element={<CategoryListPage />} />
+                <Route path="/clients/:id" element={<SaveClientPage isEdit={true} />} />
+                <Route path="/clients/add" element={<SaveClientPage isEdit={false} />} />
+
+
+                {/* Reservations */}
+                <Route path="/reservations" element={<ReservationPage />} />
+
+
                 <Route path="/orders" element={<OrdersPage />} />
 
-                <Route path="/reservations" element={<ReservationPage />} />
                 <Route path="/employees/:id" element={<EmployeeProfilePage />} />
                 <Route path="/employees" element={<EmployeePage />} />
                 <Route path="*" element={<ErrorPage />} />
