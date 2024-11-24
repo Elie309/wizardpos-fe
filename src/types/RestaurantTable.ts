@@ -1,6 +1,6 @@
 
 export type IRestaurantTable = {
-  table_id?: number;
+  table_id?: string;
   table_name: string;
   table_description: string;
   table_max_capacity: number;
@@ -12,7 +12,7 @@ export type IRestaurantTable = {
 
 export default class RestaurantTable {
 
-  table_id: number;
+  table_id: string;
   table_name: string;
   table_description: string;
   table_max_capacity: number;
@@ -22,7 +22,7 @@ export default class RestaurantTable {
   table_deleted_at: string | null;
 
   // Constructor
-  constructor(id: number, name: string, description: string, maxCapacity: number, isActive: boolean, createdAt: string, updatedAt: string, deletedAt: string | null) {
+  constructor(id: string, name: string, description: string, maxCapacity: number, isActive: boolean, createdAt: string, updatedAt: string, deletedAt: string | null) {
     this.table_id = id;
     this.table_name = name;
     this.table_description = description;
@@ -33,7 +33,7 @@ export default class RestaurantTable {
     this.table_deleted_at = deletedAt;
   }
 
-  static create(id: number, name: string, description: string, maxCapacity: number): RestaurantTable {
+  static create(id: string, name: string, description: string, maxCapacity: number): RestaurantTable {
     return new RestaurantTable(id, name, description, maxCapacity, true, "", "", null);
   }
 
