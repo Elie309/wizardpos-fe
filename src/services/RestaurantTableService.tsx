@@ -13,7 +13,7 @@ type IRestaurantTableResponse = {
 
 export default class RestaurantTableService {
 
-    static async getRestaurantTables(): Promise<IRestaurantTableResponse> {
+    static async getAll(): Promise<IRestaurantTableResponse> {
 
         try{
 
@@ -43,7 +43,7 @@ export default class RestaurantTableService {
 
     }
 
-    static async getRestaurantTable(id: string): Promise<IRestaurantTableResponse> {
+    static async get(id: string): Promise<IRestaurantTableResponse> {
 
         try{
 
@@ -75,7 +75,7 @@ export default class RestaurantTableService {
 
     }
 
-    static async getActiveRestaurantTables(): Promise<IRestaurantTableResponse> {
+    static async getActive(): Promise<IRestaurantTableResponse> {
         
         try{
                 
@@ -102,7 +102,7 @@ export default class RestaurantTableService {
 
     }
 
-    static async createRestaurantTable(newRestaurantTable: RestaurantTable): Promise<IRestaurantTableResponse> {
+    static async save(newRestaurantTable: RestaurantTable): Promise<IRestaurantTableResponse> {
 
         try{
             let formData = new FormData();
@@ -167,7 +167,7 @@ export default class RestaurantTableService {
 
     }
 
-    static async updateRestaurantTable(table_id: string, updatedRestaurantTable: RestaurantTable): Promise<IRestaurantTableResponse> {
+    static async update(table_id: string, updatedRestaurantTable: RestaurantTable): Promise<IRestaurantTableResponse> {
 
         try{
             let formData = new FormData();
@@ -228,7 +228,7 @@ export default class RestaurantTableService {
 
     }
 
-    static async deleteRestaurantTable(table_id: string): Promise<IRestaurantTableResponse> {
+    static async delete(table_id: string): Promise<IRestaurantTableResponse> {
             
             try{
     

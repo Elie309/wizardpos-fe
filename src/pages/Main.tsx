@@ -6,6 +6,7 @@ const Elements = [
     ['Orders', '/orders'],
     ['Reservations', '/reservations'],
     ['Clients', '/clients'],
+    ['Tables', '/tables'],
     ['Employees', '/employees'],
     ['Profile', '/employees/:id']
 ]

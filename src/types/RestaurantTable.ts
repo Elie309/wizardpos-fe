@@ -33,8 +33,8 @@ export default class RestaurantTable {
     this.table_deleted_at = deletedAt;
   }
 
-  static create(id: string, name: string, description: string, maxCapacity: number): RestaurantTable {
-    return new RestaurantTable(id, name, description, maxCapacity, true, "", "", null);
+  static create(name: string, description: string, maxCapacity: number, isActive: boolean): RestaurantTable {
+    return new RestaurantTable("", name, description, maxCapacity, isActive, "", "", null);
   }
 
   // FromJson

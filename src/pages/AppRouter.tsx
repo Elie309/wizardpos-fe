@@ -4,7 +4,6 @@ import ErrorPage from "./Others/ErrorPage.tsx";
 import EmployeeProfilePage from "./Auth/EmployeeProfilePage.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Main from "./Main.tsx";
-import EmployeePage from "./Admin/EmployeePage.tsx";
 import ProductListPage from "./Products/ProductListPage.tsx";
 import SaveProductPage from "./Products/SaveProductPage.tsx";
 import CategoryListPage from "./Categories/CategoryListPage.tsx";
@@ -12,6 +11,9 @@ import SaveCategoryPage from "./Categories/SaveCategoryPage.tsx";
 import UploadImagesPage from "./Others/UploadImagesPage.tsx";
 import ClientListPage from "./Clients/ClientListPage.tsx";
 import SaveClientPage from "./Clients/SaveClientPage.tsx";
+import RestaurantTableListPage from "./RestaurantTable/RestaurantTableListPage.tsx";
+import SaveRestaurantTable from "./RestaurantTable/SaveRestaurantTable.tsx";
+import EmployeePage from "./admin/EmployeePage.tsx";
 
 
 
@@ -40,6 +42,11 @@ export default function AppRouter() {
                 <Route path="/clients" element={<CategoryListPage />} />
                 <Route path="/clients/:id" element={<SaveClientPage isEdit={true} />} />
                 <Route path="/clients/add" element={<SaveClientPage isEdit={false} />} />
+
+                {/* Tables */}
+                <Route path="/tables" element={<RestaurantTableListPage />} />
+                <Route path="/tables/:id" element={<SaveRestaurantTable isEdit={true} />} />
+                <Route path="/tables/add" element={<SaveRestaurantTable isEdit={false} />} />
 
 
                 {/* Reservations */}
