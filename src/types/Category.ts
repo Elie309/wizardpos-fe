@@ -1,4 +1,4 @@
-import { CastBoolean } from "../utils/Helpers/CastBoolean";
+import { CastBoolean, CastBooleanToNumber } from "../utils/Helpers/CastBoolean";
 
 export interface ICategory {
     category_show_in_menu: boolean;
@@ -56,17 +56,16 @@ export default class Category {
         );
     }
 
-    toJson(): ICategory {
-        return {
-            category_id: this.id,
-            category_name: this.name,
-            category_description: this.description,
-            category_image: this.image,
-            category_is_active: this.isActive,
-            category_show_in_menu: this.showInMenu,
-            category_created_at: this.createdAt,
-            category_updated_at: this.updatedAt,
-            category_deleted_at: this.deletedAt
-        }   
+    toFormData(): FormData {
+        
+        const formData = new FormData();
+
+        formData.append('category_name', this.name);
+        formData.append('category_image', this.image);
+        formData.append('category_is_active', CastBooleanToNumber(this.isActive).toString());
+        formData.append('category_description', this.description);
+        formData.append('category_show_in_menu', CastBooleanToNumber(this.showInMenu).toString());
+
+        return formData;
     }
 }
