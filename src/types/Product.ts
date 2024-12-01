@@ -1,3 +1,5 @@
+import { CastBooleanToNumber } from "../utils/Helpers/CastBoolean";
+
 export interface IProduct {
   product_id: number;
   product_sku: string;
@@ -65,25 +67,21 @@ export default class Product {
     return new Product(json.product_id, json.product_sku, json.product_slug, json.product_name, json.product_description, json.product_price, json.product_category_id, json.product_show_in_menu, json.product_production_date, json.product_expiry_date, json.product_image, json.product_is_active, json.product_created_at, json.product_updated_at, json.product_deleted_at, json.category_name);
   }
 
-  toJson(): IProduct {
-    return {
-      product_id: this.id,
-      product_sku: this.sku,
-      product_slug: this.slug,
-      product_name: this.name,
-      product_description: this.description,
-      product_price: this.price,
-      product_category_id: this.categoryId,
-      product_show_in_menu: this.showInMenu,
-      product_production_date: this.productionDate,
-      product_expiry_date: this.expiryDate,
-      product_image: this.image,
-      product_is_active: this.isActive,
-      product_created_at: this.createdAt,
-      product_updated_at: this.updatedAt,
-      product_deleted_at: this.deletedAt,
-      category_name: this.categoryName
-    }
+  toFormData(): FormData {
+    let formData = new FormData();
+    formData.append('product_sku', this.sku);
+    formData.append('product_slug', this.slug);
+    formData.append('product_name', this.name);
+    formData.append('product_description', this.description);
+    formData.append('product_price', this.price.toString());
+    formData.append('product_category_id', this.categoryId.toString());
+    formData.append('product_show_in_menu', CastBooleanToNumber(this.showInMenu).toString());
+    formData.append('product_production_date', this.productionDate);
+    formData.append('product_expiry_date', this.expiryDate);
+    formData.append('product_image', this.image);
+    formData.append('product_is_active', CastBooleanToNumber(this.isActive).toString());
+
+    return formData;
   }
 
 

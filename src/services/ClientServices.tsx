@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import Client, { IClient } from "../types/Client";
 import api from "../utils/Axios";
-import { CastBooleanToNumber } from "../utils/Helpers/CastBoolean";
+import ServicesErrorHandler from "./ServicesErrorHandler";
 
 type IClientResponse = {
     success: boolean;
@@ -130,25 +130,10 @@ export default class ClientServices {
         }
     }
 
-    static async save(client: IClient): Promise<IClientResponse> {
+    static async save(client: Client): Promise<IClientResponse> {
 
         try {
-
-            let formData = new FormData();
-            formData.append('client_first_name', client.client_first_name);
-            formData.append('client_last_name', client.client_last_name);
-            formData.append('client_phone_number', client.client_phone_number);
-
-            if (client.client_email && client.client_email.trim().length > 0) {
-                formData.append('client_email', client.client_email);
-            }
-            if (client.client_address && client.client_address.trim().length > 0) {
-                formData.append('client_address', client.client_address);
-            }
-            formData.append('client_is_active', CastBooleanToNumber(client.client_is_active).toString());
-
-
-            const response = await api.post('clients', formData);
+            const response = await api.post('clients', client.toFormData());
 
             if (response.status === 201) {
                 const client = Client.fromJson(response.data.data);
@@ -166,58 +151,16 @@ export default class ClientServices {
             }
 
         } catch (error: any) {
-
-            
-            if(error instanceof AxiosError){
-
-                let errors = error.response?.data.errors;
-                // Convert json object to string
-                let message = JSON.stringify(errors);
-                //get values and join
-
-                //If errors is an array
-                if(Array.isArray(errors)){
-                    message = errors.join(', ').toLowerCase();
-                }else if(typeof errors === 'object') {
-                    message = Object.values(errors).join(', ').toLowerCase();
-                }
-    
-    
-                return {
-                    success: false,
-                    message: error.response?.data.message.toString().concat(", ", message),
-                    data: null
-                };
-
-            }else {
-                return {
-                    success: false,
-                    message: error.message || 'An error occurred',
-                    data: null
-                };
-            }
+            return ServicesErrorHandler(error);
 
         }
     }
 
-    static async update(client_id: string, client: IClient): Promise<IClientResponse> {
+    static async update(client_id: string, client: Client): Promise<IClientResponse> {
 
         try {
 
-            let formData = new FormData();
-            formData.append('client_first_name', client.client_first_name);
-            formData.append('client_last_name', client.client_last_name);
-            formData.append('client_phone_number', client.client_phone_number);
-
-            if (client.client_email && client.client_email.trim().length > 0) {
-                formData.append('client_email', client.client_email);
-            }
-            if (client.client_address && client.client_address.trim().length > 0) {
-                formData.append('client_address', client.client_address);
-            }
-            formData.append('client_is_active', CastBooleanToNumber(client.client_is_active).toString());
-
-            const response = await api.post('clients/'+client_id, formData);
+            const response = await api.post('clients/'+client_id, client.toFormData());
 
             if (response.status === 200) {
                 const client = Client.fromJson(response.data.data);
@@ -235,37 +178,7 @@ export default class ClientServices {
             }
 
         } catch (error: any) {
-
-            
-            if(error instanceof AxiosError){
-
-                let errors = error.response?.data.errors;
-                // Convert json object to string
-                let message = JSON.stringify(errors);
-                //get values and join
-
-                //If errors is an array
-                if(Array.isArray(errors)){
-                    message = errors.join(', ').toLowerCase();
-                }else if(typeof errors === 'object') {
-                    message = Object.values(errors).join(', ').toLowerCase();
-                }
-    
-    
-                return {
-                    success: false,
-                    message: error.response?.data.message.toString().concat(", ", message),
-                    data: null
-                };
-
-            }else {
-                return {
-                    success: false,
-                    message: error.message || 'An error occurred',
-                    data: null
-                };
-            }
-
+            return ServicesErrorHandler(error);
         }
     }
 }

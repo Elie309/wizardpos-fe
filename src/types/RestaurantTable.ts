@@ -1,3 +1,4 @@
+import { CastBooleanToNumber } from "../utils/Helpers/CastBoolean";
 
 export type IRestaurantTable = {
   table_id?: string;
@@ -51,22 +52,16 @@ export default class RestaurantTable {
     );
   }
 
-  toJson(): IRestaurantTable {
-    return {
-      table_id: this.table_id,
-      table_name: this.table_name,
-      table_description: this.table_description,
-      table_max_capacity: this.table_max_capacity,
-      table_is_active: this.table_is_active,
-      table_created_at: this.table_created_at,
-      table_updated_at: this.table_updated_at,
-      table_deleted_at: this.table_deleted_at
-    };
+  toFormData(): FormData {
+    let formData = new FormData();
+    formData.append('table_name', this.table_name);
+    formData.append('table_description', this.table_description);
+    formData.append('table_max_capacity', this.table_max_capacity.toString());
+    formData.append('table_is_active', CastBooleanToNumber(this.table_is_active).toString());
+
+    return formData;
   }
 
-  static toListJson(tables: RestaurantTable[]): IRestaurantTable[] {
-    return tables.map(table => table.toJson());
-  }
 
   static fromListJson(json: any): RestaurantTable[] {
     return json.map((table: any) => RestaurantTable.fromJson(table));

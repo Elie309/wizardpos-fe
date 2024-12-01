@@ -1,4 +1,4 @@
-import { CastBoolean } from "../utils/Helpers/CastBoolean";
+import { CastBoolean, CastBooleanToNumber } from "../utils/Helpers/CastBoolean";
 
 export type IClient = {
     client_id?: string;
@@ -58,19 +58,21 @@ export default class Client {
         );
     }
 
-    static toJson(client: Client): IClient {
-        return {
-            client_id: client.client_id,
-            client_first_name: client.client_first_name,
-            client_last_name: client.client_last_name,
-            client_phone_number: client.client_phone_number,
-            client_email: client.client_email,
-            client_address: client.client_address,
-            client_is_active: client.client_is_active,
-            client_created_at: client.client_created_at,
-            client_updated_at: client.client_updated_at,
-            client_deleted_at: client.client_deleted_at
+    toFormData(): FormData {
+        let formData = new FormData();
+        formData.append('client_first_name', this.client_first_name);
+        formData.append('client_last_name', this.client_last_name);
+        formData.append('client_phone_number', this.client_phone_number);
+
+        if (this.client_email && this.client_email.trim().length > 0) {
+            formData.append('client_email', this.client_email);
         }
+        if (this.client_address && this.client_address.trim().length > 0) {
+            formData.append('client_address', this.client_address);
+        }
+        formData.append('client_is_active', CastBooleanToNumber(this.client_is_active).toString());
+
+        return formData;
         
     }
 
@@ -78,9 +80,6 @@ export default class Client {
         return json.map(Client.fromJson);
     }
 
-    static toJsonList(clients: Client[]): IClient[] {
-        return clients.map(Client.toJson);
-    }
 
     static create(firstName: string, lastName: string, phoneNumber: string, email: string, address: string, isActive: boolean): Client {
         return new Client('', firstName, lastName, phoneNumber, email, address, isActive, null, null, null);
