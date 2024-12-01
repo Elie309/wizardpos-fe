@@ -21,7 +21,7 @@ export default function RestaurantTableListPage() {
     const loadTables = async () => {
         setLoading(true);
         try {
-            const response = await RestaurantTableService.getActive();
+            const response = await RestaurantTableService.getAll();
 
             if (!response.success) {
                 setLoading(false);
