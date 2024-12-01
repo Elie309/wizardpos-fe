@@ -30,7 +30,7 @@ export default function ProductListPage() {
                 setProducts([]);
                 return;
             }
-            setProducts(response.products as Product[]);
+            setProducts(response.data as Product[]);
             setLoading(false);
 
             if (response.details) {

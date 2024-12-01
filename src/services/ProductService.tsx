@@ -8,7 +8,7 @@ import { CastBooleanToNumber } from '../utils/Helpers/CastBoolean';
 type IProductResponse = {
     success: boolean;
     message: string;
-    products: Product | Product[] | null;
+    data: Product | Product[] | null;
     details?: any;
 }
 
@@ -20,7 +20,7 @@ export default class ProductService {
                 return {
                     success: false,
                     message: 'Invalid row per page or page number',
-                    products: null
+                    data: null
                 };
             }
 
@@ -28,7 +28,7 @@ export default class ProductService {
                 return {
                     success: false,
                     message: 'Invalid row per page or page number',
-                    products: null
+                    data: null
                 };
             }
 
@@ -50,14 +50,14 @@ export default class ProductService {
                 return {
                     success: true,
                     message: 'Products fetched successfully',
-                    products: products,
+                    data: products,
                     details: response.data
                 };
             }else {
                 return {
                     success: false,
                     message: 'Failed to fetch products',
-                    products: null
+                    data: null
                 };
             }
 
@@ -69,13 +69,13 @@ export default class ProductService {
                 return {
                     success: false,
                     message: error.response?.data.message || 'An error occurred',
-                    products: null
+                    data: null
                 };
             }else {
                 return {
                     success: false,
                     message: error.message || 'An error occurred',
-                    products: null
+                    data: null
                 };
             }
             
@@ -156,7 +156,7 @@ export default class ProductService {
                     return {
                         success: false,
                         message: 'Invalid product id',
-                        products: null
+                        data: null
                     };
                 }
                 response = await api.post('products/' + id, formData);
@@ -169,7 +169,7 @@ export default class ProductService {
                 return {
                     success: true,
                     message: response.data.message,
-                    products: Product.fromJson(response.data)
+                    data: Product.fromJson(response.data)
                 };
             }
 
@@ -177,14 +177,14 @@ export default class ProductService {
                 return {
                     success: true,
                     message: response.data.message,
-                    products: Product.fromJson(response.data)
+                    data: Product.fromJson(response.data)
                 };
             }
 
             return {
                 success: false,
                 message: response.data.message,
-                products: null
+                data: null
             };
 
         }catch(error: any){
@@ -207,14 +207,14 @@ export default class ProductService {
                 return {
                     success: false,
                     message: error.response?.data.message.toString().concat(", ", message),
-                    products: null
+                    data: null
                 };
 
             }else {
                 return {
                     success: false,
                     message: error.message || 'An error occurred',
-                    products: null
+                    data: null
                 };
             }
 
