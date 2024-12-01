@@ -86,13 +86,6 @@ export default function Scheduler() {
     }, [date]);
 
 
-
-
-    const handleSettings = () => {
-        console.log('Settings');
-    }
-
-
     if (loading) {
         <Loading />
     }
