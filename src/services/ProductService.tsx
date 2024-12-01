@@ -2,7 +2,7 @@
 import { AxiosError } from 'axios';
 import Product, {IProduct} from '../types/Product';
 import api from '../utils/Axios';
-import { CastBooleanToNumber } from '../utils/Helpers/CastBoolean';
+import ServicesErrorHandler from './ServicesErrorHandler';
 
 
 type IProductResponse = {
@@ -136,20 +136,6 @@ export default class ProductService {
     static async saveProduct(edit: boolean, product: Product,  id?:string): Promise<IProductResponse> {
         try{
 
-            let formData = new FormData();
-            formData.append('product_sku', product.sku);
-            formData.append('product_slug', product.slug);
-            formData.append('product_name', product.name);
-            formData.append('product_description', product.description);
-            formData.append('product_price', product.price.toString());
-            formData.append('product_category_id', product.categoryId.toString());
-            formData.append('product_show_in_menu', CastBooleanToNumber(product.showInMenu).toString());
-            formData.append('product_production_date', product.productionDate);
-            formData.append('product_expiry_date', product.expiryDate);
-            formData.append('product_image', product.image);
-            formData.append('product_is_active', CastBooleanToNumber(product.isActive).toString());
-
-
             let response = null;
             if(edit){
                 if(!id){
@@ -159,9 +145,9 @@ export default class ProductService {
                         data: null
                     };
                 }
-                response = await api.post('products/' + id, formData);
+                response = await api.post('products/' + id, product.toFormData());
             }else{
-                response = await api.post('products', formData);
+                response = await api.post('products', product.toFormData());
             }
 
 
@@ -189,35 +175,7 @@ export default class ProductService {
 
         }catch(error: any){
 
-            if(error instanceof AxiosError){
-
-                let errors = error.response?.data.errors;
-                // Convert json object to string
-                let message = JSON.stringify(errors);
-                //get values and join
-
-                //If errors is an array
-                if(Array.isArray(errors)){
-                    message = errors.join(', ').toLowerCase();
-                }else if(typeof errors === 'object') {
-                    message = Object.values(errors).join(', ').toLowerCase();
-                }
-    
-    
-                return {
-                    success: false,
-                    message: error.response?.data.message.toString().concat(", ", message),
-                    data: null
-                };
-
-            }else {
-                return {
-                    success: false,
-                    message: error.message || 'An error occurred',
-                    data: null
-                };
-            }
-
+            return ServicesErrorHandler(error);
           
         }
     }
