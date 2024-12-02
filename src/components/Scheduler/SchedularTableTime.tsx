@@ -7,6 +7,7 @@ import SchedularItem from "./SchedularItem";
 type IProps = {
     table: RestaurantTable;
     reservations: Reservation[];
+    onReservationClick: (reservation: Reservation) => void;
 }
 
 function getHour(dateString: string) {
@@ -15,18 +16,17 @@ function getHour(dateString: string) {
 }
 
 
-export default function SchedularTableTime({ table, reservations }: IProps) {
+export default function SchedularTableTime({ table, reservations, onReservationClick }: IProps) {
 
 
-    const handleOnAssetClick = () => {
-        console.log('asset clicked');
+    const handleOnAssetClick = (reservation: Reservation) => {
+
+        //Handle the click event
+        onReservationClick(reservation);       
     };
 
     useEffect(() => {
-        let res = reservations.filter((reservations) => Number(reservations.table_id) === Number(table.table_id));
-        console.log("Table ID :", table.table_id);
-        console.log("Reservations :", reservations);
-        console.log("Filtered :", res);
+        reservations.filter((reservations) => Number(reservations.table_id) === Number(table.table_id));
 
     }, [reservations, table])
 
@@ -45,11 +45,12 @@ export default function SchedularTableTime({ table, reservations }: IProps) {
                     .filter((reservations) => Number(reservations.table_id) === Number(table.table_id))
                     .map((reservation, index) => (
                         <SchedularItem
-                            onClick={() => handleOnAssetClick()}
+                            onClick={() => handleOnAssetClick(reservation)}
                             key={index}
                             title={reservation.client_name}
                             startDate={reservation.starting_time}
                             endDate={reservation.ending_time}
+                            status={reservation.status}
                             style={{
                                 top: `${getHour(reservation.starting_time) * 2}rem`,
                                 height: `${(new Date(reservation.ending_time).getTime() - new Date(reservation.starting_time).getTime()) / (1000 * 60 * 60) * 2}rem`,

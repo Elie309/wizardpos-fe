@@ -1,18 +1,29 @@
 import { useState, forwardRef, useImperativeHandle } from 'react';
 
-const Drawer = forwardRef(({ title, children }: {title: string, children: React.ReactElement}, ref) => {
+const Drawer = forwardRef(({ title, children, onDrawerClose }: {title: string, children: React.ReactElement, onDrawerClose: () => void}, ref) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleDrawer = () => {
-    setIsOpen(!isOpen);
+  const closeDrawer = () => {
+    setIsOpen(false);
   };
 
   const openDrawer = () => {
     setIsOpen(true);
   }
 
+  const isDrawerOpen = () => {
+    return isOpen;
+  }
+
+  const handleCloseButtonClick = () => {
+
+    setIsOpen(false);
+    onDrawerClose();
+    
+  }
+
   useImperativeHandle(ref, () => ({
-    toggleDrawer, openDrawer
+    closeDrawer, openDrawer, isDrawerOpen
   }));
 
   return (
@@ -21,7 +32,7 @@ const Drawer = forwardRef(({ title, children }: {title: string, children: React.
       <div className='flex flex-row justify-end p-4'>
 
       <h2 className='secondary-title'>{title}</h2>
-      <button onClick={toggleDrawer} 
+      <button onClick={handleCloseButtonClick} 
         className='text-red-800 text-xl'>
         X
       </button>

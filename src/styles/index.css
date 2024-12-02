@@ -48,6 +48,12 @@ Color platte
     @apply text-gray-400;
   }
 
+  .label-input-container input:read-only,
+  .label-input-container textarea:read-only,
+  .main-input:read-only {
+    @apply bg-gray-100;
+  }
+
   .submit-button {
     @apply bg-primary text-white rounded-md px-4 py-2 transition-colors 
         ease-linear duration-200 outline-none focus:outline-none 

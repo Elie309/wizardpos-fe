@@ -42,7 +42,7 @@ export default class ReservationService{
 
     }
 
-    static async getReservation(reservation_id: number): Promise<IReservationService> {
+    static async getReservation(reservation_id: string): Promise<IReservationService> {
 
         try{
 
@@ -75,7 +75,7 @@ export default class ReservationService{
 
         try{
 
-            let response = await api.post('/reservations', reservation.toFormData);
+            let response = await api.post('/reservations', reservation.toFormData());
 
             if(response.status === 201){
                 let reservation = Reservation.fromJson(response.data.data);
@@ -100,12 +100,13 @@ export default class ReservationService{
 
     }
 
-    static async updateReservation(reservation_id: number, reservation: Reservation): Promise<IReservationService> {
+    static async updateReservation(reservation_id: string, reservation: Reservation): Promise<IReservationService> {
 
         try{
 
-            let response = await api.put('/reservations/' + reservation_id, reservation.toFormData);
+            let response = await api.post('/reservations/' + reservation_id, reservation.toFormData());
 
+            console.log(response);
             if(response.status === 200){
                 let reservation = Reservation.fromJson(response.data.data);
                 return {

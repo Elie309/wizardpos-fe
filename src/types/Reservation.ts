@@ -5,28 +5,10 @@ export enum ReservationStatus {
     COMPLETED = 'completed'
 }
 
-export type IReservation = {
-    reservation_id: number;
-    reservation_client_id: string;
-    client_name: string;
-    client_phone_number: string;
-    reservation_table_id: string;
-    reservation_employee_id: string;
-    employee_name: string;
-    reservation_date: Date;
-    reservation_starting_time: string; 
-    reservation_ending_time: string; 
-    reservation_guests: number;
-    reservation_status: ReservationStatus;
-    reservation_created_at: Date;
-    reservation_updated_at: Date;
-    reservation_deleted_at: Date | null;
-}
-
 
 export default class Reservation {
 
-    id: number;
+    id: string;
     client_id: string;
     client_name: string;
     phone_number: string;
@@ -44,7 +26,7 @@ export default class Reservation {
 
 
     constructor() {
-        this.id = 0;
+        this.id = "0";
         this.client_id = '';
         this.client_name = '';
         this.phone_number = '';
@@ -52,8 +34,8 @@ export default class Reservation {
         this.employee_id = '';
         this.employee_name = '';
         this.date = new Date().toISOString().split('T')[0];
-        this.starting_time = new Date().toISOString().split('T')[1];
-        this.ending_time =  new Date().toISOString().split('T')[1];
+        this.starting_time = new Date().toISOString().split('T')[1].split('.')[0];
+        this.ending_time =  new Date().toISOString().split('T')[1].split('.')[0];
         this.guests = 0;
         this.status = ReservationStatus.PENDING;
         this.created_at = new Date();
@@ -63,7 +45,7 @@ export default class Reservation {
     }
 
 
-    static fromJson(data: IReservation): Reservation {
+    static fromJson(data: any): Reservation {
         const reservation = new Reservation();
         reservation.id = data.reservation_id;
         reservation.client_id = data.reservation_client_id;
@@ -86,20 +68,21 @@ export default class Reservation {
 
     toFormData(): FormData {
         let formData = new FormData();
+        console.log(this.starting_time);
 
         formData.append('reservation_client_id', this.client_id);
         formData.append('reservation_table_id', this.table_id);
         formData.append('reservation_employee_id', this.employee_id);
         formData.append('reservation_date', this.date.split('T')[0]);
-        formData.append('reservation_starting_time', this.starting_time.split('T')[1]);
-        formData.append('reservation_ending_time', this.ending_time.split('T')[1]);
+        formData.append('reservation_starting_time', this.starting_time);
+        formData.append('reservation_ending_time', this.ending_time);
         formData.append('reservation_guests', this.guests.toString());
         formData.append('reservation_status', this.status);
 
         return formData;
     }
 
-    static fromJsonList(data: IReservation[]): Reservation[] {
+    static fromJsonList(data: any[]): Reservation[] {
         return data.map((reservation) => Reservation.fromJson(reservation));
     }
 

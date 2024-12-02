@@ -5,7 +5,6 @@ import Drawer from '../Drawer/Drawer';
 import ReservationForm from './ReservationForm';
 
 import RestaurantTable from '../../types/RestaurantTable';
-// import SettingsIcon from '../Icons/SettingsSVG';
 import RestaurantTableService from '../../services/RestaurantTableService';
 import SchedularTableTime from './SchedularTableTime';
 import Reservation from '../../types/Reservation';
@@ -23,14 +22,18 @@ export default function Scheduler() {
 
     const [reservations, setReservations] = useState<Reservation[] | null>(null);
 
+    const [isFormEdit, setIsFormEdit] = useState(false);
+    const [dataForm, setDataForm] = useState<Reservation | null>(null);
+
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = React.useState<string | null>(null);
 
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
 
 
-    const drawerRef = useRef<{ toggleDrawer: () => void, openDrawer: () => void }>(null);
+    const drawerRef = useRef<{ closeDrawer: () => void, openDrawer: () => void, isDrawerOpen: () => boolean }>(null);
 
 
     const handleDateSelect = (date: Date | null) => {
@@ -46,11 +49,62 @@ export default function Scheduler() {
     };
 
 
+    const onReservationClick = (reservation: Reservation) => {
+
+        if (drawerRef.current?.isDrawerOpen()) {
+            setIsDrawerOpen(false);
+            drawerRef.current?.closeDrawer();
+
+            setTimeout(() => {
+                setDataForm(reservation);
+                setIsFormEdit(true);
+                setIsDrawerOpen(true);
+                drawerRef.current?.openDrawer();
+            }, 300);
+
+        } else {
+
+            setDataForm(reservation);
+            setIsFormEdit(true);
+            setIsDrawerOpen(true);
+            drawerRef.current?.openDrawer();
+        }
+
+
+    }
+
+    const onDrawerClose = () => {
+        setIsDrawerOpen(false);
+    }
+
+    const addReservationHandler = () => {
+
+        if (drawerRef.current?.isDrawerOpen()) {
+            drawerRef.current?.closeDrawer();
+            setIsDrawerOpen(false);
+
+            setTimeout(() => {
+                drawerRef.current?.openDrawer();
+                setIsDrawerOpen(true);
+                setDataForm(null);
+                setIsFormEdit(false);
+            }, 300);
+        } else {
+            setDataForm(null);
+            setIsFormEdit(false);
+            drawerRef.current?.openDrawer();
+            setIsDrawerOpen(true);
+
+        }
+
+
+
+    }
+
 
 
     const loadAll = async () => {
         try {
-            setLoading(true);
             const tablesResponse = await RestaurantTableService.getActive();
 
             if (tablesResponse.success) {
@@ -76,6 +130,7 @@ export default function Scheduler() {
 
 
     useEffect(() => {
+        setLoading(true);
         loadAll();
     }, []);
 
@@ -87,13 +142,25 @@ export default function Scheduler() {
 
 
     if (loading) {
-        <Loading />
+        return <Loading />;
     }
+
+
 
     return (
         <div className="h-screen flex flex-col bg-gray-100 overflow-auto">
-            <Drawer ref={drawerRef} title="Add Reservation">
-                <ReservationForm />
+            <Drawer ref={drawerRef}
+                title={isFormEdit ? "Edit Reservation" : "Add Reservation"}
+                onDrawerClose={onDrawerClose}
+            >
+                {isDrawerOpen ?
+                    <ReservationForm
+                        isEdit={isFormEdit}
+                        data={dataForm}
+                        tables={tables}
+                        currentDate={date.toISOString().split('T')[0]}
+                        currentTable={currentTable}
+                    /> : <div></div>}
             </Drawer>
 
             <div className="grid grid-cols-12 mx-10 ">
@@ -104,10 +171,6 @@ export default function Scheduler() {
 
                         <div className='flex flex-row py-4'>
                             <h1 className='primary-title'>Table Reservations</h1>
-                            {/* <div className='flex flex-row items-center'>
-
-                                <SettingsIcon className="fill-secondary h-8 w-8 cursor-pointer" onClick={handleSettings} />
-                            </div> */}
 
                             {error && <ErrorDisplay message={error} />}
 
@@ -127,7 +190,7 @@ export default function Scheduler() {
                             />
 
                             <button className="submit-button text-white p-2 rounded-lg m-2"
-                                onClick={() => drawerRef.current?.openDrawer()}
+                                onClick={addReservationHandler}
                             >Add Reservation</button>
 
 
@@ -160,7 +223,7 @@ export default function Scheduler() {
                 <div className={`col-span-12 md:col-span-3 md:overflow-auto py-4 `}>
                     <h2 className='secondary-title md:hidden'>Hours</h2>
 
-                    {currentTable && reservations && <SchedularTableTime table={currentTable} reservations={reservations} />}
+                    {currentTable && reservations && <SchedularTableTime table={currentTable} reservations={reservations} onReservationClick={onReservationClick} />}
 
                 </div>
 

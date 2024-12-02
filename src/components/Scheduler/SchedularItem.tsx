@@ -1,19 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ReservationStatus } from "../../types/Reservation";
 
 type IProps = {
     style: React.CSSProperties;
     title: string;
     startDate: string;
     endDate: string;
+    status: string;
     onClick: () => void;
 }
-
-
-enum ReservationState {
-    AVAILABLE = "available",
-    RESERVED = "reserved",
-    UNAVAILABLE = "unavailable"
-} 
 
 
 function formatTime(dateString: string) {
@@ -26,19 +21,40 @@ function formatTime(dateString: string) {
 export default function SchedularItem(props: IProps) {
 
 
-    const [reservationStatus, setReservationStatus] = useState(ReservationState.RESERVED);
+    const [reservationStatusColor, setReservationStatusColor] = useState('bg-yellow-500');
     
 
     const handleOnClick = () => {
-        
         props.onClick();
-        setReservationStatus(ReservationState.AVAILABLE);
     }
+
+    useEffect(() => {
+
+        //Set the reservation status and color based on the reservation state
+        switch (props.status) {
+            case ReservationStatus.PENDING:
+                setReservationStatusColor('bg-yellow-500');
+                break;
+            case ReservationStatus.CONFIRMED:
+                setReservationStatusColor('bg-green-500');
+                break;
+            case ReservationStatus.CANCELLED:
+                setReservationStatusColor('bg-red-500');
+                break;
+            case ReservationStatus.COMPLETED:
+                setReservationStatusColor('bg-blue-500');
+                break;
+            default:
+                setReservationStatusColor('bg-yellow-500');
+                break;
+        }
+
+    }, [props.status])
 
     return (
         <div
             onClick={handleOnClick}
-            className={`absolute cursor-pointer ${reservationStatus === ReservationState.AVAILABLE ? "bg-blue-500" : "bg-gray-400"} text-white p-1 rounded-lg`}
+            className={`absolute cursor-pointer ${reservationStatusColor} text-white p-1 rounded-lg`}
             style={props.style}
         >
             <h3 className="text-sm font-medium">{props.title}</h3>
