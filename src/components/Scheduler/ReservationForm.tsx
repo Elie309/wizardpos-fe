@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Loading from "../../components/Loading/Loading";
 import Reservation, { ReservationStatus } from "../../types/Reservation";
 import ErrorDisplay from "../../components/Error/ErrorComponent";
 import SuccessDisplay from "../../components/Success/SuccessComponent";
 import ReservationService from "../../services/ReservationService";
 import RestaurantTable from "../../types/RestaurantTable";
+import Popover from "../Popover/Popover";
+import ClientPopHandler from "../ClientHelper/ClientHandler";
+import Client from "../../types/Client";
 
 type IFormData = {
     client_id: string;
@@ -44,6 +47,9 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
         guests: 0,
         status: ReservationStatus.PENDING
     });
+
+    const clientHandlerRef = useRef<{ open: () => void, close: () => void }>(null);
+
 
     const [initialReservationId, setInitialReservationId] = useState<string>("");
 
@@ -97,7 +103,6 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
             }
             setLoading(false);
         } catch (error: any) {
-            console.log(error);
 
             setErrorMessage("An error occurred, reservation not found");
             setError(true);
@@ -110,8 +115,8 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
         if (isEdit) {
             loadReservation();
         } else {
-            if(currentDate)
-                setFormData({...formData, date: currentDate });            
+            if (currentDate)
+                setFormData({ ...formData, date: currentDate });
             setLoading(false);
         }
     }, []);
@@ -137,19 +142,7 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
 
-        if (e.target.name === "date") {
-            const date = new Date(e.target.value);
-            setFormData({ ...formData, [e.target.name]: date.toISOString().split('T')[0] });
-            return;
-        }
-
-        if (e.target.name === "starting_time" || e.target.name === "ending_time") {
-            setFormData({ ...formData, [e.target.name]: e.target.value });
-            return;
-        }
-
-
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+          setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
 
@@ -169,10 +162,11 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
 
         try {
             let reservation: Reservation = new Reservation();
+
             reservation.client_id = formData.client_id;
             reservation.client_name = formData.client_name;
             reservation.phone_number = formData.phone_number;
-            reservation.table_id = formData.table_id;
+            reservation.table_id = currentTable?.table_id!;
             reservation.employee_id = formData.employee_id;
             reservation.employee_name = formData.employee_name;
             reservation.date = formData.date;
@@ -222,6 +216,27 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
         }
     };
 
+    const handleClientSelect = (client: Client) =>{
+
+        if(client === null){
+            return;
+        }
+
+        clientHandlerRef.current?.close();
+
+
+        setFormData({
+            ...formData,
+            client_id: client.client_id!,
+            client_name: `${client.client_first_name} ${client.client_last_name}`,
+            phone_number: client.client_phone_number!
+
+        });
+    }
+
+
+
+
     if (loading) {
         return <Loading />;
     }
@@ -229,9 +244,24 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
     return (
         <div className='w-full h-full '>
 
+
+
             <form>
                 <div className="label-input-container">
-                    <label htmlFor="client_name">Client Name</label>
+                   <div className="flex flex-row justify-between">
+                     <label htmlFor="client_name">Client Name</label>
+                     <Popover ref={clientHandlerRef}
+                         id="client-form"
+                         buttonName="Find Client"
+                         title="Client Search"
+                         classNameButton="link-primary"
+                         classNameMainDiv="max-w-3xl"
+                     >
+                       <ClientPopHandler 
+                        onClientSelect={handleClientSelect}
+                       />
+                     </Popover>
+                   </div>
                     <input type="text" id="client_name" readOnly name="client_name" value={formData?.client_name} onChange={handleChange} />
                 </div>
                 <div className="label-input-container">
@@ -256,18 +286,16 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
                     name="date" value={formData?.date} onChange={handleChange} />
                 </div>
                 <div className="label-input-container">
-                    <label htmlFor="starting_time">Starting Time</label>
+                    <label htmlFor="starting_time" className="required-field">Starting Time</label>
                     <input type="time"
                         id="starting_time" name="starting_time"
-                        //Only allow time in 15 minutes interval
                         step="900"
-                        // Only 00, 15, 30, 45 minutes
                         pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
 
                         value={formData?.starting_time} onChange={handleChange} />
                 </div>
                 <div className="label-input-container">
-                    <label htmlFor="ending_time">Ending Time</label>
+                    <label htmlFor="ending_time" className="required-field">Ending Time</label>
                     <input type="time" id="ending_time" name="ending_time"
                         step="900"
                         pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
@@ -278,7 +306,7 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
                     <input type="number" id="guests" name="guests" value={formData?.guests} onChange={handleChange} />
                 </div>
                 <div className="label-input-container">
-                    <label htmlFor="status">Status</label>
+                    <label htmlFor="status" className="required-field">Status</label>
                     <select id="status" name="status" value={formData?.status} onChange={handleChange}>
                         {Object.values(ReservationStatus).map(status => (
                             <option key={status} value={status}>{status}</option>
@@ -286,7 +314,7 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
                     </select>
                 </div>
                 <div className="label-input-container my-4">
-                    <button className={`submit-button mx-auto w-3/4 md:w-1/4 ${loadingSubmit ? "cursor-wait" : ""}`}
+                    <button className={`submit-button mx-auto w-3/4  ${loadingSubmit ? "cursor-wait" : ""}`}
                         disabled={loadingSubmit}
                         type="submit"
                         onClick={handleSubmit}>
