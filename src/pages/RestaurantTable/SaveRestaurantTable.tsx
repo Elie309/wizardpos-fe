@@ -100,7 +100,7 @@ export default function SaveRestaurantTable({ isEdit }: IProps) {
         setError(false);
         setSuccess(false);
 
-        if (formData.table_description === "" || formData.table_max_capacity === "" || formData.table_name === "") {
+        if (formData.table_max_capacity === "" || formData.table_name === "") {
             setErrorMessage("Please fill in all required fields")
             setError(true)
             setLoadingSubmit(false)
@@ -178,7 +178,7 @@ export default function SaveRestaurantTable({ isEdit }: IProps) {
 
             <form>
                 <div className="label-input-container">
-                    <label className="main-label" htmlFor="table_name">Name</label>
+                    <label className="main-label required-field" htmlFor="table_name">Name</label>
                     <input className="main-input" type="text" name="table_name" value={formData.table_name} onChange={handleChange} />
                 </div>
 
@@ -188,7 +188,7 @@ export default function SaveRestaurantTable({ isEdit }: IProps) {
                 </div>
 
                 <div className="label-input-container">
-                    <label className="main-label" htmlFor="table_max_capacity">Max Capacity</label>
+                    <label className="main-label required-field" htmlFor="table_max_capacity">Max Capacity</label>
                     <input className="main-input" type="number" name="table_max_capacity" value={formData.table_max_capacity} onChange={handleChange} />
 
                 </div>
