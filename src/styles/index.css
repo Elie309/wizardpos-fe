@@ -132,7 +132,7 @@ Color platte
     @apply text-dark font-bold text-base;
   }
 
-  .link-internal a{
+  .link-internal a, .link-primary{
     @apply text-primary underline;
   } 
 
@@ -260,7 +260,7 @@ input:checked + .slider:before {
   transform: translateX(14px);
 }
 
-.required-field::before {
+.required-field::after {
   content: "*";
   color: red;
 }
