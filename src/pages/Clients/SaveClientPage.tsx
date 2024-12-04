@@ -182,12 +182,12 @@ export default function SaveClientPage({isEdit}: IProps) {
 
             <form>
                 <div className="label-input-container">
-                    <label htmlFor="name">First name</label>
+                    <label htmlFor="name" className="required-field">First name</label>
                     <input type="text" id="first_name" name="first_name" value={formData?.first_name} onChange={handleChange} />
                 </div>
 
                 <div className="label-input-container">
-                    <label htmlFor="name">Last name</label>
+                    <label htmlFor="name" className="required-field">Last name</label>
                     <input type="text" id="last_name" name="last_name" value={formData?.last_name} onChange={handleChange} />
                 </div>
 
@@ -197,7 +197,7 @@ export default function SaveClientPage({isEdit}: IProps) {
                 </div>
 
                 <div className="label-input-container">
-                    <label htmlFor="name">Phone number</label>
+                    <label htmlFor="name" className="required-field">Phone number</label>
                     <input type="text" id="phone_number" name="phone_number" value={formData?.phone_number} onChange={handleChange} />
                 </div>
 
