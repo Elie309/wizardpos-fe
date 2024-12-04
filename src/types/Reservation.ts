@@ -68,7 +68,6 @@ export default class Reservation {
 
     toFormData(): FormData {
         let formData = new FormData();
-        console.log(this.starting_time);
 
         formData.append('reservation_client_id', this.client_id);
         formData.append('reservation_table_id', this.table_id);
