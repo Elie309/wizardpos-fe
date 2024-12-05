@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Client from "../../types/Client";
 import ClientServices from "../../services/ClientServices";
-import ErrorDisplay from "../Error/ErrorComponent";
-import SuccessDisplay from "../Success/SuccessComponent";
+import ErrorDisplay from "../Utils/ErrorComponent";
+import SuccessDisplay from "../Utils/SuccessComponent";
 
 type IFormData = {
     first_name: string;

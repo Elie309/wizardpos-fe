@@ -13,7 +13,7 @@ import ClientListPage from "./Clients/ClientListPage.tsx";
 import SaveClientPage from "./Clients/SaveClientPage.tsx";
 import RestaurantTableListPage from "./RestaurantTable/RestaurantTableListPage.tsx";
 import SaveRestaurantTable from "./RestaurantTable/SaveRestaurantTable.tsx";
-import EmployeePage from "./admin/EmployeePage.tsx";
+import EmployeePage from "./Admin/EmployeePage.tsx";
 
 
 

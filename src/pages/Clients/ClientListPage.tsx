@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Client from "../../types/Client";
 import ClientServices from "../../services/ClientServices";
-import Loading from "../../components/Loading/Loading";
+import Loading from "../../components/Utils/Loading";
 import Pager from "../../components/Utils/Pager";
 
 export default function ClientListPage() {

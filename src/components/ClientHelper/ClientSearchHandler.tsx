@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Client from "../../types/Client";
 import ClientServices from "../../services/ClientServices";
-import Loading from "../Loading/Loading";
+import Loading from "../Utils/Loading";
 
 type IProps = {
     onClientSelect: (client: Client) => void;

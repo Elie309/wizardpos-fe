@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
-import Loading from "../../components/Loading/Loading";
+import Loading from "../../components/Utils/Loading";
 import { AxiosError } from "axios";
 import CategoryService from "../../services/CategoryService";
 import SwitchInput from "../../components/Utils/SwitchInput";
-import ErrorDisplay from "../../components/Error/ErrorComponent";
-import SuccessDisplay from "../../components/Success/SuccessComponent";
+import ErrorDisplay from "../../components/Utils/ErrorComponent";
+import SuccessDisplay from "../../components/Utils/SuccessComponent";
 import Category from "../../types/Category";
 
 type IFormData = {

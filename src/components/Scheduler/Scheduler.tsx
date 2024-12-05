@@ -8,8 +8,8 @@ import RestaurantTable from '../../types/RestaurantTable';
 import RestaurantTableService from '../../services/RestaurantTableService';
 import SchedularTableTime from './SchedularTableTime';
 import Reservation from '../../types/Reservation';
-import Loading from '../Loading/Loading';
-import ErrorDisplay from '../Error/ErrorComponent';
+import Loading from '../Utils/Loading';
+import ErrorDisplay from '../Utils/ErrorComponent';
 import ReservationService from '../../services/ReservationService';
 
 

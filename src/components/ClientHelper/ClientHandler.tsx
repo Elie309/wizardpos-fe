@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Client from "../../types/Client";
 import ClientForm from "./ClientFormHandler";
-import SuccessDisplay from "../Success/SuccessComponent";
+import SuccessDisplay from "../Utils/SuccessComponent";
 import ClientSearchHandler from "./ClientSearchHandler";
 
 type IProps = {

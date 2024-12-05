@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import ProductService from "../../services/ProductService";
 import Product from "../../types/Product";
 import ProductItem from "./ProductItem";
-import Loading from "../Loading/Loading";
+import Loading from "../Utils/Loading";
 
 export default function ProductMenu() {
 

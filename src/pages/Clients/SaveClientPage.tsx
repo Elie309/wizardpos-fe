@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Client from "../../types/Client";
 import ClientServices from "../../services/ClientServices";
-import Loading from "../../components/Loading/Loading";
-import ErrorDisplay from "../../components/Error/ErrorComponent";
-import SuccessDisplay from "../../components/Success/SuccessComponent";
+import Loading from "../../components/Utils/Loading";
+import ErrorDisplay from "../../components/Utils/ErrorComponent";
+import SuccessDisplay from "../../components/Utils/SuccessComponent";
 import SwitchInput from "../../components/Utils/SwitchInput";
 import { CastBoolean } from "../../utils/Helpers/CastBoolean";
 

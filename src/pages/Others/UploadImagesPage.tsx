@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import Loading from '../../components/Loading/Loading';
-import ErrorDisplay from '../../components/Error/ErrorComponent';
-import SuccessDisplay from '../../components/Success/SuccessComponent';
+import Loading from '../../components/Utils/Loading';
+import ErrorDisplay from '../../components/Utils/ErrorComponent';
+import SuccessDisplay from '../../components/Utils/SuccessComponent';
 import UploadService from '../../services/UploadService';
 
 export default function UploadImagesPage() {

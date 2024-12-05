@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Category from "../../types/Category";
-import Loading from "../../components/Loading/Loading";
+import Loading from "../../components/Utils/Loading";
 import CategoryService from "../../services/CategoryService";
 
 export default function CategoryListPage() {

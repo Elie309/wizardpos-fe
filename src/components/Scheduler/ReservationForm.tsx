@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import Loading from "../../components/Loading/Loading";
+import Loading from "../../components/Utils/Loading";
 import Reservation, { ReservationStatus } from "../../types/Reservation";
-import ErrorDisplay from "../../components/Error/ErrorComponent";
-import SuccessDisplay from "../../components/Success/SuccessComponent";
+import ErrorDisplay from "../../components/Utils/ErrorComponent";
+import SuccessDisplay from "../../components/Utils/SuccessComponent";
 import ReservationService from "../../services/ReservationService";
 import RestaurantTable from "../../types/RestaurantTable";
-import Popover from "../Popover/Popover";
+import Popover from "../Utils/Popover";
 import ClientPopHandler from "../ClientHelper/ClientHandler";
 import Client from "../../types/Client";
 

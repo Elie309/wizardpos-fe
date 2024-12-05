@@ -5,7 +5,7 @@ import AppRouter from './pages/AppRouter.tsx';
 import api from './utils/Axios.ts';
 import { useEffect, useState } from 'react';
 import { setUser } from './utils/Slices/userSlice.ts';
-import Loading from './components/Loading/Loading.tsx';
+import Loading from './components/Utils/Loading.tsx';
 
 function App() {
   const user = useSelector((state: RootState) => state.user);

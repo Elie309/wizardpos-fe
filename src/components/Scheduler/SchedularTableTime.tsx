@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import Reservation from "../../types/Reservation";
 import RestaurantTable from "../../types/RestaurantTable"
 import SchedularItem from "./SchedularItem";
-// import SchedularItem from "./SchedularItem";
 
 type IProps = {
     table: RestaurantTable;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Product from '../../types/Product';
-import Loading from '../../components/Loading/Loading';
+import Loading from '../../components/Utils/Loading';
 import ProductService from '../../services/ProductService';
 import Pager from '../../components/Utils/Pager';
 

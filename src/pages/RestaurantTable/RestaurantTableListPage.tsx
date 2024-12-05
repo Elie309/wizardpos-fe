@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Loading from "../../components/Loading/Loading";
+import Loading from "../../components/Utils/Loading";
 import RestaurantTable from "../../types/RestaurantTable";
 import RestaurantTableService from "../../services/RestaurantTableService";
 

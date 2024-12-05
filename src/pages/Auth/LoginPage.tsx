@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import api from "../../utils/Axios";
-import BlurredBackground from "../../components/BlurredBackground";
+import BlurredBackground from "../../components/Utils/BlurredBackground";
 import { useDispatch } from "react-redux";
 import { setUser, UserState } from "../../utils/Slices/userSlice";
 import LogoFilled from "../../components/Icons/LogoFilled";

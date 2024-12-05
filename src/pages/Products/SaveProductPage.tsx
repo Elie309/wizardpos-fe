@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 import Product from "../../types/Product";
 import ProductService from "../../services/ProductService";
-import Loading from "../../components/Loading/Loading";
-import ErrorDisplay from "../../components/Error/ErrorComponent";
+import Loading from "../../components/Utils/Loading";
+import ErrorDisplay from "../../components/Utils/ErrorComponent";
 import CategoryService from "../../services/CategoryService";
 import Category from "../../types/Category";
 import SwitchInput from "../../components/Utils/SwitchInput";
-import SuccessDisplay from "../../components/Success/SuccessComponent";
+import SuccessDisplay from "../../components/Utils/SuccessComponent";
 
 
 type IFormData = {
