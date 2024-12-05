@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Loading from "../../components/Utils/Loading";
 import RestaurantTable from "../../types/RestaurantTable";
 import RestaurantTableService from "../../services/RestaurantTableService";
+import { useNavigate } from "react-router-dom";
 
 export default function RestaurantTableListPage() {
 
@@ -13,9 +14,11 @@ export default function RestaurantTableListPage() {
 
     const [loading, setLoading] = useState(true);
 
+    const navigate = useNavigate();
+
 
     const handleRowClick = (table_id: string) => {
-        window.location.href = `/tables/${table_id}`;
+        navigate(`/tables/${table_id}`);
     };
 
     const loadTables = async () => {
@@ -56,7 +59,7 @@ export default function RestaurantTableListPage() {
         <div className='w-full h-full p-8 mx-auto mt-8 shadow-lg max-w-5xl bg-white rounded overflow-auto'>
 
             <div className='flex flex-row justify-between items-center'>
-                <p className='link-internal'><a href='/' className=''>Home</a> / Tables</p>
+                <p className='link-internal'><button onClick={() => navigate('/')} className=''>Home</button> / Tables</p>
             </div>
             <h2 className='primary-title'>Tables</h2>
 
@@ -68,7 +71,7 @@ export default function RestaurantTableListPage() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <a href='tables/add' className='submit-button p-1 py-2 sm:p-2 text-sm text-center col-span-10 md:col-span-2'>Add Table</a>
+                <button onClick={() => navigate('/tables/add')} className='submit-button p-1 py-2 sm:p-2 text-sm text-center col-span-10 md:col-span-2'>Add Table</button>
 
             </div>
 

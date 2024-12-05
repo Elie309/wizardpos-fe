@@ -6,6 +6,7 @@ import SwitchInput from "../../components/Utils/SwitchInput";
 import { CastBoolean } from "../../utils/Helpers/CastBoolean";
 import RestaurantTableService from "../../services/RestaurantTableService";
 import RestaurantTable from "../../types/RestaurantTable";
+import { useNavigate } from "react-router-dom";
 
 type IProps = {
     isEdit: boolean;
@@ -35,6 +36,8 @@ export default function SaveRestaurantTable({ isEdit }: IProps) {
 
     const [initialTableId, setInitialTableId] = useState<string>("");
     const [initialTableName, setInitialTableName] = useState<string>("");
+
+    const navigate = useNavigate();
 
 
     const loadTable = async () => {
@@ -168,7 +171,7 @@ export default function SaveRestaurantTable({ isEdit }: IProps) {
         <div className='w-full h-full p-8 mx-auto mt-8 shadow-lg max-w-3xl bg-white rounded overflow-auto'>
 
             <div className='flex flex-row justify-between items-center'>
-                <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/tables">Tables</a> / {isEdit ? initialTableName : "Add Table"}</p>
+                <p className='link-internal'><button onClick={() => navigate('/')} className=''>Home</button> / <button onClick={() => navigate('/tables')}>Tables</button> / {isEdit ? initialTableName : "Add Table"}</p>
             </div>
 
             <h1 className="primary-title ">{isEdit ? "Edit" : "Add"} Table</h1>

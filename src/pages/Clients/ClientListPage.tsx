@@ -3,6 +3,7 @@ import Client from "../../types/Client";
 import ClientServices from "../../services/ClientServices";
 import Loading from "../../components/Utils/Loading";
 import Pager from "../../components/Utils/Pager";
+import { useNavigate } from "react-router-dom";
 
 export default function ClientListPage() {
 
@@ -17,9 +18,11 @@ export default function ClientListPage() {
 
     const [loading, setLoading] = useState(true);
 
+    const navigate = useNavigate();
+
 
     const handleRowClick = (client_id: string) => {
-        window.location.href = `/clients/${client_id}`;
+        navigate(`/clients/${client_id}`);
     };
 
     const loadClients = async () => {
@@ -57,7 +60,7 @@ export default function ClientListPage() {
         <div className='w-full h-full p-8 mx-auto mt-8 shadow-lg max-w-5xl bg-white rounded overflow-auto'>
 
             <div className='flex flex-row justify-between items-center'>
-                <p className='link-internal'><a href='/' className=''>Home</a> / Clients</p>
+                <p className='link-internal'><button onClick={() => navigate("/")} className=''>Home</button> / Clients</p>
             </div>
             <h2 className='primary-title'>Clients</h2>
 
@@ -81,8 +84,7 @@ export default function ClientListPage() {
                     <option value='50'>50 per page</option>
                     <option value='100'>100 per page</option>
                 </select>
-                <a href='clients/add' className='submit-button p-1 py-2 sm:p-2 text-sm text-center col-span-5 md:col-span-2'>Add Client</a>
-
+                <button onClick={() => navigate("/clients/add")} className='submit-button p-1 py-2 sm:p-2 text-sm text-center col-span-5 md:col-span-2'>Add Client</button>
             </div>
 
             {loading && <Loading />}

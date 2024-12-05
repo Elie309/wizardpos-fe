@@ -7,6 +7,7 @@ import CategoryService from "../../services/CategoryService";
 import Category from "../../types/Category";
 import SwitchInput from "../../components/Utils/SwitchInput";
 import SuccessDisplay from "../../components/Utils/SuccessComponent";
+import { useNavigate } from "react-router-dom";
 
 
 type IFormData = {
@@ -46,6 +47,7 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
         isActive: false,
     });
 
+    const navigate = useNavigate();
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -63,7 +65,7 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
             const product = await ProductService.getWithSKU(sku);
 
             if (product === null) {
-                window.location.href = "/products"
+               navigate("/products");
                 throw new Error("Product or Category not found")
             }
 
@@ -108,7 +110,11 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
         }
     }
 
+    
+
     useEffect(() => {
+
+         document.title = isEdit ? "Edit Product" : "Add Product";
         setLoading(true);
         if (isEdit) {
             loadCategories()
@@ -176,7 +182,7 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
                     });
                 }else {
                     setSku(formData.sku);
-                    window.history.replaceState({}, "", `/products/${formData.sku}`);
+                    navigate(`/products/${formData.sku}`);
                 }
 
             } else {
@@ -200,7 +206,7 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
     return (
         <div className='w-full h-full p-8 mx-auto shadow-lg max-w-5xl bg-white rounded overflow-x-hidden overflow-y-auto'>
 
-            <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/products"> Products</a> / {isEdit ? sku : "New Product"}</p>
+            <p className='link-internal'><button onClick={() => navigate('/')} className=''>Home</button> / <button onClick={() => navigate('/products')}> Products</button> / {isEdit ? sku : "New Product"}</p>
             <h1 className="primary-title my-4">{isEdit ? "Edit" : "Add"} Product</h1>
 
 

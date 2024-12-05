@@ -6,6 +6,7 @@ import SwitchInput from "../../components/Utils/SwitchInput";
 import ErrorDisplay from "../../components/Utils/ErrorComponent";
 import SuccessDisplay from "../../components/Utils/SuccessComponent";
 import Category from "../../types/Category";
+import { useNavigate } from "react-router-dom";
 
 type IFormData = {
     name: string;
@@ -32,6 +33,7 @@ export default function SaveCategoryPage({ isEdit }: { isEdit: boolean }) {
 
     const [initialCategoryName, setInitialCategoryName] = useState<string>("");
 
+    const navigate = useNavigate();
 
     const loadCategory = async () => {
         setLoading(true);
@@ -130,7 +132,7 @@ export default function SaveCategoryPage({ isEdit }: { isEdit: boolean }) {
                 }else {
                     //if the name changed to redirect to the new name
                     if(initialCategoryName !== formData.name){
-                        window.history.replaceState({}, "", `/categories/${formData.name}`)
+                        navigate(`/categories/${formData.name}`)
                     }
                 }
 
@@ -166,7 +168,7 @@ export default function SaveCategoryPage({ isEdit }: { isEdit: boolean }) {
         <div className='w-full h-full p-8 mx-auto mt-8 shadow-lg max-w-3xl bg-white rounded overflow-auto'>
 
             <div className='flex flex-row justify-between items-center'>
-                <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/products">Products</a> / <a href="/categories">Categories</a> / {isEdit ? initialCategoryName : "Add Category"}</p>
+                <p className='link-internal'><button onClick={() => navigate("/")} className=''>Home</button> / <button onClick={() => navigate("/products")}>Products</button> / <button onClick={() => navigate("/categories")}>Categories</button> / {isEdit ? initialCategoryName : "Add Category"}</p>
             </div>
 
             <h1 className="primary-title ">{isEdit ? "Edit" : "Add"} Category</h1>

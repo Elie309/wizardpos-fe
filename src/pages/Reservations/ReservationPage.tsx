@@ -1,10 +1,13 @@
+import { useEffect } from "react";
 import Schedular from "../../components/Scheduler/Scheduler";
 
 
 
 export default function ReservationPage() {
 
-
+    useEffect(() => {
+        document.title = 'Reservations';
+    }, []);
 
 
     return (

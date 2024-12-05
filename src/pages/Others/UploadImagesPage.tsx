@@ -3,6 +3,7 @@ import Loading from '../../components/Utils/Loading';
 import ErrorDisplay from '../../components/Utils/ErrorComponent';
 import SuccessDisplay from '../../components/Utils/SuccessComponent';
 import UploadService from '../../services/UploadService';
+import { useNavigate } from 'react-router-dom';
 
 export default function UploadImagesPage() {
     const [isDragging, setIsDragging] = useState(false);
@@ -12,6 +13,8 @@ export default function UploadImagesPage() {
 
     const [imagesURL, setImagesURL] = useState<string[] | null>([]);
     const [successMessage, setSuccessMessage] = useState('');
+
+    const navigate = useNavigate();
 
     const dropAreaRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -92,7 +95,7 @@ export default function UploadImagesPage() {
         <div className='w-full h-full p-8 mx-auto mt-8 shadow-lg max-w-5xl bg-white rounded overflow-auto'>
 
             <div className='flex flex-row justify-between items-center'>
-                <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/products">Products</a> / Uploads</p>
+                <p className='link-internal'><button onClick={() => navigate("/")} className=''>Home</button> / <button onClick={() => navigate("/products")}>Products</button> / Uploads</p>
             </div>
 
             <h1 className='primary-title'>Upload Images</h1>

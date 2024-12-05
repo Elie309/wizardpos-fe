@@ -3,6 +3,7 @@ import Product from '../../types/Product';
 import Loading from '../../components/Utils/Loading';
 import ProductService from '../../services/ProductService';
 import Pager from '../../components/Utils/Pager';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductListPage() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -15,9 +16,11 @@ export default function ProductListPage() {
 
     const [loading, setLoading] = useState(true);
 
+    const navigate = useNavigate();
+
 
     const handleRowClick = (productSku: string) => {
-        window.location.href = `/products/${productSku}`;
+        navigate(`/products/${productSku}`);
     };
 
     const loadProducts = async () => {
@@ -50,19 +53,22 @@ export default function ProductListPage() {
         loadProducts();
     }, [currentPage, perPage, searchTerm]);
 
+    useEffect(() => {
+        document.title = 'Products';
+    }, []);
 
     return (
         <div className='w-full h-full p-8 mx-auto mt-8 shadow-lg max-w-5xl bg-white rounded overflow-auto'>
 
             <div className='flex flex-row justify-between items-center'>
-                <p className='link-internal'><a href='/' className=''>Home</a> / Products</p>
+                <p className='link-internal'><button onClick={() => navigate("/")} >Home</button> / Products</p>
 
                 <div className='grid grid-cols-2 gap-2 my-2'>
                     {/* Upload images */}
-                    <a href='uploads' className='reverse-button flex items-center justify-center text-center'>Upload Images</a>
+                    <button onClick={() => navigate("/uploads")} className='reverse-button flex items-center justify-center text-center'>Upload Images</button>
 
                     {/* Categories */}
-                    <a href='categories' className='reverse-button flex items-center justify-center text-center '>Categories</a>
+                    <button onClick={() => navigate('/categories')} className='reverse-button flex items-center justify-center text-center '>Categories</button>
 
                 </div>
             </div>
@@ -88,7 +94,7 @@ export default function ProductListPage() {
                     <option value='50'>50 per page</option>
                     <option value='100'>100 per page</option>
                 </select>
-                <a href='products/add' className='submit-button p-1 py-2 sm:p-2 text-sm text-center col-span-5 md:col-span-2'>Add Product</a>
+                <button onClick={() => navigate('/products/add')} className='submit-button p-1 py-2 sm:p-2 text-sm text-center col-span-5 md:col-span-2'>Add Product</button>
 
             </div>
 

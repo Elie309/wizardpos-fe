@@ -6,6 +6,7 @@ import ErrorDisplay from "../../components/Utils/ErrorComponent";
 import SuccessDisplay from "../../components/Utils/SuccessComponent";
 import SwitchInput from "../../components/Utils/SwitchInput";
 import { CastBoolean } from "../../utils/Helpers/CastBoolean";
+import { useNavigate } from "react-router-dom";
 
 type IProps = {
     isEdit: boolean;
@@ -38,6 +39,8 @@ export default function SaveClientPage({isEdit}: IProps) {
     const [loadingSubmit, setLoadingSubmit] = useState<boolean>();
 
     const [initialClientId, setInitialClientId] = useState<string>("");
+
+    const navigate = useNavigate();
 
 
     const loadClient = async () => {
@@ -172,7 +175,7 @@ export default function SaveClientPage({isEdit}: IProps) {
         <div className='w-full h-full p-8 mx-auto mt-8 shadow-lg max-w-3xl bg-white rounded overflow-auto'>
 
             <div className='flex flex-row justify-between items-center'>
-                <p className='link-internal'><a href='/' className=''>Home</a> / <a href="/clients">Clients</a> / {isEdit ? initialClientId : "Add Client"}</p>
+                <p className='link-internal'><button onClick={() => navigate("/")} className=''>Home</button> / <button onClick={() => navigate("/clients")}>Clients</button> / {isEdit ? initialClientId : "Add Client"}</p>
             </div>
 
             <h1 className="primary-title ">{isEdit ? "Edit" : "Add"} Client</h1>

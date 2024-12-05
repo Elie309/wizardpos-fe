@@ -132,7 +132,7 @@ Color platte
     @apply text-dark font-bold text-base;
   }
 
-  .link-internal a, .link-primary{
+  .link-internal button, .link-primary{
     @apply text-primary underline;
   } 
 

@@ -14,10 +14,19 @@ import SaveClientPage from "./Clients/SaveClientPage.tsx";
 import RestaurantTableListPage from "./RestaurantTable/RestaurantTableListPage.tsx";
 import SaveRestaurantTable from "./RestaurantTable/SaveRestaurantTable.tsx";
 import EmployeePage from "./Admin/EmployeePage.tsx";
+import { useEffect } from "react";
 
 
 
 export default function AppRouter() {
+
+
+    useEffect(() => {
+        
+    }, [])
+
+
+
     return (
         <BrowserRouter>
             <Routes>

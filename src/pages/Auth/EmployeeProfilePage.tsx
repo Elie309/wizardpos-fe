@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../../utils/Slices/userSlice";
 import { RootState } from "../../utils/store";
@@ -14,6 +14,8 @@ export default function EmployeeProfilePage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   const  handleLogout = async () => {
     try {
       setLoading(true);
@@ -27,7 +29,7 @@ export default function EmployeeProfilePage() {
         setLoading(false);
         dispatch(clearUser())
 
-        window.history.replaceState({}, '', '/login');
+       navigate('/login');
 
       } else {
         setError(response.data.message);

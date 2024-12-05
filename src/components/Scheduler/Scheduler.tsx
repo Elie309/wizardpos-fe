@@ -11,6 +11,7 @@ import Reservation from '../../types/Reservation';
 import Loading from '../Utils/Loading';
 import ErrorDisplay from '../Utils/ErrorComponent';
 import ReservationService from '../../services/ReservationService';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -30,6 +31,8 @@ export default function Scheduler() {
     const [error, setError] = React.useState<string | null>(null);
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+    const navigate = useNavigate();
 
 
 
@@ -170,6 +173,13 @@ export default function Scheduler() {
 
 
                         <div className='flex flex-row py-4'>
+
+                            <button onClick={() => navigate("/")} className="my-auto cursor-pointer no-print">
+                                <svg
+                                    viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-6 text-dark fill-none">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                                </svg>
+                            </button>
                             <h1 className='primary-title'>Table Reservations</h1>
 
                             {error && <ErrorDisplay message={error} />}
