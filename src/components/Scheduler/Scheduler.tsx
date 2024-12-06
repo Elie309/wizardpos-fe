@@ -113,7 +113,7 @@ export default function Scheduler() {
             if (tablesResponse.success) {
                 let tables = tablesResponse.data as RestaurantTable[];
                 setTables(tables);
-                if (tables.length > 0) {
+                if (tables.length > 0 && currentTable === null) {
                     setCurrentTable(tables[0]);
                 }
             }
@@ -163,6 +163,7 @@ export default function Scheduler() {
                         tables={tables}
                         currentDate={date.toISOString().split('T')[0]}
                         currentTable={currentTable}
+                        onSave={loadAll}
                     /> : <div></div>}
             </Drawer>
 

@@ -29,9 +29,10 @@ type IProps = {
     tables: RestaurantTable[];
     currentTable: RestaurantTable | null;
     currentDate: string;
+    onSave: () => void;
 }
 
-export default function ReservationForm({ isEdit, data, tables, currentTable, currentDate }: IProps) {
+export default function ReservationForm({ isEdit, data, tables, currentTable, currentDate, onSave }: IProps) {
 
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState<IFormData>({
@@ -188,6 +189,8 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
                 setSuccess(true);
                 setErrorMessage("");
                 setError(false);
+
+                onSave();
 
                 if (!isEdit) {
                     setFormData({
