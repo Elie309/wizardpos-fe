@@ -106,7 +106,6 @@ export default class ReservationService{
 
             let response = await api.post('/reservations/' + reservation_id, reservation.toFormData());
 
-            console.log(response);
             if(response.status === 200){
                 let reservation = Reservation.fromJson(response.data.data);
                 return {
