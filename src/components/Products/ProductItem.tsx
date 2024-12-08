@@ -2,14 +2,14 @@ import Product from "../../types/Product";
 
 interface ProductItemProps {
     product: Product;
+    onClick: (product: Product) => void;
 }
 
-//export default with props above
 
-export default function ProductItem({ product }: ProductItemProps) {
+export default function ProductItem({product, onClick}: ProductItemProps) {
 
     const handleOnClick = () => {
-        console.log(`Product ${product.name} clicked`);
+        onClick(product);
     }
 
     return (
