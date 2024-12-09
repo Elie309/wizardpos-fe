@@ -101,12 +101,12 @@ export default function OrdersHandler(props: { onClickOrder: (order: Order) => v
 
 
     return (
-        <div className="overflow-auto">
+        <div className="overflow-auto h-full">
             {error && <ErrorDisplay message={error} />}
             <h1 className="primary-title">Orders</h1>
-            <div className="label-input-container grid grid-cols-12 items-center pl-8 ">
+            <div className="label-input-container px-8 flex flex-row justify-evenly ">
 
-                <select className="h-fit col-span-3 max-w-64 text-center" value={orderStatusPicker} onChange={(e) => setOrderStatusPicker(e.target.value)}>
+                <select className="h-fit max-w-64 text-center" value={orderStatusPicker} onChange={(e) => setOrderStatusPicker(e.target.value)}>
                     <option value="All">All</option>
                     {Object.values(OrderStatus).map((status) => {
                         return <option key={status} value={status}>{status}</option>
@@ -121,10 +121,10 @@ export default function OrdersHandler(props: { onClickOrder: (order: Order) => v
                     onSelect={handleDateSelect}
                     onChange={handleDateChange}
                     dateFormat="dd-MMM-yyyy"
-                    wrapperClassName='col-span-6 mx-auto'
+                    wrapperClassName='mx-auto'
                 />
 
-                <button className="submit-button col-span-3">New Order</button>
+                <button className="submit-button">New Order</button>
 
 
 

@@ -136,20 +136,26 @@ export default function OrderSummary({ order, orderItems, onRemoveItem, handleSa
 
         </div>
 
-      {order.notes && <div>
-        <p className='text-center text-sm'>Notes</p>
-        <p className='text-xs text-justify'>{order.notes}</p>
-      </div>}
+        <div>
+          <div>
+            <p className='text-center text-sm'>Notes</p>
+            {!editing && <p className='text-xs text-justify'>{order.notes}</p>}
+            {editing && <textarea
+              className="border border-gray-300 rounded-md p-1 w-full outline-none"
+              value={order.notes || ""} onChange={(e) => order.notes = e.target.value} />}
+          </div>
+
+        </div>
 
       </div>
 
-        <button
-          onClick={handleSaveOrder}
-          className="no-print w-full mt-2 submit-button"
-        >
-          Save Order
-        </button>
-        
+      <button
+        onClick={handleSaveOrder}
+        className="no-print w-full mt-2 submit-button"
+      >
+        Save Order
+      </button>
+
     </div>
   )
 }
