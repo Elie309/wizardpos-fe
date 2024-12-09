@@ -7,7 +7,7 @@ import OrderComponent from "./OrderComponent";
 import DatePicker from "react-datepicker";
 
 
-export default function OrdersHandler(props: { onClickOrder: (order: Order) => void }) {
+export default function OrdersHandler(props: { onClickOrder: (order: Order) => void, handleOnClickNewOrder: () => void }) {
 
     const [orders, setOrders] = useState<Order[]>([]);
     const [initialOrders, setInitialOrders] = useState<Order[]>([]);
@@ -124,7 +124,7 @@ export default function OrdersHandler(props: { onClickOrder: (order: Order) => v
                     wrapperClassName='mx-auto'
                 />
 
-                <button className="submit-button">New Order</button>
+                <button className="submit-button" onClick={props.handleOnClickNewOrder} >New Order</button>
 
 
 

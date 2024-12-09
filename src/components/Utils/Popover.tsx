@@ -3,7 +3,8 @@ import React, { forwardRef, useImperativeHandle } from 'react';;
 interface PopoverProps {
   id: string;
   children: React.ReactNode;
-  buttonName: string;
+  useButton?: boolean;
+  buttonName?: string;
   title: string
   classNameButton: string;
   classNameMainDiv: string;
@@ -31,9 +32,9 @@ const Popover = forwardRef((props: PopoverProps, ref) => {
 
   return (
     <div>
-      <a className={" cursor-pointer "+ props.classNameButton} onClick={handleOnClick} aria-describedby={props.id}>
-        {props.buttonName}
-      </a>
+      {(props.useButton) &&<a className={" cursor-pointer "+ props.classNameButton} onClick={handleOnClick} aria-describedby={props.id}>
+        {props.buttonName || "Click me"}
+      </a>}
       {isOpen &&
         <div className={`${isOpen ? "" : "hidden"} w-screen h-screen  
           fixed inset-0 bg-black bg-opacity-50 

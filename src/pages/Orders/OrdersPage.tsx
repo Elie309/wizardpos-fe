@@ -1,17 +1,23 @@
 // src/pages/OrdersPage.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import OrderSummary from "../../components/OrdersComponent.tsx/OrderSummary";
 import ProductMenu from "../../components/Products/ProductMenu";
 import Product from "../../types/Product";
 import OrderItem from "../../types/OrderItem";
 import OrdersHandler from "../../components/OrdersComponent.tsx/OrdersHandler";
 import Order from "../../types/Order";
+import Popover from "../../components/Utils/Popover";
+import ClientPopHandler from "../../components/ClientHelper/ClientPopHandler";
+import Client from "../../types/Client";
 
 export default function OrdersPage() {
 
   const [currentOrder, setCurrentOrder] = useState<Order>(new Order());
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [showProductMenu, setShowProductMenu] = useState(false);
+
+  const clientHandlerRef = useRef<{ open: () => void, close: () => void }>(null);
+
 
   useEffect(() => {
     document.title = "Orders";
@@ -64,6 +70,21 @@ export default function OrdersPage() {
     setCurrentOrder(order);
   }
 
+  const handleOnClickNewOrder = () => {
+    clientHandlerRef.current?.open();
+  }
+
+  const onSelectClientHandler = (client: Client) => {
+
+    const newOrder = new Order();
+    newOrder.client_id = client.client_id!;
+    newOrder.client_name = client.client_first_name + " " + client.client_last_name;
+
+    setCurrentOrder(newOrder);
+    clientHandlerRef.current?.close();
+    setShowProductMenu(true);
+  }
+
   return (
     <div className="flex flex-row p-8 w-full h-full">
       <OrderSummary
@@ -72,6 +93,18 @@ export default function OrdersPage() {
         orderItems={orderItems}
         onRemoveItem={handleRemoveItem}
       />
+      <Popover
+        id="client-handler"
+        classNameButton="bg-blue-500 text-white p-2 rounded"
+        classNameMainDiv="max-w-3xl"
+        title="Search Client"
+        ref={clientHandlerRef}
+        useButton={false}
+      >
+        <ClientPopHandler
+          onClientSelect={onSelectClientHandler}
+        />
+      </Popover>
       <div className="flex flex-row">
 
         {/* Products */}
@@ -84,17 +117,21 @@ export default function OrdersPage() {
           <ProductMenu onClickMenuProduct={handleProductClick} />
         </div>
 
-        
+
         {/* Orders */}
         <div className={`no-print flex flex-col min-w-full h-full transition-transform duration-500 
                         ${showProductMenu ? "translate-x-full" : "-translate-x-full"}`}
         >
           <OrdersHandler
             onClickOrder={handleCurrentOrder}
+            handleOnClickNewOrder={handleOnClickNewOrder}
           />
         </div>
 
       </div>
+
+
+
     </div>
   );
 }

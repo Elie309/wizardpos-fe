@@ -6,7 +6,7 @@ import SuccessDisplay from "../../components/Utils/SuccessComponent";
 import ReservationService from "../../services/ReservationService";
 import RestaurantTable from "../../types/RestaurantTable";
 import Popover from "../Utils/Popover";
-import ClientPopHandler from "../ClientHelper/ClientHandler";
+import ClientPopHandler from "../ClientHelper/ClientPopHandler";
 import Client from "../../types/Client";
 
 type IFormData = {
@@ -259,6 +259,7 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
                          title="Client Search"
                          classNameButton="link-primary"
                          classNameMainDiv="max-w-3xl"
+                         useButton={true}
                      >
                        <ClientPopHandler 
                         onClientSelect={handleClientSelect}

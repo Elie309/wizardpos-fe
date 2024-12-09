@@ -91,7 +91,7 @@ export default function OrderSummary({ order, orderItems, onRemoveItem, handleSa
         </div>
 
         {/* Order Items */}
-        <div className='overflow-auto h-full'>
+        <div className='overflow-auto h-4/5'>
           <div className="my-1 ">
             {orderItems.map((item, index) => (
               <div key={index} className="flex justify-between">

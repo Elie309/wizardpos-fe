@@ -27,7 +27,7 @@ export default function OrderComponent(props: OrderItemProps) {
         rounded-lg w-52 cursor-pointer hover:scale-105`}>
             <p><strong>#</strong>{order.reference}</p>
             <p><strong>Client:</strong> {order.client_name}</p>
-            <p><strong>Date:</strong> {order.getFormattedDate()}</p>
+            <p><strong>Number:</strong> {order.phone_number}</p>
             <p><strong>Status:</strong> {order.status}</p>
         </div>
     );
