@@ -154,7 +154,7 @@ export default function OrderSummary(props: OrderSummaryProps) {
         </div>
 
         {/* Order Items */}
-        <div className='overflow-auto h-4/5'>
+        <div className='overflow-auto h-4/5 text-xs'>
           <div className="my-1 ">
             {props.orderItems.map((item, index) => (
               <div key={index} className="flex justify-between">
@@ -170,30 +170,30 @@ export default function OrderSummary(props: OrderSummaryProps) {
 
 
       {/* Action Buttons */}
-      <div className="h-fit mt-2 text-sm">
+      <div className="h-fit mt-2 text-sm ">
         <hr className='my-2' />
 
         <div>
 
           <div className="flex justify-between">
-            <p>Subtotal</p>
+            <p className='italic'>Subtotal</p>
             <p>${subtotal.toFixed(2)}</p>
           </div>
           <div className="flex justify-between">
-            <p>Discount</p>
+            <p className='italic'>Discount</p>
             {!editing && <p>${discount.toFixed(2)}</p>}
             {editing && <input type='number'
               className='border border-gray-300 rounded-md p-1 w-16 outline-none'
               value={discount} onChange={(e) => setDiscount(Number(e.target.value))} />}
           </div>
           <div className="flex justify-between">
-            <p>Tax</p>
+            <p className='italic'>Tax</p>
             <p>${tax.toFixed(2)}</p>
           </div>
           <hr />
 
           <div className="mt-4 flex justify-between">
-            <p className="font-bold">Total</p>
+            <p  className=" italic font-bold">Total</p>
             <p className="font-bold">${total.toFixed(2)}</p>
           </div>
 

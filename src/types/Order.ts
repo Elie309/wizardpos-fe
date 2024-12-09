@@ -1,3 +1,4 @@
+import OrderItem from "./OrderItem";
 
 export enum OrderStatus {
     ON_GOING = 'on-going',
@@ -32,6 +33,8 @@ export default class Order {
     created_at: Date;
     updated_at: Date;
     deleted_at: Date | null;
+
+    order_items: OrderItem[] = [];
 
     constructor() {
         this.id = "0";
@@ -95,6 +98,13 @@ export default class Order {
         order.tax = parseFloat(data.order_tax);
         order.total = parseFloat(data.order_total);
         order.status = data.order_status;
+
+        if(data.order_items){
+            data.order_items.forEach((item: any) => {
+                order.order_items.push(OrderItem.fromJson(item));
+            });
+        }
+        
         // order.created_at = new Date(data.order_created_at);
         // order.updated_at = new Date(data.order_updated_at);
         // order.deleted_at = data.order_deleted_at ? new Date(data.order_deleted_at) : null;

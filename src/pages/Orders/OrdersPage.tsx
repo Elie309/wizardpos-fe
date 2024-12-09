@@ -16,7 +16,7 @@ import OrderForm from "../../components/OrdersComponent.tsx/OrderForm";
 export default function OrdersPage() {
 
   const [currentOrder, setCurrentOrder] = useState<Order>(new Order());
-  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
+  const [orderItems, setOrderItems] = useState<OrderItem[]>(currentOrder.order_items);
   const [showProductMenu, setShowProductMenu] = useState(false);
 
   const [isEditOrder, setIsEditOrder] = useState(false);
@@ -31,6 +31,11 @@ export default function OrdersPage() {
   useEffect(() => {
     document.title = "Orders";
   }, []);
+
+  useEffect(() => {
+    console.log(currentOrder);
+    setOrderItems(currentOrder.order_items);
+  }, [currentOrder]);
 
   const handleRemoveItem = (productId: string) => {
     for (let i = 0; i < orderItems.length; i++) {
@@ -137,7 +142,7 @@ export default function OrdersPage() {
         ref={orderPopoverHandlerRef}
         useButton={false}
       >
-        <OrderForm 
+        <OrderForm
           order={currentOrder}
           isEdit={isEditOrder}
           onSaveSuccessful={handleOrderSaveSuccessful}
@@ -153,7 +158,13 @@ export default function OrdersPage() {
         <div tabIndex={-1} className={`flex flex-col min-w-full h-full transition-transform duration-500 
         ${showProductMenu ? "translate-x-0" : "translate-x-full"}`}
         >
-          <div className="w-full h-fit">
+          <div className="no-print w-full h-fit flex flex-row px-8">
+            <button onClick={() => setShowProductMenu(false)} className="my-auto cursor-pointer no-print">
+              <svg
+                viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-6 text-dark fill-none">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+              </svg>
+            </button>
             <h1 className="primary-title">Product Menu</h1>
           </div>
           <ProductMenu onClickMenuProduct={handleProductClick} />

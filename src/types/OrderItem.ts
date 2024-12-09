@@ -36,9 +36,9 @@ export default class OrderItem {
         orderItem.product_price = parseFloat(data.product_price);
         orderItem.quantity = parseInt(data.order_item_quantity);
         orderItem.total = parseFloat(data.order_item_total);
-        orderItem.created_at = new Date(data.order_item_created_at.date);
-        orderItem.updated_at = new Date(data.order_item_updated_at.date);
-        orderItem.deleted_at = data.order_item_deleted_at ? new Date(data.order_item_deleted_at.date) : null;
+        // orderItem.created_at = new Date(data.order_item_created_at.date);
+        // orderItem.updated_at = new Date(data.order_item_updated_at.date);
+        // orderItem.deleted_at = data.order_item_deleted_at ? new Date(data.order_item_deleted_at.date) : null;
         return orderItem;
     }
 
