@@ -1,4 +1,3 @@
-
 import OrderItem from "../types/OrderItem";
 import api from "../utils/Axios";
 import ServicesErrorHandler from "./ServicesErrorHandler";
@@ -75,13 +74,14 @@ export default class OrderItemService {
 
     static async bulkAdd(order_id: string, items: OrderItem[]): Promise<IOrderItemService> {
         try {
-            let formData = new FormData();
-            items.forEach((item, index) => {
-                formData.append(`items[${index}][order_item_product_id]`, item.product_id);
-                formData.append(`items[${index}][order_item_quantity]`, item.quantity.toString());
-                formData.append(`items[${index}][order_item_total]`, item.total.toString());
-            });
-            let response = await api.post(`/orders/${order_id}/items/bulk`, formData);
+            let payload = {
+                items: items.map(item => ({
+                    order_item_product_id: item.product_id,
+                    order_item_quantity: item.quantity,
+                    order_item_total: item.total
+                }))
+            };
+            let response = await api.post(`/orders/${order_id}/items/bulk`, payload.items);
             if (response.status === 201) {
                 let items = response.data.data.map((item: any) => OrderItem.fromJson(item));
                 return {
@@ -100,31 +100,5 @@ export default class OrderItemService {
         }
     }
 
-    static async bulkEdit(order_id: string, items: OrderItem[]): Promise<IOrderItemService> {
-        try {
-            let formData = new FormData();
-            items.forEach((item, index) => {
-                formData.append(`items[${index}][order_item_id]`, item.id);
-                formData.append(`items[${index}][order_item_product_id]`, item.product_id);
-                formData.append(`items[${index}][order_item_quantity]`, item.quantity.toString());
-                formData.append(`items[${index}][order_item_total]`, item.total.toString());
-            });
-            let response = await api.post(`/orders/${order_id}/items/bulk-edit`, formData);
-            if (response.status === 200) {
-                let items = response.data.data.map((item: any) => OrderItem.fromJson(item));
-                return {
-                    success: true,
-                    message: 'Order items updated successfully',
-                    data: items
-                };
-            }
-            return {
-                success: false,
-                message: 'Failed to update order items',
-                data: null
-            }
-        } catch (error: any) {
-            return ServicesErrorHandler(error);
-        }
-    }
+ 
 }

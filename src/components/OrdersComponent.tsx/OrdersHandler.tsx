@@ -6,8 +6,13 @@ import ErrorDisplay from "../Utils/ErrorComponent";
 import OrderComponent from "./OrderComponent";
 import DatePicker from "react-datepicker";
 
+type OrdersHandlerProps = {
+    onClickOrder: (order: Order) => void;
+    onClickNewOrder: () => void;
+    onDoubleClickOrder: (order: Order) => void;
+}
 
-export default function OrdersHandler(props: { onClickOrder: (order: Order) => void, handleOnClickNewOrder: () => void }) {
+export default function OrdersHandler(props: OrdersHandlerProps) {
 
     const [orders, setOrders] = useState<Order[]>([]);
     const [initialOrders, setInitialOrders] = useState<Order[]>([]);
@@ -77,6 +82,10 @@ export default function OrdersHandler(props: { onClickOrder: (order: Order) => v
         props.onClickOrder(order);
     }
 
+    const handleOnDoubleClickOrder = (order: Order) => {
+        props.onDoubleClickOrder(order);
+    }
+
 
     useEffect(() => {
 
@@ -106,7 +115,7 @@ export default function OrdersHandler(props: { onClickOrder: (order: Order) => v
             <h1 className="primary-title">Orders</h1>
             <div className="label-input-container px-8 flex flex-row justify-evenly ">
 
-                <select className="h-fit max-w-64 text-center" value={orderStatusPicker} onChange={(e) => setOrderStatusPicker(e.target.value)}>
+                <select tabIndex={-1} className="h-fit max-w-64 text-center" value={orderStatusPicker} onChange={(e) => setOrderStatusPicker(e.target.value)}>
                     <option value="All">All</option>
                     {Object.values(OrderStatus).map((status) => {
                         return <option key={status} value={status}>{status}</option>
@@ -114,6 +123,7 @@ export default function OrdersHandler(props: { onClickOrder: (order: Order) => v
                 </select>
 
                 <DatePicker
+                    tabIndex={-1}
                     showIcon={true}
                     toggleCalendarOnIconClick={true}
                     className='text-center cursor-pointer select-none '
@@ -124,7 +134,7 @@ export default function OrdersHandler(props: { onClickOrder: (order: Order) => v
                     wrapperClassName='mx-auto'
                 />
 
-                <button className="submit-button" onClick={props.handleOnClickNewOrder} >New Order</button>
+                <button tabIndex={-1} className="submit-button" onClick={props.onClickNewOrder} >New Order</button>
 
 
 
@@ -132,7 +142,12 @@ export default function OrdersHandler(props: { onClickOrder: (order: Order) => v
 
             <div className="w-full h-fit flex flex-row flex-wrap gap-4 pl-8 ">
                 {orders.map((order) => {
-                    return <OrderComponent key={order.id} order={order} onClick={handleOnClickOrder} />
+                    return <OrderComponent
+                        key={order.id}
+                        order={order}
+                        onClick={handleOnClickOrder}
+                        onDoubleClick={handleOnDoubleClickOrder}
+                    />
                 })}
             </div>
         </div>

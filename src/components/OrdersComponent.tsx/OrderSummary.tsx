@@ -3,15 +3,19 @@ import OrderItem from '../../types/OrderItem';
 import EditIcon from '../Icons/EditIcon';
 import PrintIcon from '../Icons/PrintIcon';
 import Order from '../../types/Order';
+import OrderService from '../../services/OrderService';
+import OrderItemService from '../../services/OrderItemService';
+import ErrorDisplay from '../Utils/ErrorComponent';
+import SuccessDisplay from '../Utils/SuccessComponent';
 
 interface OrderSummaryProps {
   order: Order;
   orderItems: OrderItem[];
   onRemoveItem: (id: string) => void;
-  handleSave: (orderItems: OrderItem[], total: number, discount: number, tax: number, subtotal: number) => void;
+  onClickCancel: () => void;
 }
 
-export default function OrderSummary({ order, orderItems, onRemoveItem, handleSave }: OrderSummaryProps) {
+export default function OrderSummary(props: OrderSummaryProps) {
 
   const [editing, setEditing] = useState(false);
 
@@ -20,28 +24,83 @@ export default function OrderSummary({ order, orderItems, onRemoveItem, handleSa
   const [tax, setTax] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
 
-  const handleSaveOrder = () => {
-    handleSave(orderItems, total, discount, tax, subtotal);
+  const [notes, setNotes] = useState(props.order.notes);
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const handleSaveOrder = async () => {
+    setEditing(false);
+    setLoading(true);
+    setError('');
+    setSuccess('');
+    try {
+
+      let newOrder = new Order();
+      newOrder.id = props.order.id;
+      newOrder.reference = props.order.reference;
+      newOrder.client_id = props.order.client_id;
+      newOrder.client_name = props.order.client_name;
+      newOrder.employee_id = props.order.employee_id;
+      newOrder.employee_name = props.order.employee_name;
+      newOrder.type = props.order.type;
+      newOrder.status = props.order.status;
+      newOrder.date = props.order.date;
+      newOrder.time = props.order.time;
+      newOrder.notes = notes;
+      newOrder.total = total;
+      newOrder.discount = discount;
+      newOrder.tax = tax;
+      newOrder.subtotal = subtotal;
+
+      let responseOrder = await OrderService.updateOrder(props.order.id, newOrder);
+
+      if (!responseOrder.success) {
+        setError(responseOrder.message);
+        return;
+      }
+
+      let responseOrderItems = await OrderItemService.bulkAdd(props.order.id, props.orderItems);
+
+
+      if (!responseOrderItems.success) {
+        setError(responseOrderItems.message);
+        return;
+      }
+
+      setSuccess('Order saved successfully');
+
+
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleCancelChanges = () => {
+    setEditing(false);
+    setNotes(props.order.notes);
+    setDiscount(0);
+    props.onClickCancel();
   }
 
   const handleRemoveItem = (id: string) => () => {
-    onRemoveItem(id);
+    props.onRemoveItem(id);
   }
 
   const handlePrint = () => {
-
     window.print();
-
   }
 
   const calculateTotal = () => {
-    return orderItems.reduce((total, item) => total + item.total, 0);
+    return props.orderItems.reduce((total, item) => total + item.total, 0);
   }
 
   useEffect(() => {
     setTotal(calculateTotal() - discount);
-  }, [orderItems, discount]);
+  }, [props.orderItems, discount]);
 
   useEffect(() => {
     setTax(total * 0.11);
@@ -50,6 +109,10 @@ export default function OrderSummary({ order, orderItems, onRemoveItem, handleSa
   useEffect(() => {
     setSubtotal(total - discount - tax);
   }, [total, discount, tax]);
+
+  useEffect(() => {
+    setNotes(props.order.notes);
+  }, []);
 
 
   return (
@@ -69,23 +132,23 @@ export default function OrderSummary({ order, orderItems, onRemoveItem, handleSa
         <div className="my-2 text-xs">
           <div className="flex justify-between">
             <p>Order Reference</p>
-            <p>{order.reference}</p>
+            <p>{props.order.reference}</p>
           </div>
           <div className="flex justify-between">
             <p>Client Name</p>
-            <p>{order.client_name}</p>
+            <p>{props.order.client_name}</p>
           </div>
           <div className="flex justify-between">
             <p>Employee Name</p>
-            <p>{order.employee_name}</p>
+            <p>{props.order.employee_name}</p>
           </div>
           <div className="flex justify-between">
             <p>Order Type</p>
-            <p>{order.type}</p>
+            <p>{props.order.type}</p>
           </div>
           <div className="flex justify-between">
             <p>Date - Time</p>
-            <p>{order.date.toISOString().split("T")[0]} - {order.time.toLocaleTimeString()}</p>
+            <p>{props.order.date.toISOString().split("T")[0]} - {props.order.time.toLocaleTimeString()}</p>
           </div>
 
         </div>
@@ -93,7 +156,7 @@ export default function OrderSummary({ order, orderItems, onRemoveItem, handleSa
         {/* Order Items */}
         <div className='overflow-auto h-4/5'>
           <div className="my-1 ">
-            {orderItems.map((item, index) => (
+            {props.orderItems.map((item, index) => (
               <div key={index} className="flex justify-between">
                 <p>{item.product_name} (x{item.quantity})</p>
                 {!editing && <p>${item.total.toFixed(2)}</p>}
@@ -139,23 +202,38 @@ export default function OrderSummary({ order, orderItems, onRemoveItem, handleSa
         <div>
           <div>
             <p className='text-center text-sm'>Notes</p>
-            {!editing && <p className='text-xs text-justify'>{order.notes}</p>}
+            {!editing && <p className='text-xs text-justify'>{notes}</p>}
             {editing && <textarea
               className="border border-gray-300 rounded-md p-1 w-full outline-none"
-              value={order.notes || ""} onChange={(e) => order.notes = e.target.value} />}
+              value={notes} onChange={(e) => setNotes(e.target.value)} />}
           </div>
 
         </div>
 
       </div>
+      <div className='text-xs'>
+        {error && <ErrorDisplay message={error} />}
+        {success && <SuccessDisplay message={success} />}
+      </div>
 
-      <button
-        onClick={handleSaveOrder}
-        className="no-print w-full mt-2 submit-button"
-      >
-        Save Order
-      </button>
 
+      <div className='flex flex-row justify-between'>
+        <button
+        onClick={handleCancelChanges}
+          className="no-print w-full mt-2 mx-2 reverse-button"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={handleSaveOrder}
+          disabled={loading}
+          className="no-print w-full mt-2 mx-2 submit-button"
+        >
+          Save
+        </button>
+
+      </div>
     </div>
   )
 }

@@ -1,4 +1,3 @@
-// ENUM('on-going', 'completed', 'cancelled')
 
 export enum OrderStatus {
     ON_GOING = 'on-going',
@@ -96,9 +95,9 @@ export default class Order {
         order.tax = parseFloat(data.order_tax);
         order.total = parseFloat(data.order_total);
         order.status = data.order_status;
-        order.created_at = new Date(data.order_created_at.date);
-        order.updated_at = new Date(data.order_updated_at.date);
-        order.deleted_at = data.order_deleted_at ? new Date(data.order_deleted_at.date) : null;
+        // order.created_at = new Date(data.order_created_at);
+        // order.updated_at = new Date(data.order_updated_at);
+        // order.deleted_at = data.order_deleted_at ? new Date(data.order_deleted_at) : null;
         return order;
     }
 
@@ -107,15 +106,24 @@ export default class Order {
         formData.append('order_client_id', this.client_id);
         formData.append('order_employee_id', this.employee_id);
         formData.append('order_type', this.type);
+        formData.append('order_status', this.status);
         formData.append('order_reference', this.reference);
         formData.append('order_date', this.date.toISOString().split('T')[0]);
         formData.append('order_time', this.time.toISOString().split('T')[1].split('.')[0]);
         formData.append('order_note', this.notes);
-        formData.append('order_subtotal', this.subtotal.toString());
-        formData.append('order_discount', this.discount.toString());
-        formData.append('order_tax', this.tax.toString());
-        formData.append('order_total', this.total.toString());
-        formData.append('order_status', this.status);
+
+        if (!(this.subtotal === 0 || this.subtotal === null || this.subtotal === undefined)) {
+            formData.append('order_subtotal', this.subtotal.toString());
+        }
+        if(!(this.discount === 0 || this.discount === null || this.discount === undefined)){
+            formData.append('order_discount', this.discount.toString());
+        }
+        if(!(this.tax === 0 || this.tax === null || this.tax === undefined)){
+            formData.append('order_tax', this.tax.toString());
+        }
+        if(!(this.total === 0 || this.total === null || this.total === undefined)){
+            formData.append('order_total', this.total.toString());
+        }
         return formData;
     }
 

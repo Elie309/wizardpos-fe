@@ -9,6 +9,9 @@ import Order from "../../types/Order";
 import Popover from "../../components/Utils/Popover";
 import ClientPopHandler from "../../components/ClientHelper/ClientPopHandler";
 import Client from "../../types/Client";
+import { useSelector } from "react-redux";
+import { RootState } from "../../utils/store";
+import OrderForm from "../../components/OrdersComponent.tsx/OrderForm";
 
 export default function OrdersPage() {
 
@@ -16,7 +19,13 @@ export default function OrdersPage() {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [showProductMenu, setShowProductMenu] = useState(false);
 
-  const clientHandlerRef = useRef<{ open: () => void, close: () => void }>(null);
+  const [isEditOrder, setIsEditOrder] = useState(false);
+
+  //user from redux
+  const user = useSelector((state: RootState) => state.user);
+
+  const clientPopoverHandlerRef = useRef<{ open: () => void, close: () => void }>(null);
+  const orderPopoverHandlerRef = useRef<{ open: () => void, close: () => void }>(null);
 
 
   useEffect(() => {
@@ -36,10 +45,6 @@ export default function OrdersPage() {
         break;
       }
     }
-  };
-
-  const handleSaveOrder = (orderItems: OrderItem[], total: number, discount: number, tax: number, subtotal: number) => {
-    console.log(orderItems, total, discount, tax, subtotal);
   };
 
   const handleProductClick = (product: Product) => {
@@ -66,12 +71,19 @@ export default function OrdersPage() {
     }
   };
 
-  const handleCurrentOrder = (order: Order) => {
+  const handleOnDoubleClickOrder = (order: Order) => {
+    setCurrentOrder(order);
+    setIsEditOrder(true);
+    orderPopoverHandlerRef.current?.open();
+  }
+
+  const handleOnClickOrder = (order: Order) => {
     setCurrentOrder(order);
   }
 
   const handleOnClickNewOrder = () => {
-    clientHandlerRef.current?.open();
+    clientPopoverHandlerRef.current?.open();
+    setIsEditOrder(false);
   }
 
   const onSelectClientHandler = (client: Client) => {
@@ -79,36 +91,66 @@ export default function OrdersPage() {
     const newOrder = new Order();
     newOrder.client_id = client.client_id!;
     newOrder.client_name = client.client_first_name + " " + client.client_last_name;
+    newOrder.phone_number = client.client_phone_number;
+    newOrder.employee_name = user.name;
 
     setCurrentOrder(newOrder);
-    clientHandlerRef.current?.close();
-    setShowProductMenu(true);
+    clientPopoverHandlerRef.current?.close();
+    orderPopoverHandlerRef.current?.open();
+  }
+
+  const handleOrderSaveSuccessful = () => {
+    orderPopoverHandlerRef.current?.close();
   }
 
   return (
     <div className="flex flex-row p-8 w-full h-full">
       <OrderSummary
         order={currentOrder}
-        handleSave={handleSaveOrder}
         orderItems={orderItems}
         onRemoveItem={handleRemoveItem}
+        onClickCancel={() => {
+          orderPopoverHandlerRef.current?.close();
+          setShowProductMenu(false);
+          setOrderItems([]);
+          setCurrentOrder(new Order());
+        }}
       />
       <Popover
         id="client-handler"
-        classNameButton="bg-blue-500 text-white p-2 rounded"
+        classNameButton=""
         classNameMainDiv="max-w-3xl"
         title="Search Client"
-        ref={clientHandlerRef}
+        ref={clientPopoverHandlerRef}
         useButton={false}
       >
         <ClientPopHandler
           onClientSelect={onSelectClientHandler}
         />
       </Popover>
+
+      <Popover
+        id="order-handler"
+        classNameButton=""
+        classNameMainDiv="max-w-3xl"
+        title="Order"
+        ref={orderPopoverHandlerRef}
+        useButton={false}
+      >
+        <OrderForm 
+          order={currentOrder}
+          isEdit={isEditOrder}
+          onSaveSuccessful={handleOrderSaveSuccessful}
+          onClickEditProducts={() => {
+            orderPopoverHandlerRef.current?.close();
+            setShowProductMenu(true);
+          }}
+        />
+      </Popover>
       <div className="flex flex-row">
 
         {/* Products */}
-        <div className={`flex flex-col min-w-full h-full transition-transform duration-500 
+        <div tabIndex={-1} className={`flex flex-col min-w-full h-full transition-transform duration-500 
         ${showProductMenu ? "translate-x-0" : "translate-x-full"}`}
         >
           <div className="w-full h-fit">
@@ -119,12 +161,13 @@ export default function OrdersPage() {
 
 
         {/* Orders */}
-        <div className={`no-print flex flex-col min-w-full h-full transition-transform duration-500 
+        <div tabIndex={-1} className={`no-print flex flex-col min-w-full h-full transition-transform duration-500 
                         ${showProductMenu ? "translate-x-full" : "-translate-x-full"}`}
         >
           <OrdersHandler
-            onClickOrder={handleCurrentOrder}
-            handleOnClickNewOrder={handleOnClickNewOrder}
+            onClickOrder={handleOnClickOrder}
+            onClickNewOrder={handleOnClickNewOrder}
+            onDoubleClickOrder={handleOnDoubleClickOrder}
           />
         </div>
 
