@@ -7,7 +7,7 @@ import OrderService from "../../services/OrderService";
 type OrderFormProps = {
     order: Order;
     isEdit: boolean;
-    onSaveSuccessful: () => void;
+    onSaveSuccessful: (order: Order) => void;
     onClickEditProducts: () => void;
 }
 
@@ -80,7 +80,7 @@ export default function OrderForm(props: OrderFormProps) {
                 return;
             }
 
-            props.onSaveSuccessful()
+            props.onSaveSuccessful(order);
             setSuccess('Order saved successfully');
             setLoading(false);
 

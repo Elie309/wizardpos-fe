@@ -104,8 +104,14 @@ export default function OrdersPage() {
     orderPopoverHandlerRef.current?.open();
   }
 
-  const handleOrderSaveSuccessful = () => {
+  const handleOrderSaveSuccessful = (order: Order) => {
     orderPopoverHandlerRef.current?.close();
+    setCurrentOrder(order);
+    setShowProductMenu(true);
+    setOrderItems([]);
+
+    
+    
   }
 
   return (

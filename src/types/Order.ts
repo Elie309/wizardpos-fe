@@ -99,12 +99,12 @@ export default class Order {
         order.total = parseFloat(data.order_total);
         order.status = data.order_status;
 
-        if(data.order_items){
+        if (data.order_items) {
             data.order_items.forEach((item: any) => {
                 order.order_items.push(OrderItem.fromJson(item));
             });
         }
-        
+
         // order.created_at = new Date(data.order_created_at);
         // order.updated_at = new Date(data.order_updated_at);
         // order.deleted_at = data.order_deleted_at ? new Date(data.order_deleted_at) : null;
@@ -122,18 +122,10 @@ export default class Order {
         formData.append('order_time', this.time.toISOString().split('T')[1].split('.')[0]);
         formData.append('order_note', this.notes);
 
-        if (!(this.subtotal === 0 || this.subtotal === null || this.subtotal === undefined)) {
-            formData.append('order_subtotal', this.subtotal.toString());
-        }
-        if(!(this.discount === 0 || this.discount === null || this.discount === undefined)){
-            formData.append('order_discount', this.discount.toString());
-        }
-        if(!(this.tax === 0 || this.tax === null || this.tax === undefined)){
-            formData.append('order_tax', this.tax.toString());
-        }
-        if(!(this.total === 0 || this.total === null || this.total === undefined)){
-            formData.append('order_total', this.total.toString());
-        }
+        formData.append('order_subtotal', this.subtotal.toString());
+        formData.append('order_discount', this.discount.toString());
+        formData.append('order_tax', this.tax.toString());
+        formData.append('order_total', this.total.toString());
         return formData;
     }
 
