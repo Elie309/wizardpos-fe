@@ -63,7 +63,7 @@ export default function ProductMenu(props: ProductMenuProps) {
     }
 
     return (
-        <div tabIndex={-1} className="relative mx-8 flex flex-col overflow-y-scroll overflow-x-hidden w-full h-5/6
+        <div tabIndex={-1} className=" select-none relative mx-8 flex flex-col overflow-y-scroll overflow-x-hidden w-full h-5/6
             no-print
         ">
 

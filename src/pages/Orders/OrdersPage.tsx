@@ -33,7 +33,6 @@ export default function OrdersPage() {
   }, []);
 
   useEffect(() => {
-    console.log(currentOrder);
     setOrderItems(currentOrder.order_items);
   }, [currentOrder]);
 
@@ -106,9 +105,10 @@ export default function OrdersPage() {
 
   const handleOrderSaveSuccessful = (order: Order) => {
     orderPopoverHandlerRef.current?.close();
+    console.log("ON SAVE", order);
     setCurrentOrder(order);
     setShowProductMenu(true);
-    setOrderItems([]);
+    setOrderItems(order.order_items);
 
     
     
@@ -120,7 +120,7 @@ export default function OrdersPage() {
         order={currentOrder}
         orderItems={orderItems}
         onRemoveItem={handleRemoveItem}
-        onClickCancel={() => {
+        onClickReset={() => {
           orderPopoverHandlerRef.current?.close();
           setShowProductMenu(false);
           setOrderItems([]);

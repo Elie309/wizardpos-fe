@@ -12,7 +12,7 @@ interface OrderSummaryProps {
   order: Order;
   orderItems: OrderItem[];
   onRemoveItem: (id: string) => void;
-  onClickCancel: () => void;
+  onClickReset: () => void;
 }
 
 export default function OrderSummary(props: OrderSummaryProps) {
@@ -54,6 +54,7 @@ export default function OrderSummary(props: OrderSummaryProps) {
       newOrder.tax = tax;
       newOrder.subtotal = subtotal;
 
+
       let responseOrder = await OrderService.updateOrder(props.order.id, newOrder);
 
       if (!responseOrder.success) {
@@ -83,7 +84,7 @@ export default function OrderSummary(props: OrderSummaryProps) {
     setEditing(false);
     setNotes(props.order.notes);
     setDiscount(0);
-    props.onClickCancel();
+    props.onClickReset();
   }
 
   const handleRemoveItem = (id: string) => () => {
@@ -113,6 +114,10 @@ export default function OrderSummary(props: OrderSummaryProps) {
   useEffect(() => {
     setNotes(props.order.notes);
   }, []);
+
+  useEffect(() => {
+    console.log(props.order)
+  }, [props.order]);
 
 
   return (
@@ -220,9 +225,9 @@ export default function OrderSummary(props: OrderSummaryProps) {
       <div className='flex flex-row justify-between'>
         <button
         onClick={handleCancelChanges}
-          className="no-print w-full mt-2 mx-2 reverse-button"
+          className="no-print w-full mt-2 mx-2 neutral-button"
         >
-          Cancel
+          Reset
         </button>
 
         <button

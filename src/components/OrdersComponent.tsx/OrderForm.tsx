@@ -35,6 +35,8 @@ export default function OrderForm(props: OrderFormProps) {
         notes: ''
     });
 
+    const [orderItems, setOrderItems] = useState(props.order.order_items);
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -73,14 +75,19 @@ export default function OrderForm(props: OrderFormProps) {
             } else {
                 response = await OrderService.createOrder(order);
             }
-
             if (!response.success) {
                 setLoading(false);
                 setError(response.message);
                 return;
             }
 
-            props.onSaveSuccessful(order);
+            let newOrder = response.data as Order;
+            newOrder.client_name = formData.client_name;
+            newOrder.phone_number = formData.phone_number;
+            newOrder.employee_name = props.order.employee_name;
+            newOrder.order_items = orderItems;
+            
+            props.onSaveSuccessful(newOrder);
             setSuccess('Order saved successfully');
             setLoading(false);
 
@@ -109,6 +116,7 @@ export default function OrderForm(props: OrderFormProps) {
                 time: props.order.time,
                 notes: props.order.notes || ''
             });
+            setOrderItems(props.order.order_items);
         }
     }, []);
 
