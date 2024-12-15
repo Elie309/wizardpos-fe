@@ -12,8 +12,9 @@ import ClientListPage from "./Clients/ClientListPage.tsx";
 import SaveClientPage from "./Clients/SaveClientPage.tsx";
 import RestaurantTableListPage from "./RestaurantTable/RestaurantTableListPage.tsx";
 import SaveRestaurantTable from "./RestaurantTable/SaveRestaurantTable.tsx";
-import EmployeePage from "./Admin/EmployeePage.tsx";
 import Reports from "./Others/Reports.tsx";
+import EmployeeListPage from "./Employee/EmployeeListPage.tsx";
+import SaveEmployeePage from "./Employee/SaveEmployeePage.tsx";
 
 
 
@@ -60,7 +61,10 @@ export default function AppRouter() {
                 {/* Admin & Manager*/}
                 <Route path="/reports" element={<Reports />} />
 
-                <Route path="/employees" element={<EmployeePage />} />
+                <Route path="/employees" element={<EmployeeListPage />} />
+                <Route path="/employees/:id" element={<SaveEmployeePage isEdit={true} />} />
+                <Route path="/employees/add" element={<SaveEmployeePage isEdit={false} />} />
+
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
         </BrowserRouter>

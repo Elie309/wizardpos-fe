@@ -38,9 +38,8 @@ export default function LoginPage() {
         try {
             let formData = new FormData();
 
-            formData.append('email', email);
-            formData.append('password', password);
-            formData.append('phone_number', email);
+            formData.append('employee_email', email);
+            formData.append('employee_password', password);
 
             const response = await api.post('auth/login', formData);
 
@@ -107,7 +106,7 @@ export default function LoginPage() {
 
                 <form>
                     <div className="label-input-container">
-                        <label className="" htmlFor="email">Email or Phone Number</label>
+                        <label className="" htmlFor="email">Email</label>
                         <input className="" type="email" id="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
