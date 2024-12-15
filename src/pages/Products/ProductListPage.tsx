@@ -15,7 +15,7 @@ export default function ProductListPage() {
     const [totalPages, setTotalPages] = useState(1);
     const [perPage, setPerPage] = useState(10);
 
-    const user  = useSelector((state: RootState) => state.user);
+    const user = useSelector((state: RootState) => state.user);
 
 
     const [loading, setLoading] = useState(true);
@@ -59,7 +59,7 @@ export default function ProductListPage() {
 
     useEffect(() => {
         document.title = 'Products';
-        if(user.role !== 'admin' && user.role !== 'manager'){
+        if (user.role !== 'admin' && user.role !== 'manager') {
             navigate('/');
         }
     }, []);
@@ -71,11 +71,14 @@ export default function ProductListPage() {
                 <p className='link-internal'><button onClick={() => navigate("/")} >Home</button> / Products</p>
 
                 <div className='grid grid-cols-2 gap-2 my-2'>
+                    {/* Categories */}
+                    {user.role === "admin" ? <button onClick={() => navigate('/categories')} className='reverse-button flex items-center justify-center text-center '>Categories</button>
+                        : <div></div>}
+
                     {/* Upload images */}
                     <button onClick={() => navigate("/uploads")} className='reverse-button flex items-center justify-center text-center'>Upload Images</button>
 
-                    {/* Categories */}
-                    <button onClick={() => navigate('/categories')} className='reverse-button flex items-center justify-center text-center '>Categories</button>
+
 
                 </div>
             </div>

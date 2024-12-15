@@ -7,6 +7,8 @@ import ErrorDisplay from "../../components/Utils/ErrorComponent";
 import SuccessDisplay from "../../components/Utils/SuccessComponent";
 import Category from "../../types/Category";
 import { useNavigate } from "react-router-dom";
+import { RootState } from '../../utils/store';
+import { useSelector } from 'react-redux';
 
 type IFormData = {
     name: string;
@@ -34,6 +36,7 @@ export default function SaveCategoryPage({ isEdit }: { isEdit: boolean }) {
     const [initialCategoryName, setInitialCategoryName] = useState<string>("");
 
     const navigate = useNavigate();
+    const user = useSelector((state: RootState) => state.user);
 
     const loadCategory = async () => {
         setLoading(true);
@@ -70,6 +73,11 @@ export default function SaveCategoryPage({ isEdit }: { isEdit: boolean }) {
     }
 
     useEffect(() => {
+
+        if (user.role !== 'admin') {
+            navigate('/');
+        }
+
         if (isEdit) {
             loadCategory();
         } else {

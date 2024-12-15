@@ -3,6 +3,8 @@ import Category from "../../types/Category";
 import Loading from "../../components/Utils/Loading";
 import CategoryService from "../../services/CategoryService";
 import { useNavigate } from "react-router-dom";
+import { RootState } from '../../utils/store';
+import { useSelector } from 'react-redux';
 
 export default function CategoryListPage() {
 
@@ -10,6 +12,7 @@ export default function CategoryListPage() {
     const [categories, setCategories] = useState<Category[]>([]);
 
     const navigate = useNavigate();
+    const user = useSelector((state: RootState) => state.user);
 
     const loadCategories = async () => {
         setLoading(true);
@@ -28,6 +31,9 @@ export default function CategoryListPage() {
 
 
     useEffect(() => {
+        if (user.role !== 'admin') {
+            navigate('/');
+        }
         loadCategories();
     }, [])
 
