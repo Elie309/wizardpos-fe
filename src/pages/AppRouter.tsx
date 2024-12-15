@@ -1,7 +1,6 @@
 import OrdersPage from "./Orders/OrdersPage.tsx";
 import ReservationPage from "./Reservations/ReservationPage.tsx";
 import ErrorPage from "./Others/ErrorPage.tsx";
-import EmployeeProfilePage from "./Auth/EmployeeProfilePage.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Main from "./Main.tsx";
 import ProductListPage from "./Products/ProductListPage.tsx";
@@ -14,18 +13,11 @@ import SaveClientPage from "./Clients/SaveClientPage.tsx";
 import RestaurantTableListPage from "./RestaurantTable/RestaurantTableListPage.tsx";
 import SaveRestaurantTable from "./RestaurantTable/SaveRestaurantTable.tsx";
 import EmployeePage from "./Admin/EmployeePage.tsx";
-import { useEffect } from "react";
+
 
 
 
 export default function AppRouter() {
-
-
-    useEffect(() => {
-        
-    }, [])
-
-
 
     return (
         <BrowserRouter>
@@ -44,7 +36,7 @@ export default function AppRouter() {
 
                 {/* Uploads */}
                 <Route path="/uploads" element={<UploadImagesPage />} />
-                
+
 
                 {/* Clients */}
                 <Route path="clients" element={<ClientListPage />} />
@@ -64,7 +56,6 @@ export default function AppRouter() {
 
                 <Route path="/orders" element={<OrdersPage />} />
 
-                <Route path="/employees/:id" element={<EmployeeProfilePage />} />
                 <Route path="/employees" element={<EmployeePage />} />
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
