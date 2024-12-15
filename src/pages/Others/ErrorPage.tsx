@@ -11,7 +11,7 @@ export default function ErrorPage () {
                 </p>
                 <Link
                     to="/"
-                    className="mt-6 inline-block px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition"
+                    className="submit-button mt-6 inline-block"
                 >
                     Go to Home
                 </Link>
