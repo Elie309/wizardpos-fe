@@ -194,6 +194,11 @@ html, body, #root {
   }
 }
 
+@keyframes progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
