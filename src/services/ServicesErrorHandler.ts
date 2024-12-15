@@ -8,7 +8,7 @@ type IResponse = {
 }
 
 
-export default function ServicesErrorHandler(error: any): any {
+export default function ServicesErrorHandler(error: any): IResponse {
     if(error instanceof AxiosError){
 
         let errors = error.response?.data.errors;
@@ -23,10 +23,16 @@ export default function ServicesErrorHandler(error: any): any {
             message = Object.values(errors).join(', ').toLowerCase();
         }
 
+        let responseMessage = error.response?.data.message.toString().concat(", ", message).trim();
+
+        if(responseMessage.charAt(responseMessage.length - 1) === ','){
+            responseMessage = responseMessage.slice(0, -1);
+        }
+
 
         return {
             success: false,
-            message: error.response?.data.message.toString().concat(", ", message),
+            message: responseMessage,
             data: null
         };
 
