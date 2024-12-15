@@ -23,9 +23,6 @@ export default class ReportService{
                 response = await api.get('/reports?start_date=' + start_date.toISOString().split('T')[0] + '&end_date=' + end_date.toISOString().split('T')[0]);
             }
 
-            console.log(response);
-
-
             if (response.status === 200) {
                 let orders = response.data!.data.orders.map((order: any) => Order.fromJson(order));
 
