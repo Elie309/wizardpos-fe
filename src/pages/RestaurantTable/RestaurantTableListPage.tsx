@@ -3,6 +3,9 @@ import Loading from "../../components/Utils/Loading";
 import RestaurantTable from "../../types/RestaurantTable";
 import RestaurantTableService from "../../services/RestaurantTableService";
 import { useNavigate } from "react-router-dom";
+import { RootState } from '../../utils/store';
+import { useSelector } from 'react-redux';
+
 
 export default function RestaurantTableListPage() {
 
@@ -15,7 +18,7 @@ export default function RestaurantTableListPage() {
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
-
+    const user  = useSelector((state: RootState) => state.user);
 
     const handleRowClick = (table_id: string) => {
         navigate(`/tables/${table_id}`);
@@ -44,6 +47,10 @@ export default function RestaurantTableListPage() {
 
 
     useEffect(() => {
+        if(user.role !== 'admin'){
+            navigate('/');
+        }
+
         loadTables();
     }, []);
 

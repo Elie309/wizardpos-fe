@@ -4,6 +4,8 @@ import Loading from '../../components/Utils/Loading';
 import ProductService from '../../services/ProductService';
 import Pager from '../../components/Utils/Pager';
 import { useNavigate } from 'react-router-dom';
+import { RootState } from '../../utils/store';
+import { useSelector } from 'react-redux';
 
 export default function ProductListPage() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -12,6 +14,8 @@ export default function ProductListPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [perPage, setPerPage] = useState(10);
+
+    const user  = useSelector((state: RootState) => state.user);
 
 
     const [loading, setLoading] = useState(true);
@@ -55,6 +59,9 @@ export default function ProductListPage() {
 
     useEffect(() => {
         document.title = 'Products';
+        if(user.role !== 'admin' && user.role !== 'manager'){
+            navigate('/');
+        }
     }, []);
 
     return (

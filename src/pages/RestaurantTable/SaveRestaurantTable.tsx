@@ -7,6 +7,9 @@ import { CastBoolean } from "../../utils/Helpers/CastBoolean";
 import RestaurantTableService from "../../services/RestaurantTableService";
 import RestaurantTable from "../../types/RestaurantTable";
 import { useNavigate } from "react-router-dom";
+import { RootState } from '../../utils/store';
+import { useSelector } from 'react-redux';
+
 
 type IProps = {
     isEdit: boolean;
@@ -38,6 +41,7 @@ export default function SaveRestaurantTable({ isEdit }: IProps) {
     const [initialTableName, setInitialTableName] = useState<string>("");
 
     const navigate = useNavigate();
+    const user  = useSelector((state: RootState) => state.user);
 
 
     const loadTable = async () => {
@@ -83,6 +87,11 @@ export default function SaveRestaurantTable({ isEdit }: IProps) {
     }
 
     useEffect(() => {
+
+        if(user.role !== 'admin'){
+            navigate('/');
+        }
+
         if (isEdit) {
             loadTable();
         } else {

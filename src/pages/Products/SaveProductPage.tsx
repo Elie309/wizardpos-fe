@@ -8,7 +8,8 @@ import Category from "../../types/Category";
 import SwitchInput from "../../components/Utils/SwitchInput";
 import SuccessDisplay from "../../components/Utils/SuccessComponent";
 import { useNavigate } from "react-router-dom";
-
+import { RootState } from '../../utils/store';
+import { useSelector } from 'react-redux';
 
 type IFormData = {
     sku: string;
@@ -46,6 +47,9 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
         image: "",
         isActive: false,
     });
+
+    
+    const user  = useSelector((state: RootState) => state.user);
 
     const navigate = useNavigate();
 
@@ -113,6 +117,10 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
     
 
     useEffect(() => {
+
+        if(user.role !== 'admin' && user.role !== 'manager'){
+            navigate('/');
+        }
 
          document.title = isEdit ? "Edit Product" : "Add Product";
         setLoading(true);
@@ -300,12 +308,12 @@ export default function SaveProductPage({ isEdit }: { isEdit: boolean }) {
 
 
 
-                    <div className="flex flex-row justify-around w-1/2">
+                   {user.role === "admin" && <div className="flex flex-row justify-around w-1/2">
                         <label className="main-label" htmlFor="isActive">Active</label>
                         <SwitchInput name="isActive" value={formData.isActive} onChange={() => {
                             setFormData({ ...formData, isActive: !formData.isActive })
                         }} />
-                    </div>
+                    </div>}
                 </div >
 
                 <div className="label-input-container my-4 ">

@@ -4,6 +4,8 @@ import ErrorDisplay from '../../components/Utils/ErrorComponent';
 import SuccessDisplay from '../../components/Utils/SuccessComponent';
 import UploadService from '../../services/UploadService';
 import { useNavigate } from 'react-router-dom';
+import { RootState } from '../../utils/store';
+import { useSelector } from 'react-redux';
 
 export default function UploadImagesPage() {
     const [isDragging, setIsDragging] = useState(false);
@@ -15,11 +17,19 @@ export default function UploadImagesPage() {
     const [successMessage, setSuccessMessage] = useState('');
 
     const navigate = useNavigate();
+    const user  = useSelector((state: RootState) => state.user);
+
 
     const dropAreaRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
+
+        if(user.role !== 'admin' && user.role !== 'manager'){
+            navigate('/');
+        }
+
+
         const dropArea = dropAreaRef.current;
 
         const handleDragOver = (e: DragEvent) => {

@@ -7,6 +7,8 @@ import SuccessDisplay from "../../components/Utils/SuccessComponent";
 import SwitchInput from "../../components/Utils/SwitchInput";
 import { CastBoolean } from "../../utils/Helpers/CastBoolean";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../utils/store";
+import { useSelector } from "react-redux";
 
 type IProps = {
     isEdit: boolean;
@@ -22,7 +24,7 @@ type IFormData = {
 }
 
 
-export default function SaveClientPage({isEdit}: IProps) {
+export default function SaveClientPage({ isEdit }: IProps) {
 
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState<IFormData>({
@@ -41,6 +43,7 @@ export default function SaveClientPage({isEdit}: IProps) {
     const [initialClientId, setInitialClientId] = useState<string>("");
 
     const navigate = useNavigate();
+    const user = useSelector((state: RootState) => state.user);
 
 
     const loadClient = async () => {
@@ -209,16 +212,15 @@ export default function SaveClientPage({isEdit}: IProps) {
                     <textarea id="address" name="address" className="min-h-20" value={formData?.address} onChange={handleChange} />
                 </div>
 
-
-                <div className="flex flex-row w-full justify-center">
+                {user.role === "admin" && <div className="flex flex-row w-full justify-center">
                     <div className="flex flex-row justify-around w-1/2">
                         <label className="main-label" htmlFor="isActive">Active</label>
                         <SwitchInput name="isActive" value={formData?.isActive} onChange={() => {
                             setFormData({ ...formData, isActive: !formData.isActive })
                         }} />
                     </div>
-                    
-                </div>
+
+                </div>}
 
                 <div className="label-input-container my-4 ">
                     <button className={`submit-button mx-auto w-3/4 md:w-1/4 ${loadingSubmit ? "cursor-wait" : ""} `}
