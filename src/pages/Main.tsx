@@ -13,6 +13,7 @@ const Elements = [
 ]
 const ManagerElements = [
     ['Products', '/products'],
+    ['Reports', '/reports'],
 ]
 
 

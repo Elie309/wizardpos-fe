@@ -13,6 +13,7 @@ import SaveClientPage from "./Clients/SaveClientPage.tsx";
 import RestaurantTableListPage from "./RestaurantTable/RestaurantTableListPage.tsx";
 import SaveRestaurantTable from "./RestaurantTable/SaveRestaurantTable.tsx";
 import EmployeePage from "./Admin/EmployeePage.tsx";
+import Reports from "./Others/Reports.tsx";
 
 
 
@@ -55,6 +56,9 @@ export default function AppRouter() {
 
 
                 <Route path="/orders" element={<OrdersPage />} />
+
+                {/* Admin & Manager*/}
+                <Route path="/reports" element={<Reports />} />
 
                 <Route path="/employees" element={<EmployeePage />} />
                 <Route path="*" element={<ErrorPage />} />
