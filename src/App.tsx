@@ -28,14 +28,14 @@ function App() {
           role: response.data.user.role,
           isAuthenticated: true
         }
-        if(user.email === '' || user.name === '' || user.role === ""){
+        if (user.email === '' || user.name === '' || user.role === "") {
           window.history.replaceState({}, '', "/")
 
         }
 
         dispatch(setUser(user));
         setLoading(false);
-      }else{
+      } else {
         window.history.replaceState({}, '', "/login")
         setLoading(false);
       }
@@ -49,7 +49,11 @@ function App() {
 
   useEffect(() => {
 
-    authenticatedUser();
+    if (user.isAuthenticated) {
+      authenticatedUser();
+    }else{
+      setLoading(false);
+    }
 
   }, []);
 
