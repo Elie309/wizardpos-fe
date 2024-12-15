@@ -1,81 +1,49 @@
 import { useEffect, useState } from "react";
 import Order, { OrderStatus } from "../../types/Order";
-import Loading from "../Utils/Loading";
-import OrderService from "../../services/OrderService";
-import ErrorDisplay from "../Utils/ErrorComponent";
 import OrderComponent from "./OrderComponent";
 import DatePicker from "react-datepicker";
 
 type OrdersHandlerProps = {
     onClickOrder: (order: Order) => void;
     onClickNewOrder: () => void;
+    onProductsButtonClick: () => void;
     onDoubleClickOrder: (order: Order) => void;
+    onDateChange: (date: Date) => void;
+    currentDate: Date;
+    orders: Order[];
 }
 
 export default function OrdersHandler(props: OrdersHandlerProps) {
 
-    const [orders, setOrders] = useState<Order[]>([]);
-    const [initialOrders, setInitialOrders] = useState<Order[]>([]);
+    const [orders, setOrders] = useState<Order[]>(props.orders);
 
-    const [currentDate, setCurrentDate] = useState<Date>(new Date());
-    const [orderStatusPicker, setOrderStatusPicker] = useState<string>("All");
+    const [currentDate, setCurrentDate] = useState<Date>(props.currentDate);
 
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
-
-    const handleOrders = async () => {
-        setLoading(true);
-
-        try {
-
-            let response = await OrderService.getOrders(currentDate);
-
-            if (response.success) {
-
-                let orders = filterOrderHandler(response.data as Order[]);
-                let initialOrders = filterOrderHandler(response.data as Order[]);
-                setOrders(orders);
-                setInitialOrders(initialOrders);
-
-            } else {
-                setError(response.message);
-            }
-
-
-        } catch (error: any) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
-
-    }
 
     const filterOrderHandler = (orders: Order[]) => {
         // Sort orders by status
-        let ordersList = orders.sort((a, b) => {
-            if (a.status === OrderStatus.ON_GOING) return -1;
-            if (b.status === OrderStatus.ON_GOING) return 1;
-            if (a.status === OrderStatus.COMPLETED) return -1;
-            if (b.status === OrderStatus.COMPLETED) return 1;
-            if (a.status === OrderStatus.CANCELLED) return -1;
-            if (b.status === OrderStatus.CANCELLED) return 1;
-            return 0;
-        });
+        let onGoingOrders = orders.filter(order => order.status === OrderStatus.ON_GOING);
+        let completedOrders = orders.filter(order => order.status === OrderStatus.COMPLETED);
+        let cancelledOrders = orders.filter(order => order.status === OrderStatus.CANCELLED);
 
-        return ordersList;
+        return { onGoingOrders, completedOrders, cancelledOrders };
     }
 
     const handleDateSelect = (date: Date | null) => {
         if (date)
             setCurrentDate(date);
         else setCurrentDate(new Date());
+
+        props.onDateChange(date || new Date());
+
     };
 
     const handleDateChange = (date: Date | null) => {
         if (date)
             setCurrentDate(date);
         else setCurrentDate(new Date());
+
+        props.onDateChange(date || new Date());
     };
 
     const handleOnClickOrder = (order: Order) => {
@@ -88,39 +56,20 @@ export default function OrdersHandler(props: OrdersHandlerProps) {
 
 
     useEffect(() => {
+        const { onGoingOrders, completedOrders, cancelledOrders } = filterOrderHandler(props.orders);
+        setOrders([...onGoingOrders, ...completedOrders, ...cancelledOrders]);
+    }, [props.orders]);
 
-        handleOrders();
-
-    }, [currentDate]);
-
-
-    if (loading) {
-        <Loading />
-    }
-
-    useEffect(() => {
-        let filteredOrders = initialOrders.filter((order) => {
-            if (orderStatusPicker === "All") return true;
-            return order.status === orderStatusPicker;
-        });
-
-        setOrders(filteredOrders);
-
-    }, [orderStatusPicker]);
 
 
     return (
-        <div className="overflow-auto h-full">
-            {error && <ErrorDisplay message={error} />}
-            <h1 className="primary-title">Orders</h1>
-            <div className="label-input-container px-8 flex flex-row justify-evenly ">
+        <div className="overflow-auto flex flex-col h-full">
 
-                <select tabIndex={-1} className="h-fit max-w-64 text-center" value={orderStatusPicker} onChange={(e) => setOrderStatusPicker(e.target.value)}>
-                    <option value="All">All</option>
-                    {Object.values(OrderStatus).map((status) => {
-                        return <option key={status} value={status}>{status}</option>
-                    })}
-                </select>
+            <h1 className="primary-title">Orders</h1>
+            <div className="label-input-container px-8 flex flex-row justify-between ">
+
+                <button tabIndex={-1} className="neutral-button" onClick={props.onProductsButtonClick} >Products</button>
+
 
                 <DatePicker
                     tabIndex={-1}
@@ -131,17 +80,43 @@ export default function OrdersHandler(props: OrdersHandlerProps) {
                     onSelect={handleDateSelect}
                     onChange={handleDateChange}
                     dateFormat="dd-MMM-yyyy"
-                    wrapperClassName='mx-auto'
+                    wrapperClassName='text-xl flex flex-row items-center'
                 />
 
                 <button tabIndex={-1} className="submit-button" onClick={props.onClickNewOrder} >New Order</button>
 
-
-
             </div>
 
+            <h2 className="secondary-title">On-going</h2>
+
             <div className="w-full h-fit flex flex-row flex-wrap gap-4 pl-8 ">
-                {orders.map((order) => {
+                {orders.filter(order => order.status === OrderStatus.ON_GOING).map((order) => {
+                    return <OrderComponent
+                        key={order.id}
+                        order={order}
+                        onClick={handleOnClickOrder}
+                        onDoubleClick={handleOnDoubleClickOrder}
+                    />
+                })}
+            </div>
+
+            <h2 className="secondary-title">Completed</h2>
+
+            <div className="w-full h-fit flex flex-row flex-wrap gap-4 pl-8 ">
+                {orders.filter(order => order.status === OrderStatus.COMPLETED).map((order) => {
+                    return <OrderComponent
+                        key={order.id}
+                        order={order}
+                        onClick={handleOnClickOrder}
+                        onDoubleClick={handleOnDoubleClickOrder}
+                    />
+                })}
+            </div>
+
+            <h2 className="secondary-title">Cancelled</h2>
+
+            <div className="w-full h-fit flex flex-row flex-wrap gap-4 pl-8 ">
+                {orders.filter(order => order.status === OrderStatus.CANCELLED).map((order) => {
                     return <OrderComponent
                         key={order.id}
                         order={order}

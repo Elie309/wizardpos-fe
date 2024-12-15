@@ -12,6 +12,9 @@ import Client from "../../types/Client";
 import { useSelector } from "react-redux";
 import { RootState } from "../../utils/store";
 import OrderForm from "../../components/OrdersComponent.tsx/OrderForm";
+import OrderService from "../../services/OrderService";
+import Loading from "../../components/Utils/Loading";
+import ErrorDisplay from "../../components/Utils/ErrorComponent";
 
 export default function OrdersPage() {
 
@@ -20,6 +23,12 @@ export default function OrdersPage() {
   const [showProductMenu, setShowProductMenu] = useState(false);
 
   const [isEditOrder, setIsEditOrder] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [orders, setOrders] = useState<Order[] | null>(null);
 
   //user from redux
   const user = useSelector((state: RootState) => state.user);
@@ -55,6 +64,7 @@ export default function OrdersPage() {
     if (orderItems.some((item) => item.product_id.toString() === product.id.toString())) {
       const newOrderItems = orderItems.map((item) => {
         if (item.product_id.toString() === product.id.toString()) {
+          item.order_id = currentOrder.id;
           item.quantity += 1;
           item.total = item.quantity * item.product_price;
         }
@@ -66,6 +76,7 @@ export default function OrdersPage() {
       const orderItem = new OrderItem();
       orderItem.product_id = product.id.toString();
       orderItem.product_sku = product.sku;
+      orderItem.order_id = currentOrder.id;
       orderItem.product_name = product.name;
       orderItem.product_price = product.price;
       orderItem.quantity = 1;
@@ -74,6 +85,31 @@ export default function OrdersPage() {
       setOrderItems([...orderItems, orderItem]);
     }
   };
+
+  const handleOrders = async () => {
+    setLoading(true);
+
+    try {
+
+      let response = await OrderService.getOrders(currentDate);
+
+      if (response.success) {
+
+        let orders = response.data as Order[];
+        setOrders(orders);
+
+      } else {
+        setError(response.message);
+      }
+
+
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+
+  }
 
   const handleOnDoubleClickOrder = (order: Order) => {
     setCurrentOrder(order);
@@ -103,16 +139,32 @@ export default function OrdersPage() {
     orderPopoverHandlerRef.current?.open();
   }
 
-  const handleOrderSaveSuccessful = (order: Order) => {
+  const handleOrderSaveSuccessful = (order: Order, showProductMenu: boolean) => {
     orderPopoverHandlerRef.current?.close();
-    console.log("ON SAVE", order);
     setCurrentOrder(order);
-    setShowProductMenu(true);
     setOrderItems(order.order_items);
+    setShowProductMenu(showProductMenu);
 
-    
-    
+    handleOrders();
+
   }
+
+  const handleProductsButtonClick = () => {
+    if(currentOrder.id && currentOrder.client_id && currentOrder.client_name){
+      setShowProductMenu(true);
+    }else{
+      alert('Please create or choose an order first');
+    }
+
+
+  }
+
+  useEffect(() => {
+    handleOrders();
+  }, [currentDate]);
+
+
+
 
   return (
     <div className="flex flex-row p-8 w-full h-full">
@@ -126,6 +178,9 @@ export default function OrdersPage() {
           setOrderItems([]);
           setCurrentOrder(new Order());
         }}
+
+        onOrderSummarySaveSuccessful={
+          (order) => handleOrderSaveSuccessful(order, false)}
       />
       <Popover
         id="client-handler"
@@ -151,11 +206,8 @@ export default function OrdersPage() {
         <OrderForm
           order={currentOrder}
           isEdit={isEditOrder}
-          onSaveSuccessful={handleOrderSaveSuccessful}
-          onClickEditProducts={() => {
-            orderPopoverHandlerRef.current?.close();
-            setShowProductMenu(true);
-          }}
+          onSaveSuccessful={
+            (order) => handleOrderSaveSuccessful(order, true)}
         />
       </Popover>
       <div className="flex flex-row">
@@ -179,13 +231,24 @@ export default function OrdersPage() {
 
         {/* Orders */}
         <div tabIndex={-1} className={`no-print flex flex-col min-w-full h-full transition-transform duration-500 
-                        ${showProductMenu ? "translate-x-full" : "-translate-x-full"}`}
+  ${showProductMenu ? "translate-x-full" : "-translate-x-full"}`}
         >
-          <OrdersHandler
-            onClickOrder={handleOnClickOrder}
-            onClickNewOrder={handleOnClickNewOrder}
-            onDoubleClickOrder={handleOnDoubleClickOrder}
-          />
+          {loading ? (
+            <Loading />
+          ) : (
+            orders && (
+              <OrdersHandler
+                orders={orders}
+                onDateChange={(date) => setCurrentDate(date)}
+                currentDate={currentDate}
+                onClickOrder={handleOnClickOrder}
+                onClickNewOrder={handleOnClickNewOrder}
+                onDoubleClickOrder={handleOnDoubleClickOrder}
+                onProductsButtonClick={handleProductsButtonClick}
+              />
+            )
+          )}
+          {error && <ErrorDisplay message={error} />}
         </div>
 
       </div>

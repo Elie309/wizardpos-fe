@@ -13,6 +13,7 @@ interface OrderSummaryProps {
   orderItems: OrderItem[];
   onRemoveItem: (id: string) => void;
   onClickReset: () => void;
+  onOrderSummarySaveSuccessful: (order: Order) => void;
 }
 
 export default function OrderSummary(props: OrderSummaryProps) {
@@ -54,7 +55,6 @@ export default function OrderSummary(props: OrderSummaryProps) {
       newOrder.tax = tax;
       newOrder.subtotal = subtotal;
 
-
       let responseOrder = await OrderService.updateOrder(props.order.id, newOrder);
 
       if (!responseOrder.success) {
@@ -70,6 +70,14 @@ export default function OrderSummary(props: OrderSummaryProps) {
         return;
       }
 
+      let order = await OrderService.getOrder(props.order.id);
+      if (!order.success) {
+        setError("Order saved successfully, but an error occurred while retrieving the order.");
+        return;
+      }
+
+      props.onOrderSummarySaveSuccessful(order.data as Order);
+
       setSuccess('Order saved successfully');
 
 
@@ -84,6 +92,8 @@ export default function OrderSummary(props: OrderSummaryProps) {
     setEditing(false);
     setNotes(props.order.notes);
     setDiscount(0);
+    setSuccess('');
+    setError('');
     props.onClickReset();
   }
 
@@ -113,10 +123,8 @@ export default function OrderSummary(props: OrderSummaryProps) {
 
   useEffect(() => {
     setNotes(props.order.notes);
-  }, []);
+    setDiscount(props.order.discount);
 
-  useEffect(() => {
-    console.log(props.order)
   }, [props.order]);
 
 
@@ -198,7 +206,7 @@ export default function OrderSummary(props: OrderSummaryProps) {
           <hr />
 
           <div className="mt-4 flex justify-between">
-            <p  className=" italic font-bold">Total</p>
+            <p className=" italic font-bold">Total</p>
             <p className="font-bold">${total.toFixed(2)}</p>
           </div>
 
@@ -224,7 +232,7 @@ export default function OrderSummary(props: OrderSummaryProps) {
 
       <div className='flex flex-row justify-between'>
         <button
-        onClick={handleCancelChanges}
+          onClick={handleCancelChanges}
           className="no-print w-full mt-2 mx-2 neutral-button"
         >
           Reset

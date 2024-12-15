@@ -1,18 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Order, { OrderStatus, OrderType } from "../../types/Order"
 import ErrorDisplay from "../Utils/ErrorComponent";
 import SuccessDisplay from "../Utils/SuccessComponent";
 import OrderService from "../../services/OrderService";
+import Popover from "../Utils/Popover";
+import ClientPopHandler from "../ClientHelper/ClientPopHandler";
+import Client from "../../types/Client";
 
 type OrderFormProps = {
     order: Order;
     isEdit: boolean;
     onSaveSuccessful: (order: Order) => void;
-    onClickEditProducts: () => void;
 }
 
 type IFormOrder = {
-    reference: string;
+    client_id: string;
     client_name: string;
     phone_number: string;
     type: OrderType;
@@ -25,7 +27,7 @@ type IFormOrder = {
 export default function OrderForm(props: OrderFormProps) {
 
     const [formData, setFormData] = useState<IFormOrder>({
-        reference: '',
+        client_id: '',
         client_name: '',
         phone_number: '',
         type: OrderType.DINE_IN,
@@ -40,6 +42,9 @@ export default function OrderForm(props: OrderFormProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+
+    const clientHandlerRef = useRef<{ open: () => void, close: () => void }>(null);
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -57,8 +62,7 @@ export default function OrderForm(props: OrderFormProps) {
             // Save Order
 
             let order = new Order();
-            order.reference = formData.reference;
-            order.client_id = props.order.client_id;
+            order.client_id = formData.client_id;
             order.client_name = formData.client_name;
             order.phone_number = formData.phone_number;
             order.type = formData.type;
@@ -86,7 +90,7 @@ export default function OrderForm(props: OrderFormProps) {
             newOrder.phone_number = formData.phone_number;
             newOrder.employee_name = props.order.employee_name;
             newOrder.order_items = orderItems;
-            
+
             props.onSaveSuccessful(newOrder);
             setSuccess('Order saved successfully');
             setLoading(false);
@@ -99,15 +103,24 @@ export default function OrderForm(props: OrderFormProps) {
 
     }
 
-    const handleEdit = () => {
-        props.onClickEditProducts();
+    const handleClientSelect = (client: Client) => {
+
+        setFormData({
+            ...formData,
+            client_id: client.client_id! || '',
+            client_name: client.client_first_name + " " + client.client_last_name,
+            phone_number: client.client_phone_number
+        });
+
+        clientHandlerRef.current?.close();
     }
+
 
 
     useEffect(() => {
         if (props.order) {
             setFormData({
-                reference: props.order.reference,
+                client_id: props.order.client_id,
                 client_name: props.order.client_name,
                 phone_number: props.order.phone_number,
                 type: props.order.type,
@@ -118,6 +131,8 @@ export default function OrderForm(props: OrderFormProps) {
             });
             setOrderItems(props.order.order_items);
         }
+
+        console.log(formData.date);
     }, []);
 
     return (
@@ -125,12 +140,24 @@ export default function OrderForm(props: OrderFormProps) {
             {error && <ErrorDisplay message={error} />}
             {success && <SuccessDisplay message="Order saved successfully" />}
             <div className="label-input-container">
-                <label htmlFor="reference">Reference</label>
-                <input type="text" id="reference" readOnly={props.isEdit} name="reference"
-                    value={formData.reference} onChange={handleChange} />
+                <p className="text-gray-800 text-lg">Reference: {props.order.reference}</p>
             </div>
             <div className="label-input-container">
-                <label htmlFor="client_name">Client Name</label>
+                <div className="flex flex-row justify-between">
+                    <label htmlFor="client_name">Client Name</label>
+                    <Popover ref={clientHandlerRef}
+                        id="client-form"
+                        buttonName="Find Client"
+                        title="Client Search"
+                        classNameButton="link-primary"
+                        classNameMainDiv="max-w-3xl"
+                        useButton={true}
+                    >
+                        <ClientPopHandler
+                            onClientSelect={handleClientSelect}
+                        />
+                    </Popover>
+                </div>
                 <input type="text" id="client_name" readOnly
                     name="client_name" value={formData.client_name} onChange={handleChange} />
             </div>
@@ -173,7 +200,6 @@ export default function OrderForm(props: OrderFormProps) {
             </div>
 
             <div className="flex flex-row justify-around my-4">
-                <button className="reverse-button w-1/4" disabled={loading} onClick={handleEdit}>Edit Products</button>
                 <button className="submit-button w-1/4" disabled={loading} onClick={handleSave}>Save</button>
             </div>
 

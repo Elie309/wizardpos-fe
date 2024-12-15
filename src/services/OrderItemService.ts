@@ -75,12 +75,9 @@ export default class OrderItemService {
     static async bulkAdd(order_id: string, items: OrderItem[]): Promise<IOrderItemService> {
         try {
             let payload = {
-                items: items.map(item => ({
-                    order_item_product_id: item.product_id,
-                    order_item_quantity: item.quantity,
-                    order_item_total: item.total
-                }))
+                items: items.map(item => item.toJson())
             };
+
             let response = await api.post(`/orders/${order_id}/items/bulk`, payload.items);
             if (response.status === 201) {
                 let items = response.data.data.map((item: any) => OrderItem.fromJson(item));

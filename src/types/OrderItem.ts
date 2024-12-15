@@ -1,4 +1,12 @@
 
+type IOrderItem = {
+    order_id: string;
+    order_item_id?: string;
+    order_item_product_id: string;
+    order_item_quantity: number;
+    order_item_total: number;
+}
+
 export default class OrderItem {
     id: string;
     order_id: string;
@@ -45,10 +53,34 @@ export default class OrderItem {
     toFormData(): FormData {
         let formData = new FormData();
         formData.append('order_id', this.order_id);
+        if (this.id.length > 0 || this.id !== '0' || this.id !== null || this.id !== undefined || this.id !== '') {
+            formData.append('order_item_id', this.id);
+        }
         formData.append('order_item_product_id', this.product_id);
         formData.append('order_item_quantity', this.quantity.toString());
         formData.append('order_item_total', this.total.toString());
         return formData;
+    }
+
+    toJson(): IOrderItem {
+
+        if (this.id.length > 0 && this.id !== '0' && this.id !== null && this.id !== undefined && this.id !== '') {
+            
+            return {
+                order_id: this.order_id,
+                order_item_id: this.id,
+                order_item_product_id: this.product_id,
+                order_item_quantity: this.quantity,
+                order_item_total: this.total
+            }
+        }
+
+        return {
+            order_id: this.order_id,
+            order_item_product_id: this.product_id,
+            order_item_quantity: this.quantity,
+            order_item_total: this.total
+        };
     }
 
     static fromJsonList(data: any[]): OrderItem[] {
