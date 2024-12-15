@@ -14,7 +14,7 @@ import { RootState } from "../../utils/store";
 import OrderForm from "../../components/OrdersComponent.tsx/OrderForm";
 import OrderService from "../../services/OrderService";
 import Loading from "../../components/Utils/Loading";
-import ErrorDisplay from "../../components/Utils/ErrorComponent";
+import Toaster from "../../components/Toaster/Toaster";
 
 export default function OrdersPage() {
 
@@ -26,6 +26,7 @@ export default function OrdersPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [orders, setOrders] = useState<Order[] | null>(null);
@@ -133,6 +134,7 @@ export default function OrdersPage() {
     newOrder.client_name = client.client_first_name + " " + client.client_last_name;
     newOrder.phone_number = client.client_phone_number;
     newOrder.employee_name = user.name;
+    newOrder.time = new Date().toLocaleTimeString();
 
     setCurrentOrder(newOrder);
     clientPopoverHandlerRef.current?.close();
@@ -144,27 +146,41 @@ export default function OrdersPage() {
     setCurrentOrder(order);
     setOrderItems(order.order_items);
     setShowProductMenu(showProductMenu);
+    setSuccess("Order saved successfully");
 
     handleOrders();
 
   }
 
   const handleProductsButtonClick = () => {
-    if(currentOrder.id && currentOrder.client_id && currentOrder.client_name){
+    if (currentOrder.id && currentOrder.client_id && currentOrder.client_name) {
       setShowProductMenu(true);
-    }else{
-      alert('Please create or choose an order first');
+    } else {
+      setError("Please select or create an order");
     }
-
-
   }
 
   useEffect(() => {
     handleOrders();
   }, [currentDate]);
 
+ useEffect(() => {
 
+  if(success){
+    setTimeout(() => {
+      setSuccess(null);
+    }, 5000);
+  }
+  
+}, [success]);
 
+useEffect(() => {
+  if(error){
+    setTimeout(() => {
+      setError(null);
+    }, 5000);
+  }
+}, [error]);
 
   return (
     <div className="flex flex-row p-8 w-full h-full">
@@ -178,6 +194,7 @@ export default function OrdersPage() {
           setOrderItems([]);
           setCurrentOrder(new Order());
         }}
+        onErrorChange={(error) => setError(error)}
 
         onOrderSummarySaveSuccessful={
           (order) => handleOrderSaveSuccessful(order, false)}
@@ -234,7 +251,9 @@ export default function OrdersPage() {
   ${showProductMenu ? "translate-x-full" : "-translate-x-full"}`}
         >
           {loading ? (
-            <Loading />
+            <div className="w-screen h-full flex justify-center items-center">
+              <Loading />
+            </div>
           ) : (
             orders && (
               <OrdersHandler
@@ -248,12 +267,11 @@ export default function OrdersPage() {
               />
             )
           )}
-          {error && <ErrorDisplay message={error} />}
         </div>
-
       </div>
 
-
+      {success && <Toaster message={success || ""} success={true} duration={5050} />}
+      {error && <Toaster message={error || ""} success={false} duration={5050} />}
 
     </div>
   );

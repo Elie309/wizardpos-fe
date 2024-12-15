@@ -5,8 +5,7 @@ import PrintIcon from '../Icons/PrintIcon';
 import Order from '../../types/Order';
 import OrderService from '../../services/OrderService';
 import OrderItemService from '../../services/OrderItemService';
-import ErrorDisplay from '../Utils/ErrorComponent';
-import SuccessDisplay from '../Utils/SuccessComponent';
+
 
 interface OrderSummaryProps {
   order: Order;
@@ -14,6 +13,7 @@ interface OrderSummaryProps {
   onRemoveItem: (id: string) => void;
   onClickReset: () => void;
   onOrderSummarySaveSuccessful: (order: Order) => void;
+  onErrorChange: (error: string) => void;
 }
 
 export default function OrderSummary(props: OrderSummaryProps) {
@@ -29,13 +29,11 @@ export default function OrderSummary(props: OrderSummaryProps) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
   const handleSaveOrder = async () => {
     setEditing(false);
     setLoading(true);
     setError('');
-    setSuccess('');
     try {
 
       let newOrder = new Order();
@@ -78,9 +76,6 @@ export default function OrderSummary(props: OrderSummaryProps) {
 
       props.onOrderSummarySaveSuccessful(order.data as Order);
 
-      setSuccess('Order saved successfully');
-
-
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -92,7 +87,6 @@ export default function OrderSummary(props: OrderSummaryProps) {
     setEditing(false);
     setNotes(props.order.notes);
     setDiscount(0);
-    setSuccess('');
     setError('');
     props.onClickReset();
   }
@@ -126,6 +120,10 @@ export default function OrderSummary(props: OrderSummaryProps) {
     setDiscount(props.order.discount);
 
   }, [props.order]);
+
+  useEffect(() => {
+    props.onErrorChange(error);
+  }, [error]);
 
 
   return (
@@ -161,7 +159,7 @@ export default function OrderSummary(props: OrderSummaryProps) {
           </div>
           <div className="flex justify-between">
             <p>Date - Time</p>
-            <p>{props.order.date.toISOString().split("T")[0]} - {props.order.time.toLocaleTimeString()}</p>
+            <p>{props.order.date} - {props.order.time.split(":")[0]+ ":" +props.order.time.split(":")[1]}</p>
           </div>
 
         </div>
@@ -224,11 +222,6 @@ export default function OrderSummary(props: OrderSummaryProps) {
         </div>
 
       </div>
-      <div className='text-xs'>
-        {error && <ErrorDisplay message={error} />}
-        {success && <SuccessDisplay message={success} />}
-      </div>
-
 
       <div className='flex flex-row justify-between'>
         <button

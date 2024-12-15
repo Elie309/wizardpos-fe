@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Order, { OrderStatus } from "../../types/Order";
 import OrderComponent from "./OrderComponent";
 import DatePicker from "react-datepicker";
+import { useNavigate } from "react-router-dom";
 
 type OrdersHandlerProps = {
     onClickOrder: (order: Order) => void;
@@ -18,6 +19,8 @@ export default function OrdersHandler(props: OrdersHandlerProps) {
     const [orders, setOrders] = useState<Order[]>(props.orders);
 
     const [currentDate, setCurrentDate] = useState<Date>(props.currentDate);
+
+    const navigate = useNavigate();
 
 
     const filterOrderHandler = (orders: Order[]) => {
@@ -65,8 +68,19 @@ export default function OrdersHandler(props: OrdersHandlerProps) {
     return (
         <div className="overflow-auto flex flex-col h-full">
 
-            <h1 className="primary-title">Orders</h1>
-            <div className="label-input-container px-8 flex flex-row justify-between ">
+            <div className='flex flex-row px-8 no-print'>
+                <button onClick={() => navigate("/")} className="mr-8 cursor-pointer no-print">
+                    <div className="flex flex-row items-center gap-2 text-dark">
+                        <svg
+                            viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-6 text-dark fill-none">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                        </svg>
+                        Home
+                    </div>
+                </button>
+                <h1 className="primary-title">Orders</h1>
+            </div>
+            <div className="label-input-container px-8 flex flex-row">
 
                 <button tabIndex={-1} className="neutral-button" onClick={props.onProductsButtonClick} >Products</button>
 
@@ -80,7 +94,7 @@ export default function OrdersHandler(props: OrdersHandlerProps) {
                     onSelect={handleDateSelect}
                     onChange={handleDateChange}
                     dateFormat="dd-MMM-yyyy"
-                    wrapperClassName='text-xl flex flex-row items-center'
+                    wrapperClassName='text-xl mx-auto flex flex-row items-center'
                 />
 
                 <button tabIndex={-1} className="submit-button" onClick={props.onClickNewOrder} >New Order</button>

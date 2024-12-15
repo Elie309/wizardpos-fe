@@ -6,6 +6,7 @@ import OrderService from "../../services/OrderService";
 import Popover from "../Utils/Popover";
 import ClientPopHandler from "../ClientHelper/ClientPopHandler";
 import Client from "../../types/Client";
+import TimePicker from "../TimePicker/TimePicker";
 
 type OrderFormProps = {
     order: Order;
@@ -19,8 +20,8 @@ type IFormOrder = {
     phone_number: string;
     type: OrderType;
     status: OrderStatus;
-    date: Date;
-    time: Date;
+    date: string;
+    time: string;
     notes: string;
 }
 
@@ -32,8 +33,8 @@ export default function OrderForm(props: OrderFormProps) {
         phone_number: '',
         type: OrderType.DINE_IN,
         status: OrderStatus.ON_GOING,
-        date: new Date(),
-        time: new Date(),
+        date: new Date().toISOString(),
+        time: '00:00',
         notes: ''
     });
 
@@ -130,17 +131,18 @@ export default function OrderForm(props: OrderFormProps) {
                 notes: props.order.notes || ''
             });
             setOrderItems(props.order.order_items);
+
         }
 
-        console.log(formData.date);
+
     }, []);
 
     return (
         <div>
             {error && <ErrorDisplay message={error} />}
             {success && <SuccessDisplay message="Order saved successfully" />}
-            <div className="label-input-container">
-                <p className="text-gray-800 text-lg">Reference: {props.order.reference}</p>
+            <div className="label-input-container text-center">
+                <p className="text-gray-800 text-base italic font-semibold">#{props.order.reference}</p>
             </div>
             <div className="label-input-container">
                 <div className="flex flex-row justify-between">
@@ -180,16 +182,27 @@ export default function OrderForm(props: OrderFormProps) {
                 </select>
             </div>
 
-            <div className="label-input-container">
-                <label htmlFor="date">Date</label>
-                <input type="date" id="date" name="date"
-                    value={formData.date.toISOString().split('T')[0]} onChange={handleChange} />
-            </div>
+            <div className="flex flex-row w-full items-center justify-between">
 
-            <div className="label-input-container">
-                <label htmlFor="time">Time</label>
-                <input type="time" id="time" name="time"
-                    value={formData.time.toLocaleTimeString('en-GB', { hour12: false })} onChange={handleChange} />
+                <div className="label-input-container w-1/2">
+                    <label htmlFor="date">Date</label>
+                    <input type="date" id="date" name="date"
+                        value={formData.date} onChange={handleChange} />
+                </div>
+                <div className="flex flex-col w-1/2">
+
+                    <label htmlFor="time" className="main-label">Time</label>
+                    <TimePicker
+                        initialTime={formData.time}
+                        onChange={(time) => {
+                            setFormData({
+                                ...formData,
+                                time: time
+                            });
+                        }}
+                    />
+                </div>
+
             </div>
 
             <div className="label-input-container">

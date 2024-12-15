@@ -22,8 +22,8 @@ export default class Order {
     employee_name: string;
     type: OrderType;
     reference: string;
-    date: Date;
-    time: Date;
+    date: string;
+    time: string;
     notes: string;
     subtotal: number;
     discount: number;
@@ -45,8 +45,8 @@ export default class Order {
         this.employee_name = '';
         this.type = OrderType.DINE_IN;
         this.reference = '';
-        this.date = new Date();
-        this.time = new Date();
+        this.date = new Date().toISOString().split('T')[0];
+        this.time = "00:00";
         this.notes = '';
         this.subtotal = 0;
         this.discount = 0;
@@ -90,8 +90,8 @@ export default class Order {
         order.employee_name = data.employee_name;
         order.type = data.order_type;
         order.reference = data.order_reference;
-        order.date = new Date(data.order_date);
-        order.time = new Date(`${data.order_date}T${data.order_time}Z`); //
+        order.date = data.order_date;
+        order.time = data.order_time;
         order.notes = data.order_note;
         order.subtotal = parseFloat(data.order_subtotal);
         order.discount = parseFloat(data.order_discount);
@@ -104,10 +104,6 @@ export default class Order {
                 order.order_items.push(OrderItem.fromJson(item));
             });
         }
-
-        // order.created_at = new Date(data.order_created_at);
-        // order.updated_at = new Date(data.order_updated_at);
-        // order.deleted_at = data.order_deleted_at ? new Date(data.order_deleted_at) : null;
         return order;
     }
 
@@ -118,8 +114,8 @@ export default class Order {
         formData.append('order_type', this.type);
         formData.append('order_status', this.status);
         formData.append('order_reference', this.reference);
-        formData.append('order_date', this.date.toISOString().split('T')[0]);
-        formData.append('order_time', this.time.toISOString().split('T')[1].split('.')[0]);
+        formData.append('order_date', this.date);
+        formData.append('order_time', this.time);
         formData.append('order_note', this.notes);
 
         formData.append('order_subtotal', this.subtotal.toString());
