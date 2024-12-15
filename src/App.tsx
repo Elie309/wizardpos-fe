@@ -13,7 +13,6 @@ function App() {
   const [loading, setLoading] = useState(true);
 
 
-
   const authenticatedUser = async () => {
 
     try {
@@ -34,27 +33,22 @@ function App() {
         }
 
         dispatch(setUser(user));
-        setLoading(false);
+
       } else {
         window.history.replaceState({}, '', "/login")
-        setLoading(false);
+
       }
 
     } catch (error: any) {
-      setLoading(false);
       window.history.replaceState({}, '', "/")
+    } finally {
+      setLoading(false);
     }
-
   }
 
+
   useEffect(() => {
-
-    if (user.isAuthenticated) {
       authenticatedUser();
-    }else{
-      setLoading(false);
-    }
-
   }, []);
 
   if (loading) {
