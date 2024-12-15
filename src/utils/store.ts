@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './Slices/userSlice.ts'
-import orderReducer from './Slices/orderSlice.ts'
 
 const store = configureStore({
   reducer: {
     user: userReducer,
-    order: orderReducer,
   },
 })
 
