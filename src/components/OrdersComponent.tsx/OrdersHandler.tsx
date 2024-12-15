@@ -114,7 +114,7 @@ export default function OrdersHandler(props: OrdersHandlerProps) {
                 })}
             </div>
 
-            <h2 className="secondary-title">Completed</h2>
+            <h2 className="secondary-title">Completed / Invoiced</h2>
 
             <div className="w-full h-fit flex flex-row flex-wrap gap-4 pl-8 ">
                 {orders.filter(order => order.status === OrderStatus.COMPLETED).map((order) => {
