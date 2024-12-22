@@ -102,6 +102,7 @@ export default function ClientListPage() {
                                 <th>Full Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Active</th>
                             </tr>
                         </thead>
                         <tbody >
@@ -110,6 +111,7 @@ export default function ClientListPage() {
                                     <td >{client.getFullName()}</td>
                                     <td >{client.client_email}</td>
                                     <td >{client.client_phone_number}</td>
+                                    <td >{client.client_is_active ? 'Yes' : 'No'}</td>
                                 </tr>
                             ))}
                         </tbody>
