@@ -161,7 +161,7 @@ export default function Scheduler() {
                         isEdit={isFormEdit}
                         data={dataForm}
                         tables={tables}
-                        currentDate={date.toISOString().split('T')[0]}
+                        currentDate={date.toLocaleDateString("en-CA")}
                         currentTable={currentTable}
                         onSave={loadAll}
                     /> : <div></div>}
@@ -175,11 +175,14 @@ export default function Scheduler() {
 
                         <div className='flex flex-row py-4'>
 
-                            <button onClick={() => navigate("/")} className="my-auto cursor-pointer no-print">
-                                <svg
-                                    viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-6 text-dark fill-none">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
-                                </svg>
+                            <button onClick={() => navigate("/")} className="mr-8 cursor-pointer no-print">
+                                <div className="flex flex-row items-center gap-2 text-dark">
+                                    <svg
+                                        viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-6 text-dark fill-none">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                                    </svg>
+                                    Home
+                                </div>
                             </button>
                             <h1 className='primary-title'>Table Reservations</h1>
 

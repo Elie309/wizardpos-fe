@@ -42,7 +42,7 @@ export default function ReservationForm({ isEdit, data, tables, currentTable, cu
         table_id: "",
         employee_id: "",
         employee_name: "",
-        date: new Date().toISOString().split('T')[0],
+        date: new Date().toLocaleDateString("en-CA"),
         starting_time: new Date().toLocaleTimeString('en-GB', { hour12: false }),
         ending_time: new Date().toLocaleTimeString('en-GB', { hour12: false }),
         guests: 0,
