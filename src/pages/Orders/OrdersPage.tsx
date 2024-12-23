@@ -28,7 +28,7 @@ export default function OrdersPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [currentDate, setCurrentDate] = useState<string>(new Date().toLocaleDateString("en-CA"));
   const [orders, setOrders] = useState<Order[] | null>(null);
 
   //user from redux
@@ -135,7 +135,9 @@ export default function OrdersPage() {
     newOrder.phone_number = client.client_phone_number;
     newOrder.employee_name = user.name;
     newOrder.time = new Date().toLocaleTimeString();
+    newOrder.date = new Date().toLocaleDateString("en-CA");
 
+    
     setCurrentOrder(newOrder);
     clientPopoverHandlerRef.current?.close();
     orderPopoverHandlerRef.current?.open();

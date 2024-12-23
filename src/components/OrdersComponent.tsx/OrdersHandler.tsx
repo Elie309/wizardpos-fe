@@ -9,8 +9,8 @@ type OrdersHandlerProps = {
     onClickNewOrder: () => void;
     onProductsButtonClick: () => void;
     onDoubleClickOrder: (order: Order) => void;
-    onDateChange: (date: Date) => void;
-    currentDate: Date;
+    onDateChange: (date: string) => void;
+    currentDate: string;
     orders: Order[];
 }
 
@@ -18,7 +18,7 @@ export default function OrdersHandler(props: OrdersHandlerProps) {
 
     const [orders, setOrders] = useState<Order[]>(props.orders);
 
-    const [currentDate, setCurrentDate] = useState<Date>(props.currentDate);
+    const [currentDate, setCurrentDate] = useState<string>(props.currentDate);
 
     const navigate = useNavigate();
 
@@ -33,20 +33,19 @@ export default function OrdersHandler(props: OrdersHandlerProps) {
     }
 
     const handleDateSelect = (date: Date | null) => {
-        if (date)
-            setCurrentDate(date);
-        else setCurrentDate(new Date());
+        let dateStr = date?.toLocaleDateString("en-CA") || new Date().toLocaleDateString("en-CA");
+        setCurrentDate(dateStr);
 
-        props.onDateChange(date || new Date());
+        props.onDateChange(dateStr);
 
     };
 
     const handleDateChange = (date: Date | null) => {
-        if (date)
-            setCurrentDate(date);
-        else setCurrentDate(new Date());
 
-        props.onDateChange(date || new Date());
+        let dateStr = date?.toLocaleDateString("en-CA") || new Date().toLocaleDateString("en-CA");
+        setCurrentDate(dateStr);
+
+        props.onDateChange(dateStr);
     };
 
     const handleOnClickOrder = (order: Order) => {
@@ -90,7 +89,7 @@ export default function OrdersHandler(props: OrdersHandlerProps) {
                     showIcon={true}
                     toggleCalendarOnIconClick={true}
                     className='text-center cursor-pointer select-none '
-                    selected={currentDate}
+                    selected={new Date(currentDate)}
                     onSelect={handleDateSelect}
                     onChange={handleDateChange}
                     dateFormat="dd-MMM-yyyy"

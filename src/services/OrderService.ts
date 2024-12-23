@@ -10,9 +10,9 @@ type IOrderService = {
 
 export default class OrderService {
 
-    static async getOrders(date: Date): Promise<IOrderService> {
+    static async getOrders(date: string): Promise<IOrderService> {
         try {
-            let response = await api.get('/orders?date=' + date.toISOString().split('T')[0]);
+            let response = await api.get('/orders?date=' + date);
             if (response.status === 200) {
                 let orders = response.data.data.map((order: any) => Order.fromJson(order));
                 return {

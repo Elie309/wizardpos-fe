@@ -25,10 +25,10 @@ export default class Order {
     date: string;
     time: string;
     notes: string;
-    subtotal: number;
-    discount: number;
-    tax: number;
-    total: number;
+    subtotal: number| null;
+    discount: number | null;
+    tax: number | null;
+    total: number | null;
     status: OrderStatus;
     created_at: Date;
     updated_at: Date;
@@ -45,7 +45,7 @@ export default class Order {
         this.employee_name = '';
         this.type = OrderType.DINE_IN;
         this.reference = '';
-        this.date = new Date().toISOString().split('T')[0];
+        this.date = new Date().toLocaleDateString("en-CA");
         this.time = "00:00";
         this.notes = '';
         this.subtotal = 0;
@@ -56,28 +56,6 @@ export default class Order {
         this.created_at = new Date();
         this.updated_at = new Date();
         this.deleted_at = null;
-    }
-
-    calculateTax(): number {
-        return this.subtotal * this.tax;
-    }
-
-    calculateDiscountedTotal(): number {
-        return this.subtotal - this.discount;
-    }
-
-    calculateTotal(): number {
-        const discountedTotal = this.calculateDiscountedTotal();
-        const tax = this.calculateTax();
-        return discountedTotal + tax;
-    }
-
-    getFormattedDate(): string {
-        return new Date(this.date).toLocaleDateString();
-    }
-
-    getFormattedTime(): string {
-        return new Date(`1970-01-01T${this.time}Z`).toLocaleTimeString();
     }
 
     static fromJson(data: any): Order {
@@ -118,10 +96,11 @@ export default class Order {
         formData.append('order_time', this.time);
         formData.append('order_note', this.notes);
 
-        formData.append('order_subtotal', this.subtotal.toString());
-        formData.append('order_discount', this.discount.toString());
-        formData.append('order_tax', this.tax.toString());
-        formData.append('order_total', this.total.toString());
+        if (this.subtotal != null) formData.append('order_subtotal', this.subtotal.toString());
+        if (this.discount != null) formData.append('order_discount', this.discount.toString());
+        if (this.tax != null) formData.append('order_tax', this.tax.toString());
+        if (this.total != null) formData.append('order_total', this.total.toString());
+        
         return formData;
     }
 

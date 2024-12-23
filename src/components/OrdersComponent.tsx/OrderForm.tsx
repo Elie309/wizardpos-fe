@@ -78,6 +78,10 @@ export default function OrderForm(props: OrderFormProps) {
             if (props.isEdit) {
                 response = await OrderService.updateOrder(props.order.id, order);
             } else {
+                order.subtotal = 0;
+                order.discount = 0;
+                order.total = 0;
+                order.tax = 0;
                 response = await OrderService.createOrder(order);
             }
             if (!response.success) {
@@ -85,7 +89,6 @@ export default function OrderForm(props: OrderFormProps) {
                 setError(response.message);
                 return;
             }
-
             let newOrder = response.data as Order;
             newOrder.client_name = formData.client_name;
             newOrder.phone_number = formData.phone_number;
