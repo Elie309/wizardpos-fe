@@ -117,7 +117,7 @@ export default function OrderSummary(props: OrderSummaryProps) {
 
   useEffect(() => {
     setNotes(props.order.notes);
-    setDiscount(props.order.discount);
+    setDiscount(props.order.discount || 0);
 
   }, [props.order]);
 
