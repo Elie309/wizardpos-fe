@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/api/',
+    baseURL: 'http://34.155.85.219/api/',
     timeout: 2000,
     headers: {
         'Content-Type': 'application/form-data',
