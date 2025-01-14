@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const api = axios.create({
-    baseURL: 'http://34.155.85.219/api/',
+    baseURL: 'https://posadmin.eliesaade.dev/api/',
     timeout: 2000,
     headers: {
         'Content-Type': 'application/form-data',
