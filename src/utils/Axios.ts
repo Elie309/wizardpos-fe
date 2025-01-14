@@ -1,8 +1,9 @@
 import axios from "axios";
 
+export var BASE_URL = "https://posadmin.eliesaade.dev/"
 
 const api = axios.create({
-    baseURL: 'https://posadmin.eliesaade.dev/api/',
+    baseURL: BASE_URL +'api/',
     timeout: 2000,
     headers: {
         'Content-Type': 'application/form-data',

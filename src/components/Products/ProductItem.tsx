@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import Product from "../../types/Product";
+import { BASE_URL } from "../../utils/Axios";
 
 interface ProductItemProps {
     product: Product;
@@ -11,6 +13,15 @@ export default function ProductItem({product, onClick}: ProductItemProps) {
     const handleOnClick = () => {
         onClick(product);
     }
+
+    useEffect(() => {
+    //CHeck if product image is valid URL with http
+    if (!product.image.includes('http')) {
+        product.image = BASE_URL + product.image;
+    }
+
+
+    })
 
     return (
 
